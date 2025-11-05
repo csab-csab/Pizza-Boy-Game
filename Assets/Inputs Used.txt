@@ -1,0 +1,11 @@
+Inputs Used 
+
+"C"- FreeLook Camera
+"=" Increase timescale factor in debug mode
+"-" Decrease timescale factor in debug mode
+"R"- Reset Car Position and Rotation
+","- Spawn focus car
+"/"- Debug Mode
+"F"- Interact
+"Space"- brake 
+"T"- Throw Pizza Out of Car

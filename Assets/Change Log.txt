@@ -1,0 +1,83 @@
+18/11/2024
+Today I worked on the camera. I added lerping between the camera states.
+I also added speed lines to the camera when moving fast.
+19/11/2024
+Fixed bug relating to damage particles being unassigned on spawning another car after intial spawn.
+Fixed another bug where the light particle damage was playing even when there was no damage done to the car.
+Fixed error relating to the road tag used for the tyre marks being "undefined".
+Made is so you explode on impact when crashing into mountain.
+28/11/2024
+Added Dialouge Box and the code to display dialouge. Also made this dialouge box smoothly scale in and out.
+06/12/2024
+Added a script to disable the streetlights when collided into.
+Fixed a bug with the dialouge box not scaling in and out correctly.
+13/12/2024
+I added a smooth type out effect to the dialouge box.
+Changed the render mode on car head and rear lights to important to fix a flickering issue.
+03/01/2025
+Added a free look camera for recording cutscenes, complete with ui, movement.
+13/01/2025
+Started working on first cutscene. Fixed issue wtih camera being offset.
+15/01/2025
+Added controller movement to freelook camera. Also added upwards/downards movement to the camera when holding space/rt/lt;
+12/03/2025
+Finished first cutscene and added first piece of dialouge
+15/03/2025
+Added black screen fade out effect on dialouge/cutscene end.
+22/03/2025
+Tidied folders.
+Started work on quest system.
+25/3/2025
+Implemented a quest system made up of different type of objectives that can be tailored to create specific quests.
+26/3/2025
+Created a method to trigger cutscene; made code cleaner. Also created a method to skip cutscenes and added code to stop freelook
+cam moving during cutscene;
+9/4/2025
+14/4/2025
+Made the cutscene skip to the beginning of the dialouge. Fixed engine braking. Fixed objective point animation not scaling to objective point.
+Made cutscene car despawn after cutscene.
+17/4/2025
+Introduced text that dislays current objective and also made tweaked 
+the delivery arrow code to point to the current objective if desired
+2/5/2025
+New Font, fixed interactable point. Added dialouge for boss.
+3/5/2025 + 4/5/2025
+Added charcters to dialouge. Fixed pesky 2 audio listener warning. Added a check before completing objective
+to ensure the correct object is completed before actually calling complete objective. Learnt about lambdas.
+15/6/2025
+Havent worked on the game for ages but I fixed quest not completing by adding -1 to the total objective count. 
+I believe it didnt work as the current objective started at -1 and it was still trying to find the next object when there wasn't one.
+Also made the car instantly stop by setting its velocity to 0 when it completes certain objectives.(its in the car controller disable method.)
+02/07/2025
+Worked on the 1st quest, wrote out most of the story and made somewhat of a plan to finish the project. Wrote some dialouge, introduce an out of fuel event and fail condition.
+
+08/7/2025
+Made posh alley a bit wider. Made handbrake work, worked on disable car, now when the car is disabled it properly stops, because all wheels get locked. 
+Made a few bits destructable because they werent such as bins and a small tree.
+Fixed quest not restarting when button is pressed and also made the ui give more feedback by making it dissappear.
+04/8/2025
+Back from holiday, spent ages working on fixing the bridge and guard rail on the previously unguarded ramp. Added the road where the player will escape at the end of the game.
+06/8/2025
+Worked on the map, added exploding gas canisters, made it so explosions damage the players car, that when the car lands in a pool it instantly gets destroyed, made some more
+props destructable and made the heat lamp light up.
+26/8/2025
+Added the conversation with the man about the dream car! Also made it so the end of quest 1 triggers the dialouge trigger point so this interaction can take place.
+Messed around with the car controller
+and decided to keep it as it is because I like the way it handles rn. When I changed the settings, the car felt to on rails. I did however add brake bias.
+28/8/2025
+Created a new dialouge scriptable object which just contains the dialouge class. I may convert all previous dialouge bits to scriptable objects so its easier to manage.
+I also started creating a way for there to be dialouge pre delivery. This needs to be finished off, please see to do. I also worked on some tid bits;
+made some more objects destructable, made the boss cross his arms, and wrote a the first delivery dialouge. Finally, i made money display on gameplay ui.
+29/8/2025
+Made the pre delivery chit chat work! and then triggers the delivery. Also worked on the interact texts, they should now display correctly. Added a layer check to motion light
+so props and the ground doesn't trigger it anymore. Worked on delivery code and implemented rewards for deliveries.
+05 + 06/09/2025
+Made car out of fuel cutscene + ui and coded it.
+08/09/2025
+Today I worked on setting the fuel super low using an event after the first quest is completed. I then found a countdown sound that I implemented and rewrote the countdown script to
+make sure its perfectly synced.
+17/10/2025
+Done a few bits and pieces in the past fews but didnt document them. :( Today I fixed the quest restart after fail not working, also fixed the issues with dialouge bugging when skipping.
+Finally, I added a method that forces the dialouge to end on quest fail if the player happens to somehow fail the mission mid dialouge.
+
+

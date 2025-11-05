@@ -1,0 +1,263 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1438128d1ed141146a39e1f89e61fec2, type: 3}
+  m_Name: Porsche
+  m_EditorClassIdentifier: 
+  weight: 1000
+  totalEnginePower:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.4616562
+      outSlope: 0.4616562
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 12.345963
+      value: 0.1299057
+      inSlope: -0.029194409
+      outSlope: -0.029194409
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1005.20184
+      value: 200.34973
+      inSlope: 0.011626026
+      outSlope: 0.011626026
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1005.54376
+      value: 200.3536
+      inSlope: 0.011205129
+      outSlope: 0.011205129
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1007.5947
+      value: 200.37401
+      inSlope: 0.008673836
+      outSlope: 0.008673836
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.25159806
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1016.2579
+      value: 200.45178
+      inSlope: 0.027061364
+      outSlope: 0.027061364
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1017.1576
+      value: 200.47614
+      inSlope: 0.02711151
+      outSlope: 0.02711151
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 6279.141
+      value: 1000.436
+      inSlope: -0.0409565
+      outSlope: -0.0409565
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 6304.353
+      value: 1003.07764
+      inSlope: -0.009968348
+      outSlope: -0.009968348
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 6996.03
+      value: 2.1467743
+      inSlope: -0.13975292
+      outSlope: -0.13975292
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Gears:
+  - 0
+  - 3.8
+  - 1.7
+  - 1.3
+  - 0.9
+  - 0.4
+  - 0.2
+  finalDrive: 3
+  enginePower: 1000
+  switchUPRPM: 6000
+  switchDOWNRPM: 2000
+  gearChangeCoolDown: 2
+  idleRPM: 1000
+  maxRPM: 7000
+  maxSpeed: 100
+  maxReverseSpeed: 25
+  maxBrakeForce: 90000
+  maxSteeringAngle: 50
+  TypeofDrive: 1
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  FuelDrainRate:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.00001874732
+      outSlope: 0.00001874732
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1002.4176
+      value: 0.018792644
+      inSlope: 0.0002191029
+      outSlope: 0.0002191029
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22718276
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 7000.906
+      value: 30.008398
+      inSlope: 0.0013996958
+      outSlope: 0.0013996958
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04698927
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  FuelCapacity: 500
+  LightsMaterial: {fileID: 2100000, guid: 8f3ee78ca556792438f70f17d537f0c0, type: 2}
+  asympForwardFriction: 0
+  asympSideWaysFriction: 0
+  extremForwardFriction: 0
+  extremSideWaysFriction: 0
+  suspensionStiffness: 0
+  carRpmToPitch:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -4.818846
+      value: 0.012872617
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 107.668205
+      value: 0.92580837
+      inSlope: 0.000004559811
+      outSlope: 0.000004559811
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 8061.656
+      value: 2.9678173
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  startSound: {fileID: 8300000, guid: 3f9b7422035b9ad4facb49ad87816415, type: 3}
+  runningSound: {fileID: 8300000, guid: ec7bd820e378ade4091279ad6f1e6125, type: 3}
+  tyreScreechVolume:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5.03022
+      value: 0.25178885
+      inSlope: 0.17770259
+      outSlope: 0.17770259
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.009620651
+      outWeight: 0
+    - serializedVersion: 3
+      time: 19.997208
+      value: 1.032532
+      inSlope: 0.16993254
+      outSlope: 0.16993254
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.035401627
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  tyreScreechSound: {fileID: 8300000, guid: 72254ef3466144649be07db03436b91e, type: 3}
+  reverseFoV: 84
+  revrseFarClip: 5000
