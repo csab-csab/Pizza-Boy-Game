@@ -159,6 +159,10 @@ public class CarController : MonoBehaviour
     public static HighOnFuel HighOnFuelEvent;
     #endregion
 
+    #region Refs
+    [SerializeField] Transform CameraLookAt;
+    #endregion
+
     private void Start()
     {
         IntialiseCar();
@@ -1190,7 +1194,10 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region Return Variables
-
+    public Transform ReturnCameraLookAtTrans() 
+    {
+        return CameraLookAt;
+    }
     #endregion
 
     #region Set Values
