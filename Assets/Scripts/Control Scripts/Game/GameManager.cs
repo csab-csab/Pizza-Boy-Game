@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 using UnityEngine.Playables;
 
 
@@ -56,8 +54,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject car_select;
     [SerializeField]GameObject car_select_cam;
 
-    //Reference to cinemachine cam
-    [SerializeField] CinemachineFreeLook cinema_machine_Cam;
     //Reference To Actual Rendering Camera
     [SerializeField] Camera car_cam;
 
@@ -1094,11 +1090,10 @@ public class GameManager : MonoBehaviour
     //Assings nessecary variables to a car just spawned
     public void AssignSpawnedCarVariables(GameObject car) 
     {
-        cinema_machine_Cam.Follow = car.transform;
-        cinema_machine_Cam.LookAt = car.transform;
-
         carController = car.GetComponent<CarController>();
         carController.SetPlayer(player);
+
+        CameraManager.instance.PassRefsToCinemachine(carController.ReturnCameraLookAtTrans());
 
         CarController.LowOnFuelEvent += EnableFuelTriggerOnLowFuel;
         carController.OutOfFuelEvent += CarOutOfFuel;
