@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -34,6 +33,7 @@ public class CameraManager : MonoBehaviour
 
     #region refs
     [SerializeField]Transform MainCamera;
+    [SerializeField] CameraController cameraController;  
 
     //Camera used for reversing and refueling
     Transform SecondaryCamera;
@@ -44,6 +44,12 @@ public class CameraManager : MonoBehaviour
     {
        instance = this;
     }
+
+    private void Start()
+    {
+        cameraController = MainCamera.GetComponent<CameraController>();
+    }
+
 
     private void Update()
     {
@@ -192,5 +198,11 @@ public class CameraManager : MonoBehaviour
         {
             MainCamera.GetComponent<Camera>().enabled = enabled;
         }
+    }
+
+    //ensures car transform reference is passed to cinemachine cam
+    public void PassRefsToCinemachine(Transform car_transform) 
+    {
+        cameraController.GiveTarget(car_transform);
     }
 }
