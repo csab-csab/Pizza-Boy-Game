@@ -43,7 +43,7 @@ public class QuestManager : MonoBehaviour
     private float currentTimeUntilRestart;
     //used after succesful completion of quest for disabling quest object so ui displays correctly and so there is only one quest active at a time
     private float currentTimeUntilTermination;
-    private bool isQuestOver = false;
+    [SerializeField]private bool isQuestOver = false;
     private bool autoRestart = false;
     Quest lastQuest;
     #endregion
@@ -79,12 +79,12 @@ public class QuestManager : MonoBehaviour
         }
 
         if (isQuestOver && currentTimeUntilTermination > 0) 
-        { 
-            currentTimeUntilTermination -= Time.deltaTime;
+        {
+           currentTimeUntilTermination -= Time.deltaTime;
             CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilTermination, TimeUntilTermination);
         }
-        else
-        { 
+        else if(isQuestOver && currentTimeUntilTermination <= 0)
+        {
             isQuestOver = false;
             TerminateQuest();
         }
@@ -102,6 +102,7 @@ public class QuestManager : MonoBehaviour
 
     public void StartQuest()
     {
+        print("quest started");
         if (quest != null && !isQuestActive)
         {
             GameManager.instance.AssignQuestManager(this);

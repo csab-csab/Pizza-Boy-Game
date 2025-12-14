@@ -196,12 +196,10 @@ public class SoundManager : MonoBehaviour
     /// <param name="resetBeforeAdding"></param>
     public void GetCarAudioSources(AudioSource source, bool resetBeforeAdding = false) 
     {
+        
         if (resetBeforeAdding) 
         { 
-            foreach(AudioSource _source in carSources) 
-            { 
-               carSources.Remove(_source);
-            }
+          carSources.Clear();
         }
         
         carSources.Add(source);

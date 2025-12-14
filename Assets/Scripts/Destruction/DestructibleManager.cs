@@ -30,7 +30,7 @@ public class DestructibleManager : MonoBehaviour
 
     private void Start()
     {
-        print(this.gameObject.name);
+       
     }
 
     IEnumerator CheckDestroyedObjectsRoutine() 

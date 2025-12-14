@@ -79,5 +79,11 @@ make sure its perfectly synced.
 17/10/2025
 Done a few bits and pieces in the past fews but didnt document them. :( Today I fixed the quest restart after fail not working, also fixed the issues with dialouge bugging when skipping.
 Finally, I added a method that forces the dialouge to end on quest fail if the player happens to somehow fail the mission mid dialouge.
+09/11/2025
+Camera Collison
+13/12/2025
+-Fixed issue where camera wasnt following Raiden correctly
+-Fixed radio stutter
+-Fixed car not working after respawning, due to sound bug
 
 

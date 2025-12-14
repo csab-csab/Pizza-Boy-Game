@@ -80,7 +80,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    //Call on car spawn
+    
     public void AssignCameras(GameObject car) 
     {
         SecondaryCamera = car.transform.Find(SECONDARY_CAM_NAME);
@@ -115,9 +115,6 @@ public class CameraManager : MonoBehaviour
         switch(view) 
         { 
             case CameraView.Normal:
-                
-               
-                
                 lerpCamera = true;
                 break;
             

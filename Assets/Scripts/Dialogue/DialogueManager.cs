@@ -88,7 +88,7 @@ public class DialogueManager : MonoBehaviour
         {
             StopCoroutine(writingLine);
             writingLine = null;
-            CanvasController.instance.UpdateDialogue("", ' ', "");
+            CanvasController.instance.DialougeClearSentence();
             CanvasController.instance.UpdateDialogue(cachedDialogue.Name, ' ',cachedDialogue.Sentences[dialougeIndex]);
             return;
         }
