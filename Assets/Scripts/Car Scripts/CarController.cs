@@ -160,6 +160,7 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region Refs
+    [Header("YOU MUST ASSIGN CAMERA LOOK AT OBJECT HERE!!!OTHERWISE CAMERA WILL NOT WORK!")]
     [SerializeField] Transform CameraLookAt;
     #endregion
 

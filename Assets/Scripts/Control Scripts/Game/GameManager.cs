@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
 
 
     //using my amazing research skills, I found out pizza is around
-    //250 °C so this number will be used to calculate the pizza temp timer
+    //250 ï¿½C so this number will be used to calculate the pizza temp timer
     private static float HOT_PIZZA_TEMP = 250f;
 
     private static float ROOM_TEMP = 25f;
@@ -427,13 +427,12 @@ public class GameManager : MonoBehaviour
             carController.GiveFuel(Input.GetAxis("Jump") * fuelUnitMultiplier * Time.deltaTime, true);
             CanvasController.instance.UpdateRefuelBar(carController.currentFuel, carController.FuelCapacity);
         }
-
+        //if car is destroyed, respawn car
         if (gameState == GameState.CarDestroyed && Input.GetButtonDown("Jump") 
             ^ Input.anyKeyDown)
         {
-            //ToggleCarSelect(true);
-
-            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn, DefaultCar, 1, nameof(GameManager.instance.Start));
+            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn,  CarSelectorScript.instance.ReturnLastSpawnedCar(), 1, nameof(GameManager.instance.Start));
+            CanvasController.instance.EnableDisableGameplayUi(true);
         }
 
         if(gameState == GameState.CarOutOfFuel && Input.GetButtonDown("Jump") ^ Input.anyKeyDown)  
@@ -815,7 +814,7 @@ public class GameManager : MonoBehaviour
 
         CanvasController.instance.EnableUi(false, true);
         CanvasController.instance.UpdateNumberOfPizzas(currentNoPizzas);
-        CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25°C!");
+        CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25ï¿½C!");
     }
     
     private void SpawnDeliveryPoint() 

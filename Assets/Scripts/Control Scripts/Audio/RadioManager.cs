@@ -69,15 +69,13 @@ public class RadioManager : MonoBehaviour
 
     private void ChooseTrack(int CurrentTrack) 
     {
-   
-        
-        int trackNum = Random.Range(0, Radio.radios[currentRadio].Tracks.Count);
+       int trackNum = Random.Range(0, Radio.radios[currentRadio].Tracks.Count);
 
        //if track is not the same as the previous one, play it
        if(trackNum != CurrentTrack) 
        {
-        currentTrack =  trackNum;
-        PlayRadio();
+         currentTrack =  trackNum;
+         PlayRadio();
        }
        else 
        {

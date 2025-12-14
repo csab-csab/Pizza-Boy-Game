@@ -128,6 +128,7 @@ MonoBehaviour:
   - 0.2
   finalDrive: 3
   enginePower: 1000
+  engineBrakeFactor: 0
   switchUPRPM: 6000
   switchDOWNRPM: 2000
   gearChangeCoolDown: 2
@@ -225,6 +226,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   startSound: {fileID: 8300000, guid: 3f9b7422035b9ad4facb49ad87816415, type: 3}
   runningSound: {fileID: 8300000, guid: ec7bd820e378ade4091279ad6f1e6125, type: 3}
+  shutDownSound: {fileID: 8300000, guid: 1f48bfd90cb32704f93f944ec119d8dc, type: 3}
   tyreScreechVolume:
     serializedVersion: 2
     m_Curve:
@@ -259,5 +261,3 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   tyreScreechSound: {fileID: 8300000, guid: 72254ef3466144649be07db03436b91e, type: 3}
-  reverseFoV: 84
-  revrseFarClip: 5000

@@ -79,6 +79,7 @@ Thumbs.db
 # Rider / VSCode project settings
 .idea/
 .vscode/
+.vsconfig
 
 # Auto-generated builds or exports folder
 /[Aa]ssets/[Bb]undles/

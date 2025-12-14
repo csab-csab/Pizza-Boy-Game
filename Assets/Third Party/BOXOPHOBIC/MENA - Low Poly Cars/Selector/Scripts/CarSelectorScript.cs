@@ -38,6 +38,9 @@ public class CarSelectorScript : MonoBehaviour
 
     [SerializeField] Transform CarSpawn;
 
+    //this used to spawn the correct car once its destroyed for example
+    private GameObject lastSpawnedCar;
+
     [Space(20)]
 
     [Header("Visuals")]
@@ -400,10 +403,7 @@ public class CarSelectorScript : MonoBehaviour
             unlockedCarSounds.Add(carSounds[currentCar]);
             carSounds.RemoveAt(currentCar);
            
-            //Temp 
             UnSelectCarsList();
-            //
-            
             currentCar = 0;
             CanvasController.instance.EnableDisableCarSelectionUI(true);
         }
@@ -440,7 +440,8 @@ public class CarSelectorScript : MonoBehaviour
             print("Method that called spawn car: " + method_name);
 
             GameObject Car = Instantiate(car, transformToSpawnAt.position, transformToSpawnAt.rotation );
-        
+
+            AssignLastSpawnedCar(car);
 
             GameManager.instance.AssignSpawnedCarVariables(Car);
 
@@ -448,9 +449,6 @@ public class CarSelectorScript : MonoBehaviour
 
             CarController controller = Car.GetComponent<CarController>();
 
-          
-            
-        
             if (controller != null) 
             { 
                controller.SetFuelByDenomination(fuelDenomination);
@@ -541,6 +539,18 @@ public class CarSelectorScript : MonoBehaviour
         }
     }
 
+    private void AssignLastSpawnedCar(GameObject _car)
+    {
+        lastSpawnedCar = _car;
+    }
+    
+    /// <summary>
+    /// this simply returns most recently spawned player car, so the correct car can be spawned again once the car is destroyed for example. Eg.: if raiden was last car, spawn raiden
+    /// </summary>
+    public GameObject ReturnLastSpawnedCar()
+    {
+        return lastSpawnedCar;
+    }
 
     private void OnEnable()
     {
