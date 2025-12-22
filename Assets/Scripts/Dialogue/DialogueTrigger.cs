@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
@@ -18,6 +19,7 @@ public class DialogueTrigger : MonoBehaviour
 
     public void StartDialouge(bool fadeEffectonEnd = false) 
     {
+        GameManager.instance.DestroyPointerArrow();
         DialogueManager.instance.StartDialouge(dialouge, FreezePlayer);
         //need both of these for compatiblity
         DialogueManager.instance.fadeOutEffectAfterDialouge(fadeEffectonEnd);
@@ -39,6 +41,12 @@ public class DialogueTrigger : MonoBehaviour
         if(PostDialougeTrigger != null) 
         { 
             PostDialougeTrigger.SetActive(true);
+        }
+
+        if(!string.IsNullOrWhiteSpace(dialouge.PostDialogueInstructions))
+        {
+            CanvasController.instance.UpdateQuestObjectiveText(dialouge.PostDialogueInstructions);
+            CanvasController.instance.ShowObjectiveText(true);
         }
     }
 }

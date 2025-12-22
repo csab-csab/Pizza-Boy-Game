@@ -149,7 +149,7 @@ public class QuestManager : MonoBehaviour
         CanvasController.instance.Play_Cutscene_End_Fade();
         StartCoroutine(WaitBeforeRestarting());
     }
-
+    
     private void CompleteQuest()
     {
         GrantRewards();
@@ -162,6 +162,13 @@ public class QuestManager : MonoBehaviour
         if(quest.postQuestTriggerPoint != null) 
         { 
             quest.postQuestTriggerPoint.SetActive(true);
+            CanvasController.instance.UpdateQuestObjectiveText(quest.postQuestObjectiveMessage);
+            CanvasController.instance.ShowObjectiveText(true);
+
+            if(quest.pointArrowToPostQuestPoint)
+            {
+                GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, quest.postQuestTriggerPoint);
+            }
         }
 
         OnQuestCompleted?.Invoke();
@@ -243,7 +250,10 @@ public class QuestManager : MonoBehaviour
                         {
                             // Disables camera
                             GameManager.instance.ToggleFreeLookCamera(false);
+                            
+                            #if UNITY_EDITOR
                             print("event is working...");
+                            #endif
 
                             // Unsubscribe this handler
                             DialogueManager.OnDialogueFinished -= disableFreeLook;
@@ -301,7 +311,10 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
+            #if UNITY_EDITOR
             Debug.LogWarning("No more objectives");
+            #endif
+
             CompleteQuest();
         }
 

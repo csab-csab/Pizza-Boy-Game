@@ -26,6 +26,8 @@ public class PauseMenuControl : MonoBehaviour
 
     //Misc
     bool isUnpausing = false;
+    //used to hand over control of cursor to submenus
+    bool hasControl = true;
 
 
 
@@ -49,82 +51,83 @@ public class PauseMenuControl : MonoBehaviour
 
     private void Update()
     {
-       Ray ray = PauseMenuCamera.ScreenPointToRay(Input.mousePosition);
-       
-        if(Physics.Raycast(ray, out RaycastHit hit)) 
-        {
-            
-            if (hit.collider.TryGetComponent<ContinueButton>(out ContinueButton continueButton))
+       if(hasControl)
+       {
+        Ray ray = PauseMenuCamera.ScreenPointToRay(Input.mousePosition);
+        
+            if(Physics.Raycast(ray, out RaycastHit hit)) 
             {
-                HighlightMenuChoiceObj(continueButton.transform);
                 
-                if (Input.GetMouseButtonDown(0) && !isUnpausing)
+                if (hit.collider.TryGetComponent<ContinueButton>(out ContinueButton continueButton))
                 {
-                    StartCoroutine(UnPauseGame());
-                }
+                    HighlightMenuChoiceObj(continueButton.transform);
+                    
+                    if (Input.GetMouseButtonDown(0) && !isUnpausing)
+                    {
+                        StartCoroutine(UnPauseGame());
+                    }
 
-                if (ContinueText.fontSize < fontSize)
-                {
-                    scaleInText(ContinueText);
-                }
+                    if (ContinueText.fontSize < fontSize)
+                    {
+                        scaleInText(ContinueText);
+                    }
 
-                if (SettingsText.fontSize > 0 || QuitText.fontSize > 0) 
+                    if (SettingsText.fontSize > 0 || QuitText.fontSize > 0) 
+                    {
+                        scaleOutText(SettingsText);
+                        scaleOutText(QuitText);
+                    }
+                }
+                else if(hit.collider.TryGetComponent<SettingsButton>(out SettingsButton settingsButton)) 
+                { 
+                    HighlightMenuChoiceObj(settingsButton.transform);
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        CanvasController.instance.ToggleSettingsUi(true);
+                        HandOverControl(false);
+                    }
+
+                    if (SettingsText.fontSize < fontSize)
+                    {
+                        scaleInText(SettingsText);
+                    }
+                    
+                    if (ContinueText.fontSize > 0 || QuitText.fontSize > 0)
+                    {
+                        scaleOutText(ContinueText);
+                        scaleOutText(QuitText);
+                    }
+                }
+                else if (hit.collider.TryGetComponent<QuitGameButton>(out QuitGameButton quitGameButton))  
                 {
-                    scaleOutText(SettingsText);
-                    scaleOutText(QuitText);
+                    HighlightMenuChoiceObj(quitGameButton.transform);
+                    //QuitGame
+
+                    if (QuitText.fontSize < fontSize)
+                    {
+                        scaleInText(QuitText);
+                    }
+
+                    if (ContinueText.fontSize > 0 || SettingsText.fontSize > 0)
+                    {
+                        scaleOutText(ContinueText);
+                        scaleOutText(SettingsText);
+                    }
+                }
+                else
+                {
+                    TurnOffLight();
+                    if (ContinueText.fontSize > 0 || SettingsText.fontSize > 0 ||QuitText.fontSize > 0)
+                    {
+                        scaleOutText(ContinueText);
+                        scaleOutText(SettingsText);
+                        scaleOutText(QuitText);
+                    }
+
                 }
             }
-            else if(hit.collider.TryGetComponent<SettingsButton>(out SettingsButton settingsButton)) 
-            { 
-               HighlightMenuChoiceObj(settingsButton.transform);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Debug.LogWarning("Continue Game");
-                    //add actual ui to change settings
-                }
-
-                if (SettingsText.fontSize < fontSize)
-                {
-                    scaleInText(SettingsText);
-                }
-
-
-                if (ContinueText.fontSize > 0 || QuitText.fontSize > 0)
-                {
-                    scaleOutText(ContinueText);
-                    scaleOutText(QuitText);
-                }
-            }
-            else if (hit.collider.TryGetComponent<QuitGameButton>(out QuitGameButton quitGameButton))  
-            {
-                HighlightMenuChoiceObj(quitGameButton.transform);
-                //QuitGame
-
-                if (QuitText.fontSize < fontSize)
-                {
-                    scaleInText(QuitText);
-                }
-
-                if (ContinueText.fontSize > 0 || SettingsText.fontSize > 0)
-                {
-                    scaleOutText(ContinueText);
-                    scaleOutText(SettingsText);
-                }
-            }
-            else
-            {
-                TurnOffLight();
-                if (ContinueText.fontSize > 0 || SettingsText.fontSize > 0 ||QuitText.fontSize > 0)
-                {
-                    scaleOutText(ContinueText);
-                    scaleOutText(SettingsText);
-                    scaleOutText(QuitText);
-                }
-
-            }
-        }
-       
+       }
     }
 
     private void HighlightMenuChoiceObj(Transform objectToLookAt) 
@@ -171,6 +174,11 @@ public class PauseMenuControl : MonoBehaviour
     }
 
 
+    public void HandOverControl(bool pauseMenuHascontrol)
+    {
+        hasControl = pauseMenuHascontrol;
+    }
+
     private void OnEnable()
     {
         if (PauseMenuCamera != null)
@@ -179,6 +187,7 @@ public class PauseMenuControl : MonoBehaviour
         }
         AnimationController.PlayAnimation(CameraAnimator, PAUSE_MENU_IN);
         pauseMenuMusic.Play();
+        HandOverControl(true);
     }
 
     private void OnDisable()

@@ -76,7 +76,7 @@ public class DialogueManager : MonoBehaviour
   
         
         CanvasController.instance.ToggleDialougeUi(true);
-        StartCoroutine(WriteOutLine(cachedDialogue.Sentences[dialougeIndex]));
+        writingLine = StartCoroutine(WriteOutLine(cachedDialogue.Sentences[dialougeIndex]));
     }
 
 
@@ -112,10 +112,12 @@ public class DialogueManager : MonoBehaviour
        CanvasController.instance.DialougeClearSentence();
 
        foreach(char letter in sentence.ToCharArray()) 
-       {
+        {
             CanvasController.instance.UpdateDialogue(cachedDialogue.Name, letter);
             yield return new WaitForSeconds(displaySpeed);
-       } 
+        }
+
+       writingLine = null;
     }
 
     private void EndDialouge() 
