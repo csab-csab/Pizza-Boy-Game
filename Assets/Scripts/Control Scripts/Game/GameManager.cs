@@ -225,6 +225,9 @@ public class GameManager : MonoBehaviour
         CanvasController.instance.EnableDisableDebugUi(false);
         CanvasController.instance.EnableUi(false, false);
         CanvasController.instance.ClearInteractUiText();
+        #if !UNITY_EDITOR
+        CanvasController.instance.ToggleCursor(false);
+        #endif
         #endregion
 
         #region Get external Refs
@@ -524,6 +527,7 @@ public class GameManager : MonoBehaviour
             }
 
             CanvasController.instance.EnableDisableDebugUi(false);
+            CanvasController.instance.ToggleCursor(true);
         }
         else if(gameState == GameState.Paused)
         {
@@ -560,6 +564,8 @@ public class GameManager : MonoBehaviour
             {
                 CanvasController.instance.EnableDisableDebugUi(true);
             }
+
+            CanvasController.instance.ToggleCursor(false);
         }
     }
 

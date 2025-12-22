@@ -85,5 +85,17 @@ Camera Collison
 -Fixed issue where camera wasnt following Raiden correctly
 -Fixed radio stutter
 -Fixed car not working after respawning, due to sound bug
-
-
+14/12/2025
+-Fixed dialouge typing out gibberish when skipping
+-Made it so dialouge spawns after quest 1, arrow points to it
+-Also added message after afformentioned dialouge to point the player into the direction the story needs to go
+-Started making the settings menu
+18/12/2025
+-Made sure cursor behaves appropiately. Locked when playing, unlocked when paused.
+-Added code to enable settings ui
+-Added code to change volume
+22/12/2025
+-Added graphics change option
+-Added resolution change option
+-Added exit settings button
+-Added presentation mode dropdown option

@@ -42,6 +42,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] TMP_Text InteractText;
     [SerializeField] TMP_Text MoneyText;
     [SerializeField] GameObject FreeLookUi;
+    [SerializeField] GameObject SettingsUi;
 
 
     [Header("Car UI")]
@@ -554,6 +555,11 @@ public class CanvasController : MonoBehaviour
             CarOutOfFuelUi.transform.localScale = new Vector3(1, 0, 1);
         }
     }
+
+    public void ToggleSettingsUi(bool enabled)
+    {
+        SettingsUi.SetActive(enabled);
+    }
     #endregion
 
     #region Update UI Elements 
@@ -566,7 +572,7 @@ public class CanvasController : MonoBehaviour
 
     public void UpdatePizzaTemperatureUI(float temperature) 
     {
-       DeliveryTimer.text = temperature.ToString("F2") + "°C";
+       DeliveryTimer.text = temperature.ToString("F2") + "ï¿½C";
     }
    
     public void UpdateCountDownUi(int time)
@@ -941,11 +947,25 @@ public class CanvasController : MonoBehaviour
 
 
     #region Cursor
-    public void ToggleCursor(bool value) 
+    public void ToggleCursor(bool visible) 
     { 
-        Cursor.visible = value;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = visible;
+        switch(visible)
+        {
+            case false:
+                Cursor.lockState = CursorLockMode.Locked;
+                break;
+            case true:
+                #if UNITY_EDITOR
+                    Cursor.lockState = CursorLockMode.None;
+                #else
+                    Cursor.lockState = CursorLockMode.Confined;
+                #endif
+                break;
+        }
     }
+        
+
     #endregion
 
     #region Return Values
