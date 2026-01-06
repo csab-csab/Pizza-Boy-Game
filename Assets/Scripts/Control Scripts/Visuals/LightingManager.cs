@@ -205,6 +205,7 @@ public class LightingManager : MonoBehaviour
             if (streetLightManager == null) return;
 
             streetLightManager.EnableDisableStreetLights(false);
+            SoundManager.instance.SwapTimeOfDayAmbienece(true);
         }
         else if (dayStatus == DayStatus.Night)
         {
@@ -213,6 +214,7 @@ public class LightingManager : MonoBehaviour
             if (streetLightManager == null) return;
 
             streetLightManager.EnableDisableStreetLights(true);
+            SoundManager.instance.SwapTimeOfDayAmbienece(false);
         }
 
     }
@@ -270,9 +272,6 @@ public class LightingManager : MonoBehaviour
         Mins = (minutes * 60);
 
         CanvasController.instance.DisplayTime(Hours, Mins);
-       
-       // print(Hours + ":" + Mins.ToString("F0"));
-        
     }
 
     //Forces a certain time of day and prevents time from passing

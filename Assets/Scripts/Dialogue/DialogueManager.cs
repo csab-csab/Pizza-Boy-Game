@@ -54,6 +54,8 @@ public class DialogueManager : MonoBehaviour
            return;
         }
 
+        activeDialouge = true;
+
         freezePlayer = FreezePlayer;
 
         if (freezePlayer) 
@@ -68,7 +70,6 @@ public class DialogueManager : MonoBehaviour
 
         cachedDialogue = dialouge;
         
-        activeDialouge = true;
         dialougeIndex = 0;
         
         SpawnDespawnCharacter(false, dialouge);
@@ -130,7 +131,12 @@ public class DialogueManager : MonoBehaviour
 
         if(fadeOutEffectAfterDia)
         {
-            CanvasController.instance.Play_Cutscene_End_Fade();
+            CanvasController.instance.Call_Dialogue_End_Fade(OnDialogueFinished);
+        }
+        else
+        {
+            OnDialogueFinished?.Invoke();
+            DisplayPostDialougeInstructions(cachedDialogue.PostDialogueInstructions);
         }
 
         if (freezePlayer) 
@@ -139,8 +145,7 @@ public class DialogueManager : MonoBehaviour
             freezePlayer = false;
         }
 
-        OnDialogueFinished?.Invoke();
-        DisplayPostDialougeInstructions(cachedDialogue.PostDialogueInstructions);
+       
         cachedDialogue = null;
     }
 
@@ -200,6 +205,13 @@ public class DialogueManager : MonoBehaviour
             return;
         }
     }
+
+    #region  Return Values
+    public bool CheckIsActiveDialogue()
+    {
+        return activeDialouge;
+    }
+    #endregion
 
     private void DisplayPostDialougeInstructions(string text) 
     {

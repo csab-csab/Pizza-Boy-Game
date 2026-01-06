@@ -53,11 +53,18 @@ public class PauseMenuControl : MonoBehaviour
     {
        if(hasControl)
        {
-        Ray ray = PauseMenuCamera.ScreenPointToRay(Input.mousePosition);
-        
+            Ray ray = PauseMenuCamera.ScreenPointToRay(Input.mousePosition);
+
+            if(Input.GetButtonDown("Pause"))
+            {
+                StartCoroutine(UnPauseGame());
+            }
+
+
             if(Physics.Raycast(ray, out RaycastHit hit)) 
             {
-                
+               
+
                 if (hit.collider.TryGetComponent<ContinueButton>(out ContinueButton continueButton))
                 {
                     HighlightMenuChoiceObj(continueButton.transform);
@@ -127,7 +134,15 @@ public class PauseMenuControl : MonoBehaviour
 
                 }
             }
-       }
+        }
+        else
+        {
+            if(Input.GetButtonDown("Pause"))
+            {
+                CanvasController.instance.ToggleSettingsUi(false);
+                HandOverControl(true);
+            }
+        }
     }
 
     private void HighlightMenuChoiceObj(Transform objectToLookAt) 
