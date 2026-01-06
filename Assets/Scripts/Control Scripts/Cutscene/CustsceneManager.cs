@@ -133,6 +133,7 @@ public class CustsceneManager : MonoBehaviour
         
         CanvasController.instance.ToggleCutscene1UI(true);
         TriggerCutscene(Cutscenes[0], 20, false);
+        SoundManager.instance.ToggleAmbientSounds(false);
     }
 
 
@@ -159,6 +160,7 @@ public class CustsceneManager : MonoBehaviour
                 questTriggers[0].TriggerQuest();
                
                 GameManager.instance.ToggleFreeLookCamera(false , false);
+                SoundManager.instance.ToggleAmbientSounds(true);
 
                 //to ensure quest 1 isnt triuggered again
                 lastCutscene = null;

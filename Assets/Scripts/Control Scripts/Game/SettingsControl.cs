@@ -26,42 +26,60 @@ public class SettingsControl:MonoBehaviour
         GetAvailableResolutions();
     }
 
-    #region Ui Interaction
+    #region Video and Graphics
     public void SetResolution(int resolutionIndex)
-    {
-        Resolution selectedRes = availableResolutions[resolutionIndex];
-        Screen.SetResolution(selectedRes.width, selectedRes.height, isFullScreen);
-    }
+        {
+            Resolution selectedRes = availableResolutions[resolutionIndex];
+            Screen.SetResolution(selectedRes.width, selectedRes.height, isFullScreen);
+        }
 
-    public void SetGraphicsQuality(int QualityIndex)
-    {
-        QualitySettings.SetQualityLevel(QualityIndex);
-    }
+        public void SetGraphicsQuality(int QualityIndex)
+        {
+            QualitySettings.SetQualityLevel(QualityIndex);
+        }
 
-    public void SetPresentationMode(int PresentationModeIndex)
+        public void SetPresentationMode(int PresentationModeIndex)
+        {
+            switch(PresentationModeIndex)
+            {
+                case 0:
+                    Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+                    isFullScreen = true;
+                    break;
+                case 1:
+                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                    isFullScreen = true;
+                    break;
+                case 2:
+                    Screen.fullScreenMode = FullScreenMode.Windowed;
+                    isFullScreen = false;
+                    break;
+            }
+        }
+    #endregion
+
+    #region Gameplay
+    public void SwitchTransmission(int index)
     {
-        switch(PresentationModeIndex)
+        switch(index)
         {
             case 0:
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                isFullScreen = true;
+                GameManager.instance.AccessCarController().SwitchTransmissionMode(CarController.typeOfTransmission.automatic);
                 break;
             case 1:
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                isFullScreen = true;
-                break;
-            case 2:
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                isFullScreen = false;
+                GameManager.instance.AccessCarController().SwitchTransmissionMode(CarController.typeOfTransmission.manual);
                 break;
         }
     }
+    #endregion
 
-    public void SetMasterVolume(float volume)
-    {
-        AudioListener.volume = volume;
-        print($"Volume: {volume}");
-    }
+    #region  Audio
+        public void SetMasterVolume(float volume)
+        {
+           SoundManager.instance.ModifyMasterVolume(volume);
+            print($"Volume: {volume}");
+        }
+    
     #endregion
 
     private void GetAvailableResolutions()

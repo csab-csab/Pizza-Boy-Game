@@ -99,3 +99,19 @@ Camera Collison
 -Added resolution change option
 -Added exit settings button
 -Added presentation mode dropdown option
+23/12/2025
+-Added transmission mode change option
+-Fixed car sound continuning after engine shutoff within the start engine sound period.
+-Fixed press f to deliver not showing
+-Fixing press f to start delivery stuck
+30/12/2025
+-Fixed press f to start getting stuck
+-Did some minor map work
+-Start on ambient sounds
+-Added option to unpause properly using escape key
+05/01/2026
+-Added ambient sounds
+-Added code to vary pitch, pan and volume of wind and crickets to make it feel more random
+06/1/2026
+-Added birds singing for daytime ambience
+-Added some extra roads 

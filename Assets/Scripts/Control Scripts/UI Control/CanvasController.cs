@@ -178,6 +178,7 @@ public class CanvasController : MonoBehaviour
     private bool freeLookHUDon;
     //this variable is used exculsively to check whether to reenable gameplay ui after dialouge
     private bool wasGamePlayUiOn;
+    private bool startDeliverTextCleared;
     #endregion
 
     float GoTimer;
@@ -665,7 +666,7 @@ public class CanvasController : MonoBehaviour
 
     public void ClearInteractUiText()
     {
-        InteractText.text = "";
+        InteractText.text = " "; 
     }
 
     public void UpdateNumberOfPizzas(int pizza) 
@@ -910,7 +911,28 @@ public class CanvasController : MonoBehaviour
     public void Play_Cutscene_End_Fade()
     {
        Cutscene_EndAnimator.Play(CUTSCENE_End_FADE_IN);
+
     }
+
+    public void Call_Dialogue_End_Fade(DialogueManager.DialougeFinished eventOnFinish, Action executeOnFinish = null)
+    {
+        StartCoroutine(Play_Dialogue_End_Fade(eventOnFinish, executeOnFinish));
+    }
+
+    IEnumerator Play_Dialogue_End_Fade(DialogueManager.DialougeFinished eventOnFinish, Action executeOnFinish = null)
+    {
+        float cutscene_length = Return_Cutscene_End_Fade_Length();
+        
+        Cutscene_EndAnimator.Play(CUTSCENE_End_FADE_IN);
+        yield return new WaitForSecondsRealtime(cutscene_length);
+        eventOnFinish?.Invoke();
+        
+        if (executeOnFinish != null)
+        {
+            executeOnFinish();
+        }
+    }
+
    
    //Return the length of the animations
    //Used to wait for fade before starting new object/Quest etc.
@@ -989,6 +1011,15 @@ public class CanvasController : MonoBehaviour
         return DialougePanel.transform.localScale.y > 0;
     }
     
+    public bool ReturnDeliveryTextCleared()
+    {
+        return startDeliverTextCleared;
+    }
+
+    public void AssignDeliverTextCleared(bool cleared)
+    {
+        startDeliverTextCleared = cleared;
+    }
     #endregion
    
     //Pre selects button to allow navigation of buttons with arrow keys and controller

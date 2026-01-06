@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -253,8 +254,8 @@ public class GameManager : MonoBehaviour
     {
         #region Input Handling
 
-
-        if (Input.GetButtonDown("Pause"))
+        //Unpause in pause menu control
+        if (Input.GetButtonDown("Pause") && gameState != GameState.Paused)
         {
             PauseGame();
         }
@@ -507,6 +508,7 @@ public class GameManager : MonoBehaviour
             PauseMenu.SetActive(true);
 
             SoundManager.instance.ToggleMuteAudioForPause(true);
+            SoundManager.instance.ToggleAmbientSounds(false);
 
             if (CanvasController.instance.ReturnGamePlayUiOn())
             {
@@ -541,6 +543,7 @@ public class GameManager : MonoBehaviour
             PauseMenu.SetActive(false);
 
             SoundManager.instance.ToggleMuteAudioForPause(false);
+             SoundManager.instance.ToggleAmbientSounds(true);
 
             if (wasGamePlayUi)
             {
@@ -578,11 +581,13 @@ public class GameManager : MonoBehaviour
             case FuelMode.Refueling:
                 ModifyGameState(GameState.Refueling);
                 CanvasController.instance.ToggleRefuelUi(true, carController);
+                CanvasController.instance.ToggleCursor(true);
                 break;
 
             case FuelMode.Normal:
                 ModifyGameState(GameState.Playing);
                 CanvasController.instance.ToggleRefuelUi(false);
+                CanvasController.instance.ToggleCursor(false);
                 break;
         }
     }
@@ -767,6 +772,8 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Attempted to start delivery while " + Gamemode + "and " + gameState+ "\n This is not allowed.");
             return; 
         }
+
+        EnableDisableMapTriggers(false);
 
         if (DialogueHolder.instance != null)
         {
@@ -1276,6 +1283,18 @@ public class GameManager : MonoBehaviour
         return carController.transform.position;
     }
 
+    public CarController AccessCarController()
+    {
+        if(carController != null)
+        {
+            return carController;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
     public PlayerManager ReturnPlayerManager() 
     {
         //if multiple player managers add arg to choose correct
