@@ -19,43 +19,46 @@ public class SettingsControl:MonoBehaviour
     #region  UI
     [Header("UI")]
     [SerializeField] TMP_Dropdown resDropdown;
+    [SerializeField] TMP_Dropdown qualityDropdown;
+    [SerializeField] TMP_Dropdown presDropdown;
     #endregion
 
     private void Start()
     {
         GetAvailableResolutions();
+        SetDefDropDownVals(QualitySettings.GetQualityLevel(), (int)Screen.fullScreenMode);
     }
 
     #region Video and Graphics
     public void SetResolution(int resolutionIndex)
-        {
-            Resolution selectedRes = availableResolutions[resolutionIndex];
-            Screen.SetResolution(selectedRes.width, selectedRes.height, isFullScreen);
-        }
+    {
+        Resolution selectedRes = availableResolutions[resolutionIndex];
+        Screen.SetResolution(selectedRes.width, selectedRes.height, isFullScreen);
+    }
 
-        public void SetGraphicsQuality(int QualityIndex)
-        {
-            QualitySettings.SetQualityLevel(QualityIndex);
-        }
+    public void SetGraphicsQuality(int QualityIndex)
+    {
+        QualitySettings.SetQualityLevel(QualityIndex);
+    }
 
-        public void SetPresentationMode(int PresentationModeIndex)
+    public void SetPresentationMode(int PresentationModeIndex)
+    {
+        switch(PresentationModeIndex)
         {
-            switch(PresentationModeIndex)
-            {
-                case 0:
-                    Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                    isFullScreen = true;
-                    break;
-                case 1:
-                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                    isFullScreen = true;
-                    break;
-                case 2:
-                    Screen.fullScreenMode = FullScreenMode.Windowed;
-                    isFullScreen = false;
-                    break;
-            }
+            case 0:
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+                isFullScreen = true;
+                break;
+            case 1:
+                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                isFullScreen = true;
+                break;
+            case 2:
+                Screen.fullScreenMode = FullScreenMode.Windowed;
+                isFullScreen = false;
+                break;
         }
+    }
     #endregion
 
     #region Gameplay
@@ -74,11 +77,11 @@ public class SettingsControl:MonoBehaviour
     #endregion
 
     #region  Audio
-        public void SetMasterVolume(float volume)
-        {
-           SoundManager.instance.ModifyMasterVolume(volume);
-            print($"Volume: {volume}");
-        }
+    public void SetMasterVolume(float volume)
+    {
+        AudioListener.volume = volume;
+        print($"Volume: {volume}");
+    }
     
     #endregion
 
@@ -122,5 +125,11 @@ public class SettingsControl:MonoBehaviour
         resDropdown.AddOptions(formattedStrings);
         resDropdown.value = currentResIndex;
         resDropdown.RefreshShownValue();
+    }
+
+    private void SetDefDropDownVals(int qualIndex, int presIndex)
+    {
+        qualityDropdown.value = qualIndex;
+        presDropdown.value = presIndex;
     }
 }

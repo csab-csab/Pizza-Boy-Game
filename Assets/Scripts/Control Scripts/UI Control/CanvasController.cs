@@ -41,6 +41,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] TMP_Text NotificationText;
     [SerializeField] TMP_Text InteractText;
     [SerializeField] TMP_Text MoneyText;
+    [SerializeField] GameObject SavingsText;
     [SerializeField] GameObject FreeLookUi;
     [SerializeField] GameObject SettingsUi;
 
@@ -495,6 +496,18 @@ public class CanvasController : MonoBehaviour
                 wasGamePlayUiOn = false;
                 EnableDisableGameplayUi(true);
             }
+        }
+    }
+
+    public void ToggleSavingsText(bool on)
+    {
+        if (on)
+        {
+            SavingsText.SetActive(true);
+        } 
+        else
+        {
+            SavingsText.SetActive(false);
         }
     }
 
