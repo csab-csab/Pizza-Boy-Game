@@ -10,6 +10,7 @@
   <Project Path="Boxophobic.Utils.Scripts.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
+  <Project Path="Unity.2D.Sprite.Editor.csproj" />
   <Project Path="Unity.Multiplayer.Center.Common.csproj" />
   <Project Path="Boxophobic.SkyboxCubemapExtended.Editor.csproj" />
 </Solution>

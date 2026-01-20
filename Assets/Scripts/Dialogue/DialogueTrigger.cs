@@ -10,6 +10,9 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] bool DisableDialougeTriggerObj = false;
     [SerializeField] bool FreezePlayer = false;
     [SerializeField] GameObject PostDialougeTrigger;
+    
+    [SerializeField]bool enableSavingsTextPostDia = false;
+    
   
     
     private void Start()
@@ -47,6 +50,11 @@ public class DialogueTrigger : MonoBehaviour
         {
             CanvasController.instance.UpdateQuestObjectiveText(dialouge.PostDialogueInstructions);
             CanvasController.instance.ShowObjectiveText(true);
+        }
+
+        if(enableSavingsTextPostDia)
+        {
+            CanvasController.instance.ToggleSavingsText(true);
         }
     }
 }
