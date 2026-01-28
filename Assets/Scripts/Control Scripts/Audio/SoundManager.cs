@@ -75,6 +75,7 @@ public class SoundManager : MonoBehaviour
         radioManager = GetComponentInChildren<RadioManager>();
 
         QuestManager.OnQuestCompleted += PlayQuestCompleteChime;
+        GameManager.OnDeliveryCompleted += PlayQuestCompleteChime;
 
         InvokeRepeating("VaryWindNoiseProperties", 2f, 30f);
     }
