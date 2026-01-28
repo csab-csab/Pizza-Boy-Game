@@ -39,6 +39,8 @@ public class DialogueTrigger : MonoBehaviour
         return dialouge.Name;
     }
 
+    //please ensure that you disable the object when its not needed as this is a global even, and will always get called,
+    //regardless if this was the correct dialogue or not
     private void TriggerEventAfterDia() 
     {
         if(PostDialougeTrigger != null) 

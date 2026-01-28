@@ -4305,6 +4305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Bush_02 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1681130047304334, guid: 78ff8aca7f76b3c4db8387aac4c52f21, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4729865671827640, guid: 78ff8aca7f76b3c4db8387aac4c52f21, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.99999976

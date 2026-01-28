@@ -118,7 +118,6 @@ public class LightingManager : MonoBehaviour
         {
             // New in-game hour has started
             secondsSinceLastHour = 0f; // Reset the counter
-            print("New hour");
         }
 
         // Calculate and display the real-world duration of one in-game hour

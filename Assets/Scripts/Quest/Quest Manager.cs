@@ -67,13 +67,13 @@ public class QuestManager : MonoBehaviour
     {
         if (autoRestart && currentTimeUntilRestart > 0)
         {
-            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
             currentTimeUntilRestart -= Time.deltaTime;
+            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
         }
         
         if (autoRestart && currentTimeUntilRestart <= 0 || autoRestart && Input.GetKey(KeyCode.Return))
         {
-            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
+            CanvasController.instance.UpdateQuestOverTimerBar(0, 1);
             autoRestart = false;
             RestartQuest();
         }

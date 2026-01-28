@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72a2d0c52b16a9d4282b1028b9d00ef1, type: 3}
-  m_Name: First Real Pre Delivery Dialouge
+  m_Name: Pre delivery dia 3
   m_EditorClassIdentifier: 
   Dialouge:
     Name: Tony Mozzarella
@@ -18,8 +18,7 @@ MonoBehaviour:
       type: 3}
     charTransformSpawnOn: {fileID: 0}
     Sentences:
-    - 'Hey Kid! You back for some more "doughliveries"? '
-    - "Busy night ahead, so i hope you doughn\u2019t give up halfway."
-    - Go dish the pie!
+    - "Look who rolled in! We\u2019re slammed tonight, so keep it cheesy and don\u2019t
+      get sauced out there."
     triggerFadeAfterDialouge: 1
     PostDialogueInstructions: 

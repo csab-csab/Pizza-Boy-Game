@@ -42,24 +42,24 @@ public class FreeLookCameraMovement : MonoBehaviour
         //Calculate movement based on direction camera is facing
         Vector3 moveDirection = transform.forward * verticalMove + transform.right * horizontalMove;
 
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection * moveSpeed * Time.unscaledDeltaTime, Space.World);
 
         if (Input.GetButton("Camera Move Up"))
         {
-         transform.Translate(Vector3.up * moveSpeed * Time.deltaTime, Space.World);
+         transform.Translate(Vector3.up * moveSpeed * Time.unscaledDeltaTime, Space.World);
         }
 
         #region Controller Camera Move up/down
         if (Input.GetAxis("RT") > 0) 
         {
             float rt = Input.GetAxis("RT");
-            transform.Translate(new Vector3( 0, rt) * moveSpeed * Time.deltaTime, Space.World);
+            transform.Translate(new Vector3( 0, rt) * moveSpeed * Time.unscaledDeltaTime, Space.World);
         }
 
         if (Input.GetAxis("LT") > 0)
         {
             float lt = Input.GetAxis("LT");
-            transform.Translate(new Vector3(0, -lt) * moveSpeed * Time.deltaTime, Space.World);
+            transform.Translate(new Vector3(0, -lt) * moveSpeed * Time.unscaledDeltaTime, Space.World);
         }
         #endregion
        
@@ -79,8 +79,8 @@ public class FreeLookCameraMovement : MonoBehaviour
         {
 
              velocity = new Vector2(
-                 Mathf.MoveTowards(velocity.x, -vertical, smoothing.x *Time.deltaTime),
-                 Mathf.MoveTowards(velocity.y, horizontal, smoothing.y * Time.deltaTime));
+                 Mathf.MoveTowards(velocity.x, -vertical, smoothing.x *Time.unscaledDeltaTime),
+                 Mathf.MoveTowards(velocity.y, horizontal, smoothing.y * Time.unscaledDeltaTime));
         
 
           currentRotation += velocity;

@@ -586,7 +586,7 @@ public class CanvasController : MonoBehaviour
 
     public void UpdatePizzaTemperatureUI(float temperature) 
     {
-       DeliveryTimer.text = temperature.ToString("F2") + "�C";
+       DeliveryTimer.text = temperature.ToString("F2") + "°C";
     }
    
     public void UpdateCountDownUi(int time)

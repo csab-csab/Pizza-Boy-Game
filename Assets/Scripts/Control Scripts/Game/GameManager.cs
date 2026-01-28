@@ -155,6 +155,10 @@ public class GameManager : MonoBehaviour
     //private, serialize used for debug
     [SerializeField] int currentNoPizzas;
 
+    public delegate void DeliveryCompleted();
+
+    public static DeliveryCompleted OnDeliveryCompleted;
+
     [Space(10)]
 
     [Header("GameObject References")]
@@ -925,6 +929,7 @@ public class GameManager : MonoBehaviour
         if (!failed)
         {
             player.AddToDelisComplete();
+            OnDeliveryCompleted?.Invoke();
         }
         
         if (QuestManager.isQuestActive == false)
@@ -943,7 +948,8 @@ public class GameManager : MonoBehaviour
         player.GiveMoney(payout);
 
         CanvasController.instance.UpdateQuestOverText("Delivery Complete!", false);
-        CanvasController.instance.UpdateQuestOverSubText($"+$ {payout:F0} Pay + {bonus:F2} Tips");
+        CanvasController.instance.UpdateQuestOverSubText($"+$ {payout:F0} Pay + ${bonus:F2} Tips");
+        CanvasController.instance.UpdateQuestOverTimerBar(0,1);
         CanvasController.instance.CallQuestOverFade();
 
 
