@@ -397,17 +397,18 @@ public class QuestManager : MonoBehaviour
         if (quest.questExtras.carToSpawn != null &&
             quest.questExtras.carTransformToSpawnOn != null)
         {
+            int TransmissionTypeIndex = GameManager.instance.ReturnTransmissionTypeLoaded();
             //spawn the car in 1st quest with less fuel
             if (quest.id == 0)
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
-                extras.carToSpawn, 4,
+                extras.carToSpawn, 4, TransmissionTypeIndex,
                   nameof(SpawnQuestCar));
             }
             else 
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
-                extras.carToSpawn, 1,
+                extras.carToSpawn, 1,TransmissionTypeIndex,
                 nameof(SpawnQuestCar));
             }
         }

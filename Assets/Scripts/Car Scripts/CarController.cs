@@ -115,7 +115,7 @@ public class CarController : MonoBehaviour
     [SerializeField] enum typeOfDrive { frontWheelDrive, rearWheelDrive, allWheelDrive };
     [SerializeField] typeOfDrive TypeOfDrive;
 
-    public enum typeOfTransmission { manual, automatic };
+    public enum typeOfTransmission {automatic, manual};
     public typeOfTransmission TypeOfTransmission;
 
     [Header("Paricle Effects")]
@@ -975,7 +975,7 @@ public class CarController : MonoBehaviour
 
     public void SwitchTransmissionMode(typeOfTransmission transmission)
     {
-        TypeOfTransmission = transmission;
+      TypeOfTransmission = transmission;
     }
 
     public void ResetCarPostion() 
