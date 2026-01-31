@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
+using UnityEditor.SearchService;
 using UnityEngine;
+using Unity_SM = UnityEngine.SceneManagement; 
 
 public class SceneManager : MonoBehaviour
 {
-   public static SceneManager instance;
+   public static SceneManager instance{get; private set;}
 
     private bool isFirstStart = true;
     private bool isLoading = false;
 
     private float loadProgress = 0f;
 
+  
+
     private void Awake()
     {
-        if(instance != null)
+        if(instance != null && instance != this)
         {
             Destroy(this.gameObject);
             return;
@@ -21,8 +26,7 @@ public class SceneManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
-
-
+    
     public void LoadScene(int sceneIndex)
     {
         StartCoroutine(LoadSceneAsync(sceneIndex));
@@ -35,7 +39,7 @@ public class SceneManager : MonoBehaviour
         loadProgress = 0f;
 
         AsyncOperation operation =
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneIndex);
+        Unity_SM.SceneManager.LoadSceneAsync(sceneIndex);
 
         operation.allowSceneActivation = false;
 
@@ -54,6 +58,8 @@ public class SceneManager : MonoBehaviour
         isLoading = false;
     }
 
+
+   
     #region Return Values
     public bool ReturIsFirstStart()
     {
@@ -68,6 +74,11 @@ public class SceneManager : MonoBehaviour
     public float ReturnLoadProgress()
     {
         return loadProgress;
+    }
+    public int ReturnCurrentSceneIndex()
+    {
+        Unity_SM.Scene scene = Unity_SM.SceneManager.GetActiveScene();
+        return scene.buildIndex;
     }
     #endregion
 }

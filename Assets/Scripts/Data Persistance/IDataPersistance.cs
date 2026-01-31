@@ -1,16 +1,9 @@
 using UnityEngine;
 
-public class IDataPersistance : MonoBehaviour
+public interface IDataPersistance
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  void SaveGameData(ref GameData gameData);
+  void LoadGameData(GameData gameData);
+  void SaveSettingsData(ref SettingsData settingsData);
+  void LoadSettingsData(SettingsData settingsData);
 }

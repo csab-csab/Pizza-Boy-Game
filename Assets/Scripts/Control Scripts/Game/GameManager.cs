@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistance
 {
    public static GameManager instance;
 
@@ -121,8 +121,6 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
-
     #region Pizza Delivery Stuff Variables
     [Header("Pizza Delivery Related Variables")]
 
@@ -171,7 +169,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject garage_trigger_point;
     [SerializeField] GameObject refuel_trigger_point_parent;
 
-    //Lists must be intialised
     [SerializeField]List<GameObject> fuel_triggers = new List<GameObject>();
 
 
@@ -187,6 +184,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Input Related Variables
+
+    #region  Saving/Loading Refs
+    int TransmissionTypeIndex;
+    #endregion
+
     [Header("Input Variables")]
 
     public bool isJoystickDpadXEnabled;
@@ -214,7 +216,6 @@ public class GameManager : MonoBehaviour
         //Change this when fully implemented
         player = PlayerParent.GetChild(0).GetComponent<PlayerManager>();
         
-       
         #region Get Self Contained References
         try
         {
@@ -230,9 +231,11 @@ public class GameManager : MonoBehaviour
         CanvasController.instance.EnableDisableDebugUi(false);
         CanvasController.instance.EnableUi(false, false);
         CanvasController.instance.ClearInteractUiText();
+        //ONLY COMMENTED OUT FOR TEST BUILD
+       /*
         #if !UNITY_EDITOR
         CanvasController.instance.ToggleCursor(false);
-        #endif
+        #endif*/
         #endregion
 
         #region Get external Refs
@@ -358,7 +361,7 @@ public class GameManager : MonoBehaviour
 
                 if(Input.GetKeyDown(KeyCode.Comma))
                 {
-                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, nameof(GameManager.instance.Start));
+                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, TransmissionTypeIndex, nameof(GameManager.instance.Start));
                      SetPlayState();
                 }
 
@@ -439,7 +442,7 @@ public class GameManager : MonoBehaviour
         if (gameState == GameState.CarDestroyed && Input.GetButtonDown("Jump") 
             ^ Input.anyKeyDown)
         {
-            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn,  CarSelectorScript.instance.ReturnLastSpawnedCar(), 1, nameof(GameManager.instance.Start));
+            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn,  CarSelectorScript.instance.ReturnLastSpawnedCar(), 1, TransmissionTypeIndex, nameof(GameManager.instance.Start));
             CanvasController.instance.EnableDisableGameplayUi(true);
         }
 
@@ -467,10 +470,10 @@ public class GameManager : MonoBehaviour
         switch (car) 
         { 
             case StartGameDebug.CarToSpawn.Emma:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
                 break;
             case StartGameDebug.CarToSpawn.Raiden:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
                 break;
         }
         
@@ -1308,6 +1311,32 @@ public class GameManager : MonoBehaviour
         //if multiple player managers add arg to choose correct
         return player;
     }
+
+    public int ReturnTransmissionTypeLoaded()
+    {
+       return this.TransmissionTypeIndex;
+    }
     #endregion
+
+     public void SaveGameData(ref GameData gameData)
+    {
+       
+    }
+
+    public void LoadGameData(GameData gameData)
+    {
+      
+    }
+
+    public void SaveSettingsData(ref SettingsData settingsData)
+    {
+       
+    }
+
+    public void LoadSettingsData(SettingsData settingsData)
+    {
+        this.TransmissionTypeIndex = settingsData.TransmissionTypeIndex;
+        print($"in game, manager, loading{TransmissionTypeIndex}");
+    }
 }
 

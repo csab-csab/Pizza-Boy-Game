@@ -12,7 +12,7 @@ public class CarSelectorScript : MonoBehaviour
     
     //Events
    //this event is used to spawn the car by other scripts without needing a reference
-    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, string method);
+    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method);
     public static TriggerSpawnCar triggerSpawnCar; 
     
     [Header("Properties")]
@@ -433,7 +433,7 @@ public class CarSelectorScript : MonoBehaviour
 
     //Spawns Any Car
     //WARNING, IF CAR DOESNT WORK WHEN SPAWNED MAKE SURE GAME MANAGER STATE IS PLAYING
-    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination ,string method_name)
+    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method_name)
     {
            string method_called_from_name = method_name;
 
@@ -448,6 +448,7 @@ public class CarSelectorScript : MonoBehaviour
             CameraManager.instance.AssignCameras(Car);
 
             CarController controller = Car.GetComponent<CarController>();
+            controller.SwitchTransmissionMode((CarController.typeOfTransmission)TransmissionTypeIndex);
 
             if (controller != null) 
             { 
