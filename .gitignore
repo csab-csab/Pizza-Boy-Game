@@ -88,3 +88,10 @@ Thumbs.db
 # Unity Cloud Collaborate cache
 /[Cc]ollab/
 
+# Unity baked lighting
+Assets/**/Lightmap-*
+Assets/**/LightingData.asset
+Assets/**/ReflectionProbe-*.exr
+Assets/**/OcclusionCullingData.asset
+
+
