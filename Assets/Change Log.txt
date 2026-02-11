@@ -120,3 +120,8 @@ Camera Collison
 -Fully working main menu with settings menu
 21/01/2026
 -Added lots of pre-delivery dialouge
+06/02/2026
+-Map changes, added houses to circular road and fixed some visual issues
+-Started fixing ai 
+-baked lights but they need fixing
+-added new stuart radio sprites

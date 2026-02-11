@@ -4,18 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(DictionarySerializer))]
-public class MainMenuManager : MonoBehaviour
+public class MainMenuManager : MonoBehaviour, IDataPersistance
 {
     public DictionarySerializer dictionarySerializer;
     private Dictionary<int, GameObject> menuIndexDic = new Dictionary<int, GameObject>();
 
     private int currentScreenIndex = 0;
-
+    
     [Header("Smooth ScaleInUiVals")]
     [SerializeField] float scaleRate = 0.25f;
 
     [Header("LoadingScreen")]
     [SerializeField] Image LoadingBar;
+
+    [Header("Ui References")]
+    [SerializeField]Button ContinueButton;
 
     private void Start()
     {
@@ -70,9 +73,14 @@ public class MainMenuManager : MonoBehaviour
         NavigateMainMenu(2);
     }
 
+    public void OpenWarning()
+    {
+        NavigateMainMenu(3);
+    }
+    
     public void ReturnToPrevScreen()
     {
-        NavigateMainMenu(currentScreenIndex - 1);
+        NavigateMainMenu(currentScreenIndex-1);
     }
 
     public void StartGame()
@@ -123,6 +131,35 @@ public class MainMenuManager : MonoBehaviour
             LoadingBar.fillAmount = SceneManager.instance.ReturnLoadProgress();
             print(SceneManager.instance.ReturnLoadProgress());
         }
+    }
+
+    public void SaveGameData(ref GameData gameData)
+    {
+      
+    }
+
+    public void LoadGameData(GameData gameData)
+    {
+        
+        if(gameData.currentQuest <= 0)
+        {
+            ContinueButton.interactable = false;
+        }
+        else
+        {
+             ContinueButton.interactable = true;
+             print("true");
+        } 
+    }
+
+    public void SaveSettingsData(ref SettingsData settingsData)
+    {
+        //not needed
+    }
+
+    public void LoadSettingsData(SettingsData settingsData)
+    {
+        //not needed
     }
 
     #endregion

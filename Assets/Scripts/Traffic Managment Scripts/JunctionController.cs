@@ -12,7 +12,7 @@ public class JunctionController : JunctionManagerBase
 
    [SerializeField] private Queue<JunctionPoint> orderedPoints = new Queue<JunctionPoint>();
 
-    [Header("Used for deciding which point should be the first. sometimes when at a junction, cars have to join a route rather than")]
+    [Header("Used for deciding which point should be the first. sometimes when at a junction, cars have to join a route rather than start new")]
     [SerializeField] private List<int> startOnPoint;
 
     private bool isManaging = false;

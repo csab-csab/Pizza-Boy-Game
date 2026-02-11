@@ -70,6 +70,7 @@ public class LightingManager : MonoBehaviour
             "Make sure it is on the same gameobject as this script!\n" + e);
         }
 
+        SetTimeOfDay("start" ,12, false);
     }
 
     private void Update()
@@ -128,6 +129,7 @@ public class LightingManager : MonoBehaviour
         sunManager.UpdateSunPosition(TimeOfDay, secondsSinceLastHour, realWorldSecondsPerGameHour);
     }
 
+    
     private void UpdateLighting(float timePercent)
     {
         if (LightingPreset == null)
@@ -226,6 +228,7 @@ public class LightingManager : MonoBehaviour
         blendedSkybox.Lerp(daySkybox, nightSkybox, blendValue);
         return blendedSkybox;
     }
+
 
     void UpdateSkyBox(bool isDay)
     {

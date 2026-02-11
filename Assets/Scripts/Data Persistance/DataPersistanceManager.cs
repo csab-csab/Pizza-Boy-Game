@@ -45,18 +45,19 @@ public class DataPersistanceManager : MonoBehaviour
         this.fileDataHandler = new FileDataHandler(Application.persistentDataPath, gameDataFileName, settingsDataFileName);
         LoadSettingsData();
         LoadGame();
+        SaveGame();
     }
 
     public void NewGame()
     {
         this.gameData = new GameData();
-        this.settingsData = new SettingsData();
-        //print("No game data was found. Creating new...");
+        SaveGame();
     }
 
     public void NewSettings()
     {
       //print("No settings data was found. Creating new...");
+      this.settingsData = new SettingsData();
     }
 
     public void LoadGame()
