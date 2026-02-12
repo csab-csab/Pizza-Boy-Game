@@ -54,6 +54,11 @@ public class QuestManager : MonoBehaviour
     private float desiredValue;
     #endregion
 
+    #region  Misc
+    //Incase of that multpiple different dialogue cam positions
+    //are needed, this pointer keeps track of which one we need
+    private int dialogueCamIndexPtr = 0;
+    #endregion
     private void Start()
     {
         OnObjectiveCompleted += CheckObjectiveComplete;
@@ -229,11 +234,14 @@ public class QuestManager : MonoBehaviour
                     break;
                 case Objective.ObjectiveType.Dialouge:
                     GameManager.instance.DisableCar(false);
-                    if(quest.questExtras.dialougeCameraPosition != null && quest.currentObjectiveIndex == quest.questExtras.objectiveIndxForCamPos) 
+                    if(quest.questExtras.dialougeCameraPositions.Length > 0 &&
+                     quest.currentObjectiveIndex == quest.questExtras.objectiveIndxsForCamPos[dialogueCamIndexPtr]) 
                     {
+                        dialogueCamIndexPtr ++;
+                        
                         GameManager.instance.ToggleFreeLookCamera(true, true,
-                            quest.questExtras.dialougeCameraPosition.position, 
-                            quest.questExtras.dialougeCameraPosition.rotation);
+                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
+                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation);
                      
                         //creates new event handler
                         DialogueManager.DialougeFinished disableFreeLook = null;
