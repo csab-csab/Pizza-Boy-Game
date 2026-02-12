@@ -70,6 +70,7 @@ public class LightingManager : MonoBehaviour
             "Make sure it is on the same gameobject as this script!\n" + e);
         }
 
+        SetTimeOfDay("start" ,12, false);
     }
 
     private void Update()
@@ -118,7 +119,6 @@ public class LightingManager : MonoBehaviour
         {
             // New in-game hour has started
             secondsSinceLastHour = 0f; // Reset the counter
-            print("New hour");
         }
 
         // Calculate and display the real-world duration of one in-game hour
@@ -129,6 +129,7 @@ public class LightingManager : MonoBehaviour
         sunManager.UpdateSunPosition(TimeOfDay, secondsSinceLastHour, realWorldSecondsPerGameHour);
     }
 
+    
     private void UpdateLighting(float timePercent)
     {
         if (LightingPreset == null)
@@ -205,6 +206,7 @@ public class LightingManager : MonoBehaviour
             if (streetLightManager == null) return;
 
             streetLightManager.EnableDisableStreetLights(false);
+            SoundManager.instance.SwapTimeOfDayAmbienece(true);
         }
         else if (dayStatus == DayStatus.Night)
         {
@@ -213,6 +215,7 @@ public class LightingManager : MonoBehaviour
             if (streetLightManager == null) return;
 
             streetLightManager.EnableDisableStreetLights(true);
+            SoundManager.instance.SwapTimeOfDayAmbienece(false);
         }
 
     }
@@ -225,6 +228,7 @@ public class LightingManager : MonoBehaviour
         blendedSkybox.Lerp(daySkybox, nightSkybox, blendValue);
         return blendedSkybox;
     }
+
 
     void UpdateSkyBox(bool isDay)
     {
@@ -270,9 +274,6 @@ public class LightingManager : MonoBehaviour
         Mins = (minutes * 60);
 
         CanvasController.instance.DisplayTime(Hours, Mins);
-       
-       // print(Hours + ":" + Mins.ToString("F0"));
-        
     }
 
     //Forces a certain time of day and prevents time from passing

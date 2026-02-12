@@ -14,7 +14,8 @@ public class QuestTrigger : MonoBehaviour
            questManager.StartQuest();
             if (this.gameObject.GetComponent<QuestManager>() != null) 
             {
-                this.enabled = false;
+                print("Quest manager on this go:" + this.gameObject.GetComponent<QuestManager>() != null);
+                //this.enabled = false;
             }
             else 
             {

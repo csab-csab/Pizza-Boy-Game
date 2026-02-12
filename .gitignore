@@ -79,6 +79,7 @@ Thumbs.db
 # Rider / VSCode project settings
 .idea/
 .vscode/
+.vsconfig
 
 # Auto-generated builds or exports folder
 /[Aa]ssets/[Bb]undles/
@@ -86,4 +87,11 @@ Thumbs.db
 
 # Unity Cloud Collaborate cache
 /[Cc]ollab/
+
+# Unity baked lighting
+Assets/**/Lightmap-*
+Assets/**/LightingData.asset
+Assets/**/ReflectionProbe-*.exr
+Assets/**/OcclusionCullingData.asset
+
 

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
+using NUnit.Framework;
 using UnityEngine;
 
 
@@ -113,8 +115,8 @@ public class CarController : MonoBehaviour
     [SerializeField] enum typeOfDrive { frontWheelDrive, rearWheelDrive, allWheelDrive };
     [SerializeField] typeOfDrive TypeOfDrive;
 
-    [SerializeField] enum typeOfTransmission { manual, automatic };
-    [SerializeField] typeOfTransmission TypeOfTransmission;
+    public enum typeOfTransmission {automatic, manual};
+    public typeOfTransmission TypeOfTransmission;
 
     [Header("Paricle Effects")]
     [SerializeField] List<TrailRenderer> TyreSkidMarks;
@@ -148,6 +150,8 @@ public class CarController : MonoBehaviour
     [Header("Sounds")]
     AudioSource carAudioSource;
     AudioSource tyreAudioSource;
+    Coroutine startNormalEngineSound = null;
+    Coroutine stopNormalEngineSound = null;
     #endregion
     #region Events
     public delegate void OutOfFuel();
@@ -157,6 +161,11 @@ public class CarController : MonoBehaviour
     public OutOfFuel OutOfFuelEvent;
     public static LowOnFuel LowOnFuelEvent;
     public static HighOnFuel HighOnFuelEvent;
+    #endregion
+
+    #region Refs
+    [Header("YOU MUST ASSIGN CAMERA LOOK AT OBJECT HERE!!!OTHERWISE CAMERA WILL NOT WORK!")]
+    [SerializeField] Transform CameraLookAt;
     #endregion
 
     private void Start()
@@ -315,7 +324,7 @@ public class CarController : MonoBehaviour
 
             }
             //switch down
-            else if (!isReversing && gearChangeCoolDown <= 0 && currentGear > 1 && engineRpm <= switchDOWNRPM && engineRpm < lastRPM)
+            else if (!isReversing && /*gearChangeCoolDown <= 0 &&*/ currentGear > 1 && engineRpm <= switchDOWNRPM && engineRpm < lastRPM)
             {
                 ChangeGear(currentGear - 1);
                 gearChangeCoolDown = baseGearChangeCoolDown;
@@ -532,8 +541,14 @@ public class CarController : MonoBehaviour
             ParticleEffectsControl.instance.PlayParticleEffect(ExhaustSmoke);
             ParticleEffectsControl.instance.PlayParticleEffect(ExhaustSmoke1);
 
+            if(stopNormalEngineSound != null)
+            {
+                StopCoroutine(stopNormalEngineSound);
+                stopNormalEngineSound = null;
+            }
+
             SoundManager.instance.SetAudioClip(carAudioSource, preset.startSound, false);
-            StartCoroutine(SoundManager.instance.PlayCarStartSound(carAudioSource, preset.runningSound));
+            startNormalEngineSound = StartCoroutine(SoundManager.instance.PlayCarStartSound(carAudioSource, preset.runningSound));
             wasEngineOn = true;
 
         }
@@ -547,6 +562,13 @@ public class CarController : MonoBehaviour
 
             ParticleEffectsControl.instance.StopParticleEffect(ExhaustSmoke);
             ParticleEffectsControl.instance.StopParticleEffect(ExhaustSmoke1);
+            
+            if(startNormalEngineSound != null)
+            {
+                StopCoroutine(startNormalEngineSound);
+                startNormalEngineSound = null;
+            }
+            
             if (wasEngineOn == true)
             {
                 SoundManager.instance.SetAudioClip(carAudioSource, preset.shutDownSound, false);
@@ -926,17 +948,12 @@ public class CarController : MonoBehaviour
         return false;
     }
 
-    //Enables Car Movement
-    //Toggle
-    public void EnableCarMovement()
+     public void EnableCarMovement()
     {
         isEnabled = true;
         ToggleLockAllBrakes(false);
-
-    
-        
     }
-    //Disables Car Movement
+   
     public void DisableCarMovement(bool engineOff = false)
     {
         currentBrakeForce = maxBrakeForce;
@@ -948,14 +965,17 @@ public class CarController : MonoBehaviour
         SoundManager.instance.ModifyVolume(tyreAudioSource, 0);
         SoundManager.instance.ModifyPitch(carAudioSource, preset.carRpmToPitch.Evaluate(idleRPM));
 
-
-
         if (engineOff)
         {
             Debug.LogError("Engine off executed");
             ToggleEngine(false);
         }
         
+    }
+
+    public void SwitchTransmissionMode(typeOfTransmission transmission)
+    {
+      TypeOfTransmission = transmission;
     }
 
     public void ResetCarPostion() 
@@ -973,11 +993,6 @@ public class CarController : MonoBehaviour
     {
         return isEnabled;
     }
-    #endregion
-
-    #region CoolDowns
-
-
     #endregion
 
     #region Lights
@@ -1022,8 +1037,8 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Delivery Point"))
         {
-            //scriptable obj for notification text
-            CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.DeliverPizzaTextPc);
+           CanvasController.instance.ClearInteractUiText();
+           CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.DeliverPizzaTextPc);
         }
 
         if (other.gameObject.CompareTag(GameManager.instance.INSTANT_DESTROY_TAG)) 
@@ -1036,6 +1051,8 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Delivery Point"))
         {
+            CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.DeliverPizzaTextPc);
+
             if (Input.GetAxis("Joystick Dpad X") > 0f && GameManager.instance.ReturnJoystickXStatus() || Input.GetKeyDown("f"))
             {
                 GameManager.instance.EndCurrentDelivery();
@@ -1044,22 +1061,27 @@ public class CarController : MonoBehaviour
         }
         
   
-        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.Gamemode != GameManager.gamemode.FinishedDelivery)
+        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.Gamemode != GameManager.gamemode.FinishedDelivery 
+        && GameManager.instance.Gamemode != GameManager.gamemode.Delivery && !DialogueManager.instance.CheckIsActiveDialogue())
         {
-            //this needs to be called here not entry so it can be showed when the speed is 0
             CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.StartDeliveryTextPc);
+            CanvasController.instance.AssignDeliverTextCleared(false);
             
             if (Input.GetAxis("Joystick Dpad X") > 0f && GameManager.instance.ReturnJoystickXStatus() || Input.GetKeyDown("f"))
             {
                 GameManager.instance.TryStartDelivery();
                 
                 CanvasController.instance.ClearInteractUiText();
+                CanvasController.instance.AssignDeliverTextCleared(true);
             }
         }
-        else if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed > 0)
+        else if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed > 0 && !CanvasController.instance.ReturnDeliveryTextCleared()
+        || !CanvasController.instance.ReturnDeliveryTextCleared() && !other.gameObject.transform.CompareTag("Start Delivery"))
         {
             CanvasController.instance.ClearInteractUiText();
+            CanvasController.instance.AssignDeliverTextCleared(true);
         }
+       
 
         if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.Gamemode == GameManager.gamemode.FinishedDelivery)
         {
@@ -1190,7 +1212,10 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region Return Variables
-
+    public Transform ReturnCameraLookAtTrans() 
+    {
+        return CameraLookAt;
+    }
     #endregion
 
     #region Set Values

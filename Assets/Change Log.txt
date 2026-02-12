@@ -79,5 +79,49 @@ make sure its perfectly synced.
 17/10/2025
 Done a few bits and pieces in the past fews but didnt document them. :( Today I fixed the quest restart after fail not working, also fixed the issues with dialouge bugging when skipping.
 Finally, I added a method that forces the dialouge to end on quest fail if the player happens to somehow fail the mission mid dialouge.
-
-
+09/11/2025
+Camera Collison
+13/12/2025
+-Fixed issue where camera wasnt following Raiden correctly
+-Fixed radio stutter
+-Fixed car not working after respawning, due to sound bug
+14/12/2025
+-Fixed dialouge typing out gibberish when skipping
+-Made it so dialouge spawns after quest 1, arrow points to it
+-Also added message after afformentioned dialouge to point the player into the direction the story needs to go
+-Started making the settings menu
+18/12/2025
+-Made sure cursor behaves appropiately. Locked when playing, unlocked when paused.
+-Added code to enable settings ui
+-Added code to change volume
+22/12/2025
+-Added graphics change option
+-Added resolution change option
+-Added exit settings button
+-Added presentation mode dropdown option
+23/12/2025
+-Added transmission mode change option
+-Fixed car sound continuning after engine shutoff within the start engine sound period.
+-Fixed press f to deliver not showing
+-Fixing press f to start delivery stuck
+30/12/2025
+-Fixed press f to start getting stuck
+-Did some minor map work
+-Start on ambient sounds
+-Added option to unpause properly using escape key
+05/01/2026
+-Added ambient sounds
+-Added code to vary pitch, pan and volume of wind and crickets to make it feel more random
+06/1/2026
+-Added birds singing for daytime ambience
+-Added some extra roads 
+20/1/2026
+-Major map update
+-Fully working main menu with settings menu
+21/01/2026
+-Added lots of pre-delivery dialouge
+06/02/2026
+-Map changes, added houses to circular road and fixed some visual issues
+-Started fixing ai 
+-baked lights but they need fixing
+-added new stuart radio sprites

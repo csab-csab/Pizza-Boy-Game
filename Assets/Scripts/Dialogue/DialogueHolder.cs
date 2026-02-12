@@ -37,8 +37,8 @@ public class DialogueHolder : MonoBehaviour
     {
        if(index > DeliveryDialougeList.Count - 1) 
        {
-            Debug.LogError("Dialouge out of range");
-            return null;
+            int random = Random.Range(1, DeliveryDialougeList.Count);
+            return DeliveryDialougeList[random].Dialouge;
        }
         
         return DeliveryDialougeList[index].Dialouge;

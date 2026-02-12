@@ -19,6 +19,7 @@ MonoBehaviour:
     charTransformSpawnOn: {fileID: 0}
     Sentences:
     - 'Hey Kid! You back for some more "doughliveries"? '
-    - "Busy night ahead of so i hope you doughn\u2019t give up halfway."
+    - "Busy night ahead, so i hope you doughn\u2019t give up halfway."
     - Go dish the pie!
     triggerFadeAfterDialouge: 1
+    PostDialogueInstructions: 

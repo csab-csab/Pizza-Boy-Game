@@ -43,7 +43,7 @@ public class QuestManager : MonoBehaviour
     private float currentTimeUntilRestart;
     //used after succesful completion of quest for disabling quest object so ui displays correctly and so there is only one quest active at a time
     private float currentTimeUntilTermination;
-    private bool isQuestOver = false;
+    [SerializeField]private bool isQuestOver = false;
     private bool autoRestart = false;
     Quest lastQuest;
     #endregion
@@ -67,24 +67,24 @@ public class QuestManager : MonoBehaviour
     {
         if (autoRestart && currentTimeUntilRestart > 0)
         {
-            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
             currentTimeUntilRestart -= Time.deltaTime;
+            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
         }
         
         if (autoRestart && currentTimeUntilRestart <= 0 || autoRestart && Input.GetKey(KeyCode.Return))
         {
-            CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
+            CanvasController.instance.UpdateQuestOverTimerBar(0, 1);
             autoRestart = false;
             RestartQuest();
         }
 
         if (isQuestOver && currentTimeUntilTermination > 0) 
-        { 
-            currentTimeUntilTermination -= Time.deltaTime;
+        {
+           currentTimeUntilTermination -= Time.deltaTime;
             CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilTermination, TimeUntilTermination);
         }
-        else
-        { 
+        else if(isQuestOver && currentTimeUntilTermination <= 0)
+        {
             isQuestOver = false;
             TerminateQuest();
         }
@@ -102,6 +102,7 @@ public class QuestManager : MonoBehaviour
 
     public void StartQuest()
     {
+        print("quest started");
         if (quest != null && !isQuestActive)
         {
             GameManager.instance.AssignQuestManager(this);
@@ -148,7 +149,7 @@ public class QuestManager : MonoBehaviour
         CanvasController.instance.Play_Cutscene_End_Fade();
         StartCoroutine(WaitBeforeRestarting());
     }
-
+    
     private void CompleteQuest()
     {
         GrantRewards();
@@ -161,6 +162,13 @@ public class QuestManager : MonoBehaviour
         if(quest.postQuestTriggerPoint != null) 
         { 
             quest.postQuestTriggerPoint.SetActive(true);
+            CanvasController.instance.UpdateQuestObjectiveText(quest.postQuestObjectiveMessage);
+            CanvasController.instance.ShowObjectiveText(true);
+
+            if(quest.pointArrowToPostQuestPoint)
+            {
+                GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, quest.postQuestTriggerPoint);
+            }
         }
 
         OnQuestCompleted?.Invoke();
@@ -242,7 +250,10 @@ public class QuestManager : MonoBehaviour
                         {
                             // Disables camera
                             GameManager.instance.ToggleFreeLookCamera(false);
+                            
+                            #if UNITY_EDITOR
                             print("event is working...");
+                            #endif
 
                             // Unsubscribe this handler
                             DialogueManager.OnDialogueFinished -= disableFreeLook;
@@ -300,7 +311,10 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
+            #if UNITY_EDITOR
             Debug.LogWarning("No more objectives");
+            #endif
+
             CompleteQuest();
         }
 
@@ -383,17 +397,18 @@ public class QuestManager : MonoBehaviour
         if (quest.questExtras.carToSpawn != null &&
             quest.questExtras.carTransformToSpawnOn != null)
         {
+            int TransmissionTypeIndex = GameManager.instance.ReturnTransmissionTypeLoaded();
             //spawn the car in 1st quest with less fuel
             if (quest.id == 0)
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
-                extras.carToSpawn, 4,
+                extras.carToSpawn, 4, TransmissionTypeIndex,
                   nameof(SpawnQuestCar));
             }
             else 
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
-                extras.carToSpawn, 1,
+                extras.carToSpawn, 1,TransmissionTypeIndex,
                 nameof(SpawnQuestCar));
             }
         }

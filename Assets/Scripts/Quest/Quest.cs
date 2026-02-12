@@ -27,6 +27,10 @@ public class Quest
 
     public GameObject postQuestTriggerPoint;
 
+    public string postQuestObjectiveMessage = "This a post quest objective message.";
+
+    public bool pointArrowToPostQuestPoint = false;
+
     public QuestExtras questExtras;
 
     public Objective NextObjective()

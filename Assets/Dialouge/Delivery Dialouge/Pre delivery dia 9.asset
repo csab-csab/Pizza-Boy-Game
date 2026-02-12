@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72a2d0c52b16a9d4282b1028b9d00ef1, type: 3}
+  m_Name: Pre delivery dia 9
+  m_EditorClassIdentifier: 
+  Dialouge:
+    Name: Tony Mozzarella
+    characterToSpawn: {fileID: 1038128334585484, guid: a92acd4090533d84bb62ba63b05c0db5,
+      type: 3}
+    charTransformSpawnOn: {fileID: 0}
+    Sentences:
+    - "Customer\u2019s waiting, don\u2019t keep them hungry."
+    triggerFadeAfterDialouge: 1
+    PostDialogueInstructions: 

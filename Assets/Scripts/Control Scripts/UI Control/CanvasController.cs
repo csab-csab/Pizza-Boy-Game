@@ -41,7 +41,9 @@ public class CanvasController : MonoBehaviour
     [SerializeField] TMP_Text NotificationText;
     [SerializeField] TMP_Text InteractText;
     [SerializeField] TMP_Text MoneyText;
+    [SerializeField] GameObject SavingsText;
     [SerializeField] GameObject FreeLookUi;
+    [SerializeField] GameObject SettingsUi;
 
 
     [Header("Car UI")]
@@ -177,6 +179,7 @@ public class CanvasController : MonoBehaviour
     private bool freeLookHUDon;
     //this variable is used exculsively to check whether to reenable gameplay ui after dialouge
     private bool wasGamePlayUiOn;
+    private bool startDeliverTextCleared;
     #endregion
 
     float GoTimer;
@@ -496,6 +499,18 @@ public class CanvasController : MonoBehaviour
         }
     }
 
+    public void ToggleSavingsText(bool on)
+    {
+        if (on)
+        {
+            SavingsText.SetActive(true);
+        } 
+        else
+        {
+            SavingsText.SetActive(false);
+        }
+    }
+
     private void CallQuestTitleFade()
     {
         scaleInQuestTitle = true;
@@ -554,6 +569,11 @@ public class CanvasController : MonoBehaviour
             CarOutOfFuelUi.transform.localScale = new Vector3(1, 0, 1);
         }
     }
+
+    public void ToggleSettingsUi(bool enabled)
+    {
+        SettingsUi.SetActive(enabled);
+    }
     #endregion
 
     #region Update UI Elements 
@@ -566,7 +586,7 @@ public class CanvasController : MonoBehaviour
 
     public void UpdatePizzaTemperatureUI(float temperature) 
     {
-       DeliveryTimer.text = temperature.ToString("F2") + "°C";
+       DeliveryTimer.text = temperature.ToString("F2") + "Â°C";
     }
    
     public void UpdateCountDownUi(int time)
@@ -659,7 +679,7 @@ public class CanvasController : MonoBehaviour
 
     public void ClearInteractUiText()
     {
-        InteractText.text = "";
+        InteractText.text = " "; 
     }
 
     public void UpdateNumberOfPizzas(int pizza) 
@@ -904,7 +924,28 @@ public class CanvasController : MonoBehaviour
     public void Play_Cutscene_End_Fade()
     {
        Cutscene_EndAnimator.Play(CUTSCENE_End_FADE_IN);
+
     }
+
+    public void Call_Dialogue_End_Fade(DialogueManager.DialougeFinished eventOnFinish, Action executeOnFinish = null)
+    {
+        StartCoroutine(Play_Dialogue_End_Fade(eventOnFinish, executeOnFinish));
+    }
+
+    IEnumerator Play_Dialogue_End_Fade(DialogueManager.DialougeFinished eventOnFinish, Action executeOnFinish = null)
+    {
+        float cutscene_length = Return_Cutscene_End_Fade_Length();
+        
+        Cutscene_EndAnimator.Play(CUTSCENE_End_FADE_IN);
+        yield return new WaitForSecondsRealtime(cutscene_length);
+        eventOnFinish?.Invoke();
+        
+        if (executeOnFinish != null)
+        {
+            executeOnFinish();
+        }
+    }
+
    
    //Return the length of the animations
    //Used to wait for fade before starting new object/Quest etc.
@@ -941,11 +982,25 @@ public class CanvasController : MonoBehaviour
 
 
     #region Cursor
-    public void ToggleCursor(bool value) 
+    public void ToggleCursor(bool visible) 
     { 
-        Cursor.visible = value;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = visible;
+        switch(visible)
+        {
+            case false:
+                Cursor.lockState = CursorLockMode.Locked;
+                break;
+            case true:
+                #if UNITY_EDITOR
+                    Cursor.lockState = CursorLockMode.None;
+                #else
+                    Cursor.lockState = CursorLockMode.Confined;
+                #endif
+                break;
+        }
     }
+        
+
     #endregion
 
     #region Return Values
@@ -969,6 +1024,15 @@ public class CanvasController : MonoBehaviour
         return DialougePanel.transform.localScale.y > 0;
     }
     
+    public bool ReturnDeliveryTextCleared()
+    {
+        return startDeliverTextCleared;
+    }
+
+    public void AssignDeliverTextCleared(bool cleared)
+    {
+        startDeliverTextCleared = cleared;
+    }
     #endregion
    
     //Pre selects button to allow navigation of buttons with arrow keys and controller

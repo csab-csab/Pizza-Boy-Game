@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using Cinemachine;
 using UnityEngine.Playables;
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistance
 {
    public static GameManager instance;
 
@@ -56,8 +55,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject car_select;
     [SerializeField]GameObject car_select_cam;
 
-    //Reference to cinemachine cam
-    [SerializeField] CinemachineFreeLook cinema_machine_Cam;
     //Reference To Actual Rendering Camera
     [SerializeField] Camera car_cam;
 
@@ -124,8 +121,6 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
-
     #region Pizza Delivery Stuff Variables
     [Header("Pizza Delivery Related Variables")]
 
@@ -145,7 +140,7 @@ public class GameManager : MonoBehaviour
 
 
     //using my amazing research skills, I found out pizza is around
-    //250 °C so this number will be used to calculate the pizza temp timer
+    //250 ï¿½C so this number will be used to calculate the pizza temp timer
     private static float HOT_PIZZA_TEMP = 250f;
 
     private static float ROOM_TEMP = 25f;
@@ -157,6 +152,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] int pizzasToDeliver;
     //private, serialize used for debug
     [SerializeField] int currentNoPizzas;
+
+    public delegate void DeliveryCompleted();
+
+    public static DeliveryCompleted OnDeliveryCompleted;
 
     [Space(10)]
 
@@ -170,7 +169,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject garage_trigger_point;
     [SerializeField] GameObject refuel_trigger_point_parent;
 
-    //Lists must be intialised
     [SerializeField]List<GameObject> fuel_triggers = new List<GameObject>();
 
 
@@ -186,6 +184,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Input Related Variables
+
+    #region  Saving/Loading Refs
+    int TransmissionTypeIndex;
+    #endregion
+
     [Header("Input Variables")]
 
     public bool isJoystickDpadXEnabled;
@@ -213,7 +216,6 @@ public class GameManager : MonoBehaviour
         //Change this when fully implemented
         player = PlayerParent.GetChild(0).GetComponent<PlayerManager>();
         
-       
         #region Get Self Contained References
         try
         {
@@ -229,6 +231,11 @@ public class GameManager : MonoBehaviour
         CanvasController.instance.EnableDisableDebugUi(false);
         CanvasController.instance.EnableUi(false, false);
         CanvasController.instance.ClearInteractUiText();
+        //ONLY COMMENTED OUT FOR TEST BUILD
+       /*
+        #if !UNITY_EDITOR
+        CanvasController.instance.ToggleCursor(false);
+        #endif*/
         #endregion
 
         #region Get external Refs
@@ -254,8 +261,8 @@ public class GameManager : MonoBehaviour
     {
         #region Input Handling
 
-
-        if (Input.GetButtonDown("Pause"))
+        //Unpause in pause menu control
+        if (Input.GetButtonDown("Pause") && gameState != GameState.Paused)
         {
             PauseGame();
         }
@@ -354,7 +361,7 @@ public class GameManager : MonoBehaviour
 
                 if(Input.GetKeyDown(KeyCode.Comma))
                 {
-                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, nameof(GameManager.instance.Start));
+                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, TransmissionTypeIndex, nameof(GameManager.instance.Start));
                      SetPlayState();
                 }
 
@@ -431,13 +438,12 @@ public class GameManager : MonoBehaviour
             carController.GiveFuel(Input.GetAxis("Jump") * fuelUnitMultiplier * Time.deltaTime, true);
             CanvasController.instance.UpdateRefuelBar(carController.currentFuel, carController.FuelCapacity);
         }
-
+        //if car is destroyed, respawn car
         if (gameState == GameState.CarDestroyed && Input.GetButtonDown("Jump") 
             ^ Input.anyKeyDown)
         {
-            //ToggleCarSelect(true);
-
-            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn, DefaultCar, 1, nameof(GameManager.instance.Start));
+            CarSelectorScript.instance.SpawnSpecifiedCar(DefaultCarSpawn,  CarSelectorScript.instance.ReturnLastSpawnedCar(), 1, TransmissionTypeIndex, nameof(GameManager.instance.Start));
+            CanvasController.instance.EnableDisableGameplayUi(true);
         }
 
         if(gameState == GameState.CarOutOfFuel && Input.GetButtonDown("Jump") ^ Input.anyKeyDown)  
@@ -464,10 +470,10 @@ public class GameManager : MonoBehaviour
         switch (car) 
         { 
             case StartGameDebug.CarToSpawn.Emma:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
                 break;
             case StartGameDebug.CarToSpawn.Raiden:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
                 break;
         }
         
@@ -509,6 +515,7 @@ public class GameManager : MonoBehaviour
             PauseMenu.SetActive(true);
 
             SoundManager.instance.ToggleMuteAudioForPause(true);
+            SoundManager.instance.ToggleAmbientSounds(false);
 
             if (CanvasController.instance.ReturnGamePlayUiOn())
             {
@@ -529,6 +536,7 @@ public class GameManager : MonoBehaviour
             }
 
             CanvasController.instance.EnableDisableDebugUi(false);
+            CanvasController.instance.ToggleCursor(true);
         }
         else if(gameState == GameState.Paused)
         {
@@ -542,6 +550,7 @@ public class GameManager : MonoBehaviour
             PauseMenu.SetActive(false);
 
             SoundManager.instance.ToggleMuteAudioForPause(false);
+             SoundManager.instance.ToggleAmbientSounds(true);
 
             if (wasGamePlayUi)
             {
@@ -565,6 +574,8 @@ public class GameManager : MonoBehaviour
             {
                 CanvasController.instance.EnableDisableDebugUi(true);
             }
+
+            CanvasController.instance.ToggleCursor(false);
         }
     }
 
@@ -577,11 +588,13 @@ public class GameManager : MonoBehaviour
             case FuelMode.Refueling:
                 ModifyGameState(GameState.Refueling);
                 CanvasController.instance.ToggleRefuelUi(true, carController);
+                CanvasController.instance.ToggleCursor(true);
                 break;
 
             case FuelMode.Normal:
                 ModifyGameState(GameState.Playing);
                 CanvasController.instance.ToggleRefuelUi(false);
+                CanvasController.instance.ToggleCursor(false);
                 break;
         }
     }
@@ -767,6 +780,8 @@ public class GameManager : MonoBehaviour
             return; 
         }
 
+        EnableDisableMapTriggers(false);
+
         if (DialogueHolder.instance != null)
         {
             Dialouge PreDeliveryDialouge = DialogueHolder.instance.ReturnDeliveryDialouge(player.ReturnDelisCompleted());
@@ -819,7 +834,7 @@ public class GameManager : MonoBehaviour
 
         CanvasController.instance.EnableUi(false, true);
         CanvasController.instance.UpdateNumberOfPizzas(currentNoPizzas);
-        CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25°C!");
+        CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25ï¿½C!");
     }
     
     private void SpawnDeliveryPoint() 
@@ -917,6 +932,7 @@ public class GameManager : MonoBehaviour
         if (!failed)
         {
             player.AddToDelisComplete();
+            OnDeliveryCompleted?.Invoke();
         }
         
         if (QuestManager.isQuestActive == false)
@@ -935,7 +951,8 @@ public class GameManager : MonoBehaviour
         player.GiveMoney(payout);
 
         CanvasController.instance.UpdateQuestOverText("Delivery Complete!", false);
-        CanvasController.instance.UpdateQuestOverSubText($"+$ {payout:F0} Pay + {bonus:F2} Tips");
+        CanvasController.instance.UpdateQuestOverSubText($"+$ {payout:F0} Pay + ${bonus:F2} Tips");
+        CanvasController.instance.UpdateQuestOverTimerBar(0,1);
         CanvasController.instance.CallQuestOverFade();
 
 
@@ -949,10 +966,12 @@ public class GameManager : MonoBehaviour
 
         //enable quest trigger
        if(player.ReturnMoney() >= QuestPrerequisite.DreamCarCost) 
-       {
+        {
             EnableDisableMapTriggers(false, false, false, true);
             QuestPrerequisite.Quest2TriggerRef.SetActive(true);
-       }
+            CanvasController.instance.UpdateNotificationText("CONGRATS! You have saved enough to buy your dream car!");
+            SpawnPointerArrow(ArrowType.Objective,  QuestPrerequisite.Quest2TriggerRef);
+        }
         
     }
 
@@ -1094,11 +1113,10 @@ public class GameManager : MonoBehaviour
     //Assings nessecary variables to a car just spawned
     public void AssignSpawnedCarVariables(GameObject car) 
     {
-        cinema_machine_Cam.Follow = car.transform;
-        cinema_machine_Cam.LookAt = car.transform;
-
         carController = car.GetComponent<CarController>();
         carController.SetPlayer(player);
+
+        CameraManager.instance.PassRefsToCinemachine(carController.ReturnCameraLookAtTrans());
 
         CarController.LowOnFuelEvent += EnableFuelTriggerOnLowFuel;
         carController.OutOfFuelEvent += CarOutOfFuel;
@@ -1276,11 +1294,49 @@ public class GameManager : MonoBehaviour
         return carController.transform.position;
     }
 
+    public CarController AccessCarController()
+    {
+        if(carController != null)
+        {
+            return carController;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
     public PlayerManager ReturnPlayerManager() 
     {
         //if multiple player managers add arg to choose correct
         return player;
     }
+
+    public int ReturnTransmissionTypeLoaded()
+    {
+       return this.TransmissionTypeIndex;
+    }
     #endregion
+
+     public void SaveGameData(ref GameData gameData)
+    {
+       
+    }
+
+    public void LoadGameData(GameData gameData)
+    {
+      
+    }
+
+    public void SaveSettingsData(ref SettingsData settingsData)
+    {
+       
+    }
+
+    public void LoadSettingsData(SettingsData settingsData)
+    {
+        this.TransmissionTypeIndex = settingsData.TransmissionTypeIndex;
+        print($"in game, manager, loading{TransmissionTypeIndex}");
+    }
 }
 

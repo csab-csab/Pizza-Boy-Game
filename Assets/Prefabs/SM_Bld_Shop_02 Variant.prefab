@@ -8,9 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1479735946079136, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1505297201169936, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662917476775690, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1767746906731792, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Shop_02 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1767746906731792, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4048332410202056, guid: 35929e51da1a27e4596769c6a2b89ae0, type: 3}
       propertyPath: m_RootOrder
@@ -90,12 +106,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23428272230670534, guid: 35929e51da1a27e4596769c6a2b89ae0,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 28646867ddcf90a4989276acd313ea43, type: 2}
     - target: {fileID: 23428272230670534, guid: 35929e51da1a27e4596769c6a2b89ae0,
         type: 3}
-      propertyPath: m_Materials.Array.data[1]
+      propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: a42d40093a06b634cb49e6bfda441946, type: 2}
     m_RemovedComponents: []

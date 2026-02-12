@@ -20,6 +20,8 @@ public class Destructible : MonoBehaviour
     {
         if (TryGetComponent<Rigidbody>(out rb))
         {
+            rb.isKinematic = false;
+            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
 
