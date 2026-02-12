@@ -110,18 +110,12 @@ public class QuestManager : MonoBehaviour
             CanvasController.instance.EnableDisableGameplayUi(true);
             isQuestActive = true;
 
-            //Tweak this method in the following way:
-            //if there is an assigned car in quest extras class
-            //spawn said car
-            //else spawn current car in quest start location
             if (quest.questExtras.carToSpawn != null)
             {
+                GameManager.instance.ForceDestroyCurCar();
                 SpawnQuestCar();
             }
-            else
-            {
-                //SpawnCurrentCarQuest();
-            }
+            
 
             //triggers quest started event
             CanvasController.instance.UpdateQuestTitleText(quest.QuestName);
