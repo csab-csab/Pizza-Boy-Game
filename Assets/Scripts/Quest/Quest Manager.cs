@@ -59,6 +59,8 @@ public class QuestManager : MonoBehaviour
     //are needed, this pointer keeps track of which one we need
     private int dialogueCamIndexPtr = 0;
     #endregion
+
+
     private void Start()
     {
         OnObjectiveCompleted += CheckObjectiveComplete;
@@ -114,7 +116,8 @@ public class QuestManager : MonoBehaviour
             GameManager.instance.SetPlayState();
             CanvasController.instance.EnableDisableGameplayUi(true);
             isQuestActive = true;
-
+            print("Ran");
+            //print quest id
             if (quest.questExtras.carToSpawn != null)
             {
                 GameManager.instance.ForceDestroyCurCar();
@@ -130,6 +133,7 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
+            print($"Quest null: {quest == null}, questActive: {isQuestActive}");
             Debug.LogError("Quest is null. Please assign quest in the inspector! ");
         }
     }
