@@ -55,7 +55,8 @@ public class QuestManager : MonoBehaviour
     #endregion
 
     #region Reach point variables
-        private float currentTime;
+        private bool isTimerReachPointActive = false;
+        private float currentTimeToReachPoint;
         private float allowedTime;
     #endregion
 
@@ -92,7 +93,7 @@ public class QuestManager : MonoBehaviour
 
         if (isQuestOver && currentTimeUntilTermination > 0) 
         {
-           currentTimeUntilTermination -= Time.deltaTime;
+            currentTimeUntilTermination -= Time.deltaTime;
             CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilTermination, TimeUntilTermination);
         }
         else if(isQuestOver && currentTimeUntilTermination <= 0)
@@ -109,15 +110,18 @@ public class QuestManager : MonoBehaviour
             CheckReachValue();
         }
 
-        if (currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime
-            && currentTime > 0)
+        if ( isTimerReachPointActive && currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime
+            && currentTimeToReachPoint > 0)
         {
-            currentTime -= Time.deltaTime;
+            currentTimeToReachPoint -= Time.deltaTime;
+            CanvasController.instance.UpdateTimerUI(currentTimeToReachPoint, "Time left:" );
         }
-        else if (quest.ReturnCurrentObjective().type == Objective.ObjectiveType.ReachPointWithinTime &&
-                currentTime <= 0)
+        else if ( isTimerReachPointActive && quest.ReturnCurrentObjective().type == Objective.ObjectiveType.ReachPointWithinTime &&
+                 currentTimeToReachPoint <= 0)
         {
+            isTimerReachPointActive = false;
             OnObjectiveFailed?.Invoke("Failed to reach destination in time!");
+            CanvasController.instance.ToggleGPTimerUi(false);
         }
        
     }
@@ -314,7 +318,8 @@ public class QuestManager : MonoBehaviour
                     PlayableAsset cutscene = quest.ReturnCurrentObjective().Cutscene;
                     if (cutscene != null)
                     {
-                        CustsceneManager.instance.TriggerCutscene(quest.ReturnCurrentObjective().Cutscene, 0, false, false, false);
+                        CustsceneManager.instance.TriggerCutscene(quest.ReturnCurrentObjective().Cutscene, 
+                            0, false, false, false);
                     } 
                     //this is specific code for the first mission
                     if(quest.id == 0) 
@@ -325,7 +330,9 @@ public class QuestManager : MonoBehaviour
                 case Objective.ObjectiveType.ReachPointWithinTime: 
                     EnablePointToReach(objective.pointToReach);
                     GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, objective.pointToReach);
-                    currentTime = objective.allowedTime;
+                    CanvasController.instance.ToggleGPTimerUi(true);
+                    currentTimeToReachPoint = objective.allowedTime;
+                    isTimerReachPointActive = true;
                     break;
             }
 

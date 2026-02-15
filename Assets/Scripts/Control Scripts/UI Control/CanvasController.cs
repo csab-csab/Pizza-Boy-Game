@@ -358,10 +358,14 @@ public class CanvasController : MonoBehaviour
         StartGameUiBase.SetActive(!enabled);
     }
     
-    public void EnableUi(bool trackUi, bool deliveryUi) 
+    public void ToggleDeliveryUi( bool deliveryUi) 
     {
-       TrackUI.SetActive(trackUi);
-       DeliveryUI.SetActive(deliveryUi);
+        DeliveryUI.SetActive(deliveryUi);
+    }
+
+    public void ToggleGPTimerUi(bool trackUi)
+    {
+        TrackUI.SetActive(trackUi);
     }
 
     public void EnableDisableDebugUi(bool active) 
@@ -579,9 +583,9 @@ public class CanvasController : MonoBehaviour
     #region Update UI Elements 
 
     #region Update Timers UI
-    public void UpdateTimerUI(int millisecs, int secs, int mins) 
-    {
-       Timer.text = mins + "." + secs + "." + millisecs;
+    public void UpdateTimerUI(float seconds, string optionalMessage = "") 
+    { 
+        Timer.text =  $"{optionalMessage}{seconds:F2}";
     }
 
     public void UpdatePizzaTemperatureUI(float temperature) 

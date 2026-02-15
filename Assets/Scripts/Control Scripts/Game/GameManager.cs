@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         #region Ui Intialisation
         
         CanvasController.instance.EnableDisableDebugUi(false);
-        CanvasController.instance.EnableUi(false, false);
+        CanvasController.instance.ToggleDeliveryUi(false);
         CanvasController.instance.ClearInteractUiText();
         //ONLY COMMENTED OUT FOR TEST BUILD
        /*
@@ -380,7 +380,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
             if (remaining <= 0)
             {
-                Debug.Log("Countdown finished exactly with audio!");
                 carController.EnableCarMovement();
                 isCountingDown = false;
 
@@ -423,8 +422,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
                 lapTimerSecs = 0;
                 lapTimerMins++;
             }
-
-            CanvasController.instance.UpdateTimerUI(Mathf.FloorToInt(lapTimerMilli), Mathf.FloorToInt(lapTimerSecs), Mathf.FloorToInt(lapTimerMins));
         }
 
         #endregion
@@ -832,7 +829,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         EnableDisableMapTriggers(false);
       
 
-        CanvasController.instance.EnableUi(false, true);
+        CanvasController.instance.ToggleDeliveryUi(true);
         CanvasController.instance.UpdateNumberOfPizzas(currentNoPizzas);
         CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25�C!");
     }
@@ -925,7 +922,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         DestroyPointerArrow();
         
-        CanvasController.instance.EnableUi(false, false);
+        CanvasController.instance.ToggleDeliveryUi(false);
 
         EnableDisableMapTriggers(true);
 
@@ -1000,7 +997,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         DestroyPointerArrow();
       
-        CanvasController.instance.EnableUi(false, false);
+        CanvasController.instance.ToggleDeliveryUi(false);
     }
     
     public void EnableDisableMapTriggers(bool enableAll  ,bool enableDelivery = false, bool enableGarage = false, bool enableFuel = false) 
