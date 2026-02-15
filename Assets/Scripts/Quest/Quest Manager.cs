@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -10,6 +8,8 @@ public class QuestManager : MonoBehaviour
 
     //Can be used to see if there is currently a quest active
     public static bool isQuestActive { get; private set; } = false;
+    
+    private Objective currentObjective;
 
     #region Events 
     public delegate void QuestStarted();
@@ -52,6 +52,11 @@ public class QuestManager : MonoBehaviour
     private bool reachValueObjective = false;
     private float currentValue;
     private float desiredValue;
+    #endregion
+
+    #region Reach point variables
+        private float currentTime;
+        private float allowedTime;
     #endregion
 
     #region  Misc
@@ -104,6 +109,16 @@ public class QuestManager : MonoBehaviour
             CheckReachValue();
         }
 
+        if (currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime
+            && currentTime > 0)
+        {
+            currentTime -= Time.deltaTime;
+        }
+        else if (quest.ReturnCurrentObjective().type == Objective.ObjectiveType.ReachPointWithinTime &&
+                currentTime <= 0)
+        {
+            OnObjectiveFailed?.Invoke("Failed to reach destination in time!");
+        }
        
     }
 
@@ -117,11 +132,16 @@ public class QuestManager : MonoBehaviour
             CanvasController.instance.EnableDisableGameplayUi(true);
             isQuestActive = true;
             print("Ran");
-            //print quest id
+            print($"Quest id: {quest.id}");
+          
             if (quest.questExtras.carToSpawn != null)
             {
                 GameManager.instance.ForceDestroyCurCar();
                 SpawnQuestCar();
+            }
+            else
+            { 
+                SpawnCurrentCarQuest();
             }
             
 
@@ -219,6 +239,7 @@ public class QuestManager : MonoBehaviour
         if (quest == null) return;
 
         Objective objective = quest.NextObjective();
+        currentObjective = objective;
 
         GameManager.instance.EnableCar();
 
@@ -241,12 +262,21 @@ public class QuestManager : MonoBehaviour
                     if(quest.questExtras.dialougeCameraPositions.Length > 0 &&
                      quest.currentObjectiveIndex == quest.questExtras.objectiveIndxsForCamPos[dialogueCamIndexPtr]) 
                     {
-                        dialogueCamIndexPtr ++;
+                        if (quest.questExtras.fieldOfViews.Length > 0 && 
+                            quest.questExtras.fieldOfViews.Length >= dialogueCamIndexPtr )
+                        {
+                            GameManager.instance.ToggleFreeLookCamera(true, true,
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation,
+                                quest.questExtras.fieldOfViews[dialogueCamIndexPtr]);
+                        }
+                        else
+                        {
+                            GameManager.instance.ToggleFreeLookCamera(true, true,
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation); 
+                        }
                         
-                        GameManager.instance.ToggleFreeLookCamera(true, true,
-                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
-                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation);
-                     
                         //creates new event handler
                         DialogueManager.DialougeFinished disableFreeLook = null;
                         
@@ -267,6 +297,7 @@ public class QuestManager : MonoBehaviour
                         
                         //subscribes disableFreelook to on dialogue finished 
                         DialogueManager.OnDialogueFinished += disableFreeLook;
+                        dialogueCamIndexPtr ++;
                     }
                     DialogueManager.instance.StartDialouge(objective.dialouge);
                     break;
@@ -284,13 +315,17 @@ public class QuestManager : MonoBehaviour
                     if (cutscene != null)
                     {
                         CustsceneManager.instance.TriggerCutscene(quest.ReturnCurrentObjective().Cutscene, 0, false, false, false);
-                    }
-                   
+                    } 
                     //this is specific code for the first mission
                     if(quest.id == 0) 
                     {
                         EnableRefuelTriggerForObjective();
                     }
+                    break;
+                case Objective.ObjectiveType.ReachPointWithinTime: 
+                    EnablePointToReach(objective.pointToReach);
+                    GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, objective.pointToReach);
+                    currentTime = objective.allowedTime;
                     break;
             }
 
@@ -422,8 +457,15 @@ public class QuestManager : MonoBehaviour
 
     public void SpawnCurrentCarQuest()
     {
-        throw new NotImplementedException();
-    }
+        if(quest.questExtras.carTransformToSpawnOn != null){
+            Transform spawnPoint = quest.questExtras.carTransformToSpawnOn;
+
+            Transform car = GameManager.instance.AccessCarController().transform;
+            car.position = spawnPoint.position;
+            car.rotation = spawnPoint.rotation;
+            GameManager.instance.ReturnPlayerManager().ResetHealth();
+        }
+}
 
     private void EnableRefuelTriggerForObjective() 
     { 
@@ -439,7 +481,7 @@ public class QuestManager : MonoBehaviour
     }
 
      IEnumerator WaitBeforeRestarting()
-     {
+    {
         yield return new WaitForSeconds(CanvasController.instance.Return_Cutscene_End_Fade_Length());
         StartQuest(); 
     }

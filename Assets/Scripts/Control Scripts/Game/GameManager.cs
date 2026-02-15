@@ -1153,10 +1153,14 @@ public class GameManager : MonoBehaviour, IDataPersistance
         car_select_cam.GetComponent<AudioListener>().enabled = active;
     }
 
-    public void ToggleFreeLookCamera(bool active, bool cutSceneMode = false, Vector3 pos = default, Quaternion rot = default)
+    public void ToggleFreeLookCamera(bool active, bool cutSceneMode = false, Vector3 pos = default, 
+        Quaternion rot = default, float fieldOfView = 60)
     {
         FreeLookCameraMovement freeLookCamScript =  FreeLookCam.GetComponent<FreeLookCameraMovement>();
-
+        
+        //Set field of view
+        FreeLookCam.fieldOfView = fieldOfView;
+        
         if (pos != default)
         {
             freeLookCamScript.transform.position = pos;

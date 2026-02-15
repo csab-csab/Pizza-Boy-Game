@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class QuestTrigger : MonoBehaviour
@@ -11,7 +12,7 @@ public class QuestTrigger : MonoBehaviour
     {
         if (questManager != null)
         {
-           questManager.StartQuest();
+            questManager.StartQuest();
             if (this.gameObject.GetComponent<QuestManager>() != null) 
             {
                 print("Quest manager on this go:" + this.gameObject.GetComponent<QuestManager>() != null);
@@ -28,8 +29,8 @@ public class QuestTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag(GameManager.instance.PLAYER_CAR_TAG))
         {
-           TriggerQuest();
-            print("Triggered through collider");
+            TriggerQuest();
+            print($"Triggered through collider, {this.gameObject.name}");
         }
     }
 }
