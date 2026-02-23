@@ -64,6 +64,7 @@ public class QuestManager : MonoBehaviour
     //Incase of that multpiple different dialogue cam positions
     //are needed, this pointer keeps track of which one we need
     private int dialogueCamIndexPtr = 0;
+    private int objsToEnableIndxPtr = 0;
     #endregion
 
 
@@ -248,9 +249,26 @@ public class QuestManager : MonoBehaviour
         GameManager.instance.EnableCar();
 
         if (objective != null)
-        {
-
+        { 
             GameManager.instance.DestroyPointerArrow();
+            
+            //This if checks if both objToEnable and asscoiated index is equal, otherwise
+            //we have a problem and it wont work
+            if (quest.questExtras != null && quest.questExtras.objsToEnable.Length > 0 && 
+                quest.questExtras.objsToEnable.Length == quest.questExtras.objIndexForEnable.Length)
+            {
+                if (objsToEnableIndxPtr > 0)
+                {
+                    quest.questExtras.objsToEnable[objsToEnableIndxPtr - 1].SetActive(false);
+                }
+                
+                if (objsToEnableIndxPtr < quest.questExtras.objsToEnable.Length && 
+                      quest.currentObjectiveIndex == quest.questExtras.objIndexForEnable[objsToEnableIndxPtr])
+                { 
+                    quest.questExtras.objsToEnable[objsToEnableIndxPtr].SetActive(true);
+                    objsToEnableIndxPtr++;
+                }
+            }
 
             switch (objective.type)
             {

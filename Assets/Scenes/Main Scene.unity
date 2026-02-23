@@ -39165,7 +39165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &234396563
 RectTransform:
   m_ObjectHideFlags: 0
@@ -99129,6 +99129,8 @@ MonoBehaviour:
       - {fileID: 396061380}
       fieldOfViews: []
       objectiveIndxsForCamPos: 06000000
+      objsToEnable: []
+      objIndexForEnable: 
   timeUntilAutoStart: 8
   TimeUntilTermination: 8
   isQuestOver: 0
@@ -196793,7 +196795,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1031142142
 RectTransform:
   m_ObjectHideFlags: 0
@@ -196843,8 +196845,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4286972063
+  m_fontColor: {r: 0.6226415, g: 0, b: 0.52475405, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -196883,7 +196885,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -290627,12 +290629,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1548474836}
   m_Layer: 0
-  m_Name: Crow Dialogue 1 Quest 3
+  m_Name: Crowd Dialogue 1 Quest 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1548474836
 Transform:
   m_ObjectHideFlags: 0
@@ -294720,6 +294722,9 @@ MonoBehaviour:
       fieldOfViews:
       - 30
       objectiveIndxsForCamPos: 00000000
+      objsToEnable:
+      - {fileID: 1548474835}
+      objIndexForEnable: 00000000
   timeUntilAutoStart: 8
   TimeUntilTermination: 8
   isQuestOver: 0
@@ -358766,6 +358771,8 @@ MonoBehaviour:
       dialougeCameraPositions: []
       fieldOfViews: []
       objectiveIndxsForCamPos: 
+      objsToEnable: []
+      objIndexForEnable: 
   timeUntilAutoStart: 8
   TimeUntilTermination: 8
   isQuestOver: 0
@@ -374571,7 +374578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2007615486
 RectTransform:
   m_ObjectHideFlags: 0

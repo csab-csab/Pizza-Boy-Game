@@ -119,12 +119,14 @@ public class Objective
    public GameObject carToSpawn;
    public Transform carTransformToSpawnOn;
    public Transform[] dialougeCameraPositions;
-   public GameObject[] objectsToEnable;
    public float[] fieldOfViews ;
     [Header("This is the int value of the objective where the dialogue cam \n" +
         "is needed eg.: if objective 6 is the obj that needs it then this \n" +
         "is 6 and so on")]
     public int[] objectiveIndxsForCamPos;
-
     
+    [Header("Used to enable certain objects at specified objective index")]
+    public GameObject[] objsToEnable;
+    public int[] objIndexForEnable;
+
   }
