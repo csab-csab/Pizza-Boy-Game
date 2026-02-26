@@ -99748,7 +99748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &508207256
 Transform:
   m_ObjectHideFlags: 0
@@ -295993,8 +295993,8 @@ MonoBehaviour:
       pizzasToDeliver: 0
       timeToDeliver: 0
       Cutscene: {fileID: 0}
-      variableToSet: 0
-      valueToSet: 0
+      variableToSet: 4
+      valueToSet: 18
       allowedTime: 0
     - type: 4
       Description: Deliver the pizza as fast as you can!
