@@ -101,7 +101,7 @@ public class Objective
 
     public PlayableAsset Cutscene;
 
-    public enum VariableToSet {None, CarHealth, Money, Fuel};
+    public enum VariableToSet {None, CarHealth, Money, Fuel, Time};
     public VariableToSet variableToSet;    
     public float valueToSet;
     
