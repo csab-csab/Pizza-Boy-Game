@@ -331,8 +331,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
             if (debugMode == DebugMode.On)
             {
-             
-                
                 if (Input.GetKey(KeyCode.Equals))
                 {
                     lightingManager.ModifyTimeScaleFactor(1);
@@ -962,12 +960,9 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
 
         //enable quest trigger
-       if(player.ReturnMoney() >= QuestPrerequisite.DreamCarCost) 
+        if(player.ReturnMoney() >= QuestPrerequisite.DreamCarCost) 
         {
-            EnableDisableMapTriggers(false, false, false, true);
-            QuestPrerequisite.Quest2TriggerRef.SetActive(true);
-            CanvasController.instance.UpdateNotificationText("CONGRATS! You have saved enough to buy your dream car!");
-            SpawnPointerArrow(ArrowType.Objective,  QuestPrerequisite.Quest2TriggerRef);
+          QuestPrerequisite.EnableQuest2();    
         }
         
     }
