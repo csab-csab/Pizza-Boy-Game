@@ -82,10 +82,11 @@ public class Quest
 [System.Serializable]
 public class Objective
 {
-    public enum ObjectiveType{None ,ReachPoint, ReachValue, Dialouge, Delivery, Cutscene};
+    public enum ObjectiveType{None ,ReachPoint, ReachValue, Dialouge, Delivery, Cutscene, ReachPointWithinTime};
 
     public ObjectiveType type;
 
+    [Header("Objective description")]
     public string Description;
 
     public GameObject pointToReach;
@@ -93,7 +94,8 @@ public class Objective
     public float valueToReach;
 
     public Dialouge dialouge;
-
+    
+    [Header("Delivery Objective Values")]
     public int pizzasToDeliver;
     public float timeToDeliver;
 
@@ -102,6 +104,13 @@ public class Objective
     public enum VariableToSet {None, CarHealth, Money, Fuel};
     public VariableToSet variableToSet;    
     public float valueToSet;
+    
+    #region  Reach point within time variables
+    [Header("Reach point within time variables \n" +
+            "(For point to reach, use the existing point to reach ref)"
+            + " allowedTime is in seconds")]
+    public float allowedTime;
+    #endregion
 }
 
   [System.Serializable]
@@ -110,8 +119,14 @@ public class Objective
    public GameObject carToSpawn;
    public Transform carTransformToSpawnOn;
    public Transform[] dialougeCameraPositions;
+   public float[] fieldOfViews ;
     [Header("This is the int value of the objective where the dialogue cam \n" +
         "is needed eg.: if objective 6 is the obj that needs it then this \n" +
         "is 6 and so on")]
     public int[] objectiveIndxsForCamPos;
+    
+    [Header("Used to enable certain objects at specified objective index")]
+    public GameObject[] objsToEnable;
+    public int[] objIndexForEnable;
+
   }

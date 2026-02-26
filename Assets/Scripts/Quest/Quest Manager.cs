@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -10,6 +8,8 @@ public class QuestManager : MonoBehaviour
 
     //Can be used to see if there is currently a quest active
     public static bool isQuestActive { get; private set; } = false;
+    
+    private Objective currentObjective;
 
     #region Events 
     public delegate void QuestStarted();
@@ -54,11 +54,20 @@ public class QuestManager : MonoBehaviour
     private float desiredValue;
     #endregion
 
+    #region Reach point variables
+        private bool isTimerReachPointActive = false;
+        private float currentTimeToReachPoint;
+        private float allowedTime;
+    #endregion
+
     #region  Misc
     //Incase of that multpiple different dialogue cam positions
     //are needed, this pointer keeps track of which one we need
     private int dialogueCamIndexPtr = 0;
+    private int objsToEnableIndxPtr = 0;
     #endregion
+
+
     private void Start()
     {
         OnObjectiveCompleted += CheckObjectiveComplete;
@@ -85,7 +94,7 @@ public class QuestManager : MonoBehaviour
 
         if (isQuestOver && currentTimeUntilTermination > 0) 
         {
-           currentTimeUntilTermination -= Time.deltaTime;
+            currentTimeUntilTermination -= Time.deltaTime;
             CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilTermination, TimeUntilTermination);
         }
         else if(isQuestOver && currentTimeUntilTermination <= 0)
@@ -102,6 +111,19 @@ public class QuestManager : MonoBehaviour
             CheckReachValue();
         }
 
+        if ( isTimerReachPointActive && currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime
+            && currentTimeToReachPoint > 0)
+        {
+            currentTimeToReachPoint -= Time.deltaTime;
+            CanvasController.instance.UpdateTimerUI(currentTimeToReachPoint, "Time left:" );
+        }
+        else if ( isTimerReachPointActive && quest.ReturnCurrentObjective().type == Objective.ObjectiveType.ReachPointWithinTime &&
+                 currentTimeToReachPoint <= 0)
+        {
+            isTimerReachPointActive = false;
+            OnObjectiveFailed?.Invoke("Failed to reach destination in time!");
+            CanvasController.instance.ToggleGPTimerUi(false);
+        }
        
     }
 
@@ -114,11 +136,17 @@ public class QuestManager : MonoBehaviour
             GameManager.instance.SetPlayState();
             CanvasController.instance.EnableDisableGameplayUi(true);
             isQuestActive = true;
-
+            print("Ran");
+            print($"Quest id: {quest.id}");
+          
             if (quest.questExtras.carToSpawn != null)
             {
                 GameManager.instance.ForceDestroyCurCar();
                 SpawnQuestCar();
+            }
+            else
+            { 
+                SpawnCurrentCarQuest();
             }
             
 
@@ -130,6 +158,7 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
+            print($"Quest null: {quest == null}, questActive: {isQuestActive}");
             Debug.LogError("Quest is null. Please assign quest in the inspector! ");
         }
     }
@@ -215,13 +244,31 @@ public class QuestManager : MonoBehaviour
         if (quest == null) return;
 
         Objective objective = quest.NextObjective();
+        currentObjective = objective;
 
         GameManager.instance.EnableCar();
 
         if (objective != null)
-        {
-
+        { 
             GameManager.instance.DestroyPointerArrow();
+            
+            //This if checks if both objToEnable and asscoiated index is equal, otherwise
+            //we have a problem and it wont work
+            if (quest.questExtras != null && quest.questExtras.objsToEnable.Length > 0 && 
+                quest.questExtras.objsToEnable.Length == quest.questExtras.objIndexForEnable.Length)
+            {
+                if (objsToEnableIndxPtr > 0)
+                {
+                    quest.questExtras.objsToEnable[objsToEnableIndxPtr - 1].SetActive(false);
+                }
+                
+                if (objsToEnableIndxPtr < quest.questExtras.objsToEnable.Length && 
+                      quest.currentObjectiveIndex == quest.questExtras.objIndexForEnable[objsToEnableIndxPtr])
+                { 
+                    quest.questExtras.objsToEnable[objsToEnableIndxPtr].SetActive(true);
+                    objsToEnableIndxPtr++;
+                }
+            }
 
             switch (objective.type)
             {
@@ -237,12 +284,21 @@ public class QuestManager : MonoBehaviour
                     if(quest.questExtras.dialougeCameraPositions.Length > 0 &&
                      quest.currentObjectiveIndex == quest.questExtras.objectiveIndxsForCamPos[dialogueCamIndexPtr]) 
                     {
-                        dialogueCamIndexPtr ++;
+                        if (quest.questExtras.fieldOfViews.Length > 0 && 
+                            quest.questExtras.fieldOfViews.Length >= dialogueCamIndexPtr )
+                        {
+                            GameManager.instance.ToggleFreeLookCamera(true, true,
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation,
+                                quest.questExtras.fieldOfViews[dialogueCamIndexPtr]);
+                        }
+                        else
+                        {
+                            GameManager.instance.ToggleFreeLookCamera(true, true,
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
+                                quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation); 
+                        }
                         
-                        GameManager.instance.ToggleFreeLookCamera(true, true,
-                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].position, 
-                            quest.questExtras.dialougeCameraPositions[dialogueCamIndexPtr].rotation);
-                     
                         //creates new event handler
                         DialogueManager.DialougeFinished disableFreeLook = null;
                         
@@ -263,6 +319,7 @@ public class QuestManager : MonoBehaviour
                         
                         //subscribes disableFreelook to on dialogue finished 
                         DialogueManager.OnDialogueFinished += disableFreeLook;
+                        dialogueCamIndexPtr ++;
                     }
                     DialogueManager.instance.StartDialouge(objective.dialouge);
                     break;
@@ -279,14 +336,21 @@ public class QuestManager : MonoBehaviour
                     PlayableAsset cutscene = quest.ReturnCurrentObjective().Cutscene;
                     if (cutscene != null)
                     {
-                        CustsceneManager.instance.TriggerCutscene(quest.ReturnCurrentObjective().Cutscene, 0, false, false, false);
-                    }
-                   
+                        CustsceneManager.instance.TriggerCutscene(quest.ReturnCurrentObjective().Cutscene, 
+                            0, false, false, false);
+                    } 
                     //this is specific code for the first mission
                     if(quest.id == 0) 
                     {
                         EnableRefuelTriggerForObjective();
                     }
+                    break;
+                case Objective.ObjectiveType.ReachPointWithinTime: 
+                    EnablePointToReach(objective.pointToReach);
+                    GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, objective.pointToReach);
+                    CanvasController.instance.ToggleGPTimerUi(true);
+                    currentTimeToReachPoint = objective.allowedTime;
+                    isTimerReachPointActive = true;
                     break;
             }
 
@@ -418,8 +482,15 @@ public class QuestManager : MonoBehaviour
 
     public void SpawnCurrentCarQuest()
     {
-        throw new NotImplementedException();
-    }
+        if(quest.questExtras.carTransformToSpawnOn != null){
+            Transform spawnPoint = quest.questExtras.carTransformToSpawnOn;
+
+            Transform car = GameManager.instance.AccessCarController().transform;
+            car.position = spawnPoint.position;
+            car.rotation = spawnPoint.rotation;
+            GameManager.instance.ReturnPlayerManager().ResetHealth();
+        }
+}
 
     private void EnableRefuelTriggerForObjective() 
     { 
@@ -435,7 +506,7 @@ public class QuestManager : MonoBehaviour
     }
 
      IEnumerator WaitBeforeRestarting()
-     {
+    {
         yield return new WaitForSeconds(CanvasController.instance.Return_Cutscene_End_Fade_Length());
         StartQuest(); 
     }
