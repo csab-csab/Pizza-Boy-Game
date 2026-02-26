@@ -184,6 +184,8 @@ public class QuestManager : MonoBehaviour
         isQuestOver = true;
         currentTimeUntilTermination = TimeUntilTermination;
 
+        LightingManager.instance.ToggleFreezeTime(false);
+
         CanvasController.instance.UpdateQuestOverText("Quest Completed!", false);
         CanvasController.instance.IntialiseQuestOverTimerBar(false);
 
@@ -366,6 +368,13 @@ public class QuestManager : MonoBehaviour
                     OnSetValue(Objective.VariableToSet.Fuel, objective.valueToSet);
                     break; 
 
+                case Objective.VariableToSet.CarHealth:
+                    GameManager.instance.ReturnPlayerManager().ResetHealth();
+                    break;
+                
+                case Objective.VariableToSet.Time:
+                    LightingManager.instance.SetTimeOfDay("QuestManager/CompleteObjective()", objective.valueToSet, true);
+                    break;
             }
 
             //to avoid showing the quest name and objetive name the same time

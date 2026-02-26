@@ -980,7 +980,7 @@ public class CanvasController : MonoBehaviour
     
     public void DisplayCurrentTimeScale(float timeScale) 
     {
-        CurrentTimeScaleText.text = timeScale.ToString();
+        CurrentTimeScaleText.text = timeScale.ToString("f0");
     }
     #endregion
 

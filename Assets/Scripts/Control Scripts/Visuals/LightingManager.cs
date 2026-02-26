@@ -283,22 +283,13 @@ public class LightingManager : MonoBehaviour
     /// </summary>
     /// <param name="forceTime"></param>
     /// <param name="timeofDay"></param>
-    public void SetTimeOfDay(String callerMethod ,float timeofDay = 12, bool freezeTime = true)
+    public void SetTimeOfDay(String callerMethod ,float timeofDay = 12, bool _freezeTime = true)
     {
 
 
         print("Method that set time of day: " + callerMethod);
 
-        if (freezeTime)
-        {
-            ModifyTimeScaleFactor(0);
-            isTimeStatic = true;
-        }
-        else
-        {
-            ModifyTimeScaleFactor(60);
-            isTimeStatic = false;
-        }
+        ToggleFreezeTime(_freezeTime);
         
         TimeOfDay = timeofDay;
         
@@ -313,5 +304,20 @@ public class LightingManager : MonoBehaviour
         { 
             DirectionalLight.gameObject.SetActive(value);
         }
+    }
+
+
+    public void ToggleFreezeTime(bool freezeTime)
+    {
+        if (freezeTime)
+        {
+            ModifyTimeScaleFactor(0);
+            isTimeStatic = true;
+        }
+        else
+        {
+            ModifyTimeScaleFactor(60);
+            isTimeStatic = false;
+        } 
     }
 }
