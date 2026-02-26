@@ -2,5 +2,6 @@ using UnityEngine;
 
 public class GameData
 {
-    public int currentQuest = 0;    
+    public int currentQuestProgress = 0;
+    public float playerMoney = 0;    
 }
