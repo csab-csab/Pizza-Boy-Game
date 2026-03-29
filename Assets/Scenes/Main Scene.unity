@@ -17007,8 +17007,8 @@ GameObject:
   - component: {fileID: 99971976}
   - component: {fileID: 99971975}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39544,8 +39544,8 @@ GameObject:
   - component: {fileID: 234305689}
   - component: {fileID: 234305688}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68868,8 +68868,8 @@ GameObject:
   - component: {fileID: 359903216}
   - component: {fileID: 359903215}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73816,8 +73816,8 @@ GameObject:
   - component: {fileID: 389078394}
   - component: {fileID: 389078393}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83361,8 +83361,8 @@ GameObject:
   - component: {fileID: 436876471}
   - component: {fileID: 436876470}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108575,8 +108575,8 @@ GameObject:
   - component: {fileID: 556393052}
   - component: {fileID: 556393051}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160169,8 +160169,8 @@ GameObject:
   - component: {fileID: 811809629}
   - component: {fileID: 811809628}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -161553,8 +161553,8 @@ GameObject:
   - component: {fileID: 820206170}
   - component: {fileID: 820206169}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182909,8 +182909,8 @@ GameObject:
   - component: {fileID: 934985426}
   - component: {fileID: 934985425}
   m_Layer: 0
-  m_Name: Possible Delivery Point (9)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -202789,8 +202789,8 @@ GameObject:
   - component: {fileID: 1047640410}
   - component: {fileID: 1047640409}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -202930,6 +202930,92 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 396662109}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1047999791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047999792}
+  - component: {fileID: 1047999794}
+  - component: {fileID: 1047999793}
+  m_Layer: 0
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1047999792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047999791}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.3, y: 0, z: -6.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1655365946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1047999793
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047999791}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: fd097d58dc165a2489c537f74833ee21, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1047999794
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047999791}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1048100287
 GameObject:
   m_ObjectHideFlags: 0
@@ -253345,8 +253431,8 @@ GameObject:
   - component: {fileID: 1321969531}
   - component: {fileID: 1321969530}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -262578,8 +262664,8 @@ GameObject:
   - component: {fileID: 1372281847}
   - component: {fileID: 1372281846}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315656,7 +315742,8 @@ Transform:
   m_LocalPosition: {x: 282.69, y: 18.22, z: 293.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1047999792}
   m_Father: {fileID: 1243332930}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1655365947
@@ -359672,8 +359759,8 @@ GameObject:
   - component: {fileID: 1919341842}
   - component: {fileID: 1919341841}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384133,8 +384220,8 @@ GameObject:
   - component: {fileID: 2037986610}
   - component: {fileID: 2037986609}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -390945,8 +391032,8 @@ GameObject:
   - component: {fileID: 2079507398}
   - component: {fileID: 2079507397}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -392457,8 +392544,8 @@ GameObject:
   - component: {fileID: 2089876325}
   - component: {fileID: 2089876324}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -393814,8 +393901,8 @@ GameObject:
   - component: {fileID: 2094308235}
   - component: {fileID: 2094308234}
   m_Layer: 0
-  m_Name: Possible Delivery Point (1)
-  m_TagString: Untagged
+  m_Name: Pizza Throw Effect Anchor
+  m_TagString: PizzaThrowEffectAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399522,6 +399609,7 @@ MonoBehaviour:
   - {fileID: 907801791}
   - {fileID: 11938908}
   - {fileID: 931109676}
+  pizzaThrowEffectTag: PizzaThrowEffectAnchor
   delivery_arrow_prefab: {fileID: 8974529564682518591, guid: 24bb0a95c3290da41a6e900fc7cbdb64,
     type: 3}
   isJoystickDpadXEnabled: 0
