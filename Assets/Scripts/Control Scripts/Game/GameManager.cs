@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
-
 
 public class GameManager : MonoBehaviour, IDataPersistance
 {
@@ -1124,7 +1122,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
    
 
     #region Car Select
-    //Assings nessecary variables to a car just spawned
+    //Assigns necessary variables to a car just spawned
     public void AssignSpawnedCarVariables(GameObject car) 
     {
         carController = car.GetComponent<CarController>();
