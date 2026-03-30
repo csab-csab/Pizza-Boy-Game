@@ -59,6 +59,10 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
                 $"You are only{DreamCarCost - playerMoney} away from your dream car! ");
             }
         }
+        else if (this.currentQuestProgress == 2)
+        {
+            //Enable quest 3
+        }
         //Same for quest 3
     }
 
