@@ -129,7 +129,6 @@ public class MainMenuManager : MonoBehaviour, IDataPersistance
         if (SceneManager.instance.ReturnIsLoading())
         {
             LoadingBar.fillAmount = SceneManager.instance.ReturnLoadProgress();
-            print(SceneManager.instance.ReturnLoadProgress());
         }
     }
 
@@ -141,14 +140,13 @@ public class MainMenuManager : MonoBehaviour, IDataPersistance
     public void LoadGameData(GameData gameData)
     {
         
-        if(gameData.currentQuest <= 0)
+        if(gameData.currentQuestProgress <= 0)
         {
             ContinueButton.interactable = false;
         }
         else
         {
-             ContinueButton.interactable = true;
-             print("true");
+            ContinueButton.interactable = true;
         } 
     }
 

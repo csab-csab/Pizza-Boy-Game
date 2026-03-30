@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour, IDataPersistance
 {
     #region Player Progress
     [SerializeField] int delisCompleted = 0;
@@ -144,5 +144,27 @@ public class PlayerManager : MonoBehaviour
     public int ReturnDelisCompleted() 
     {
         return delisCompleted;
+    }
+
+    public void SaveGameData(ref GameData gameData)
+    {
+        gameData.playerMoney = this.Money;
+        gameData.deliveriesCompleted = this.delisCompleted;
+    }
+
+    public void LoadGameData(GameData gameData)
+    {
+        this.Money = gameData.playerMoney;
+        this.delisCompleted = gameData.deliveriesCompleted;
+    }
+
+    public void SaveSettingsData(ref SettingsData settingsData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void LoadSettingsData(SettingsData settingsData)
+    {
+        throw new System.NotImplementedException();
     }
 }

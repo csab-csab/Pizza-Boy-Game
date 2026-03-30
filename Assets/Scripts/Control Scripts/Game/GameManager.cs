@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
-
 
 public class GameManager : MonoBehaviour, IDataPersistance
 {
@@ -174,7 +172,10 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
   
 
-    [SerializeField]GameObject[] Houses;
+    [SerializeField]GameObject possibleDeliveryPointsParent;
+    //Actual delivery points
+    [SerializeField]List<Transform> Houses;
+    [SerializeField]string pizzaThrowEffectTag = "PizzaThrowEffectAnchor";
     private int lastHouse;
 
     [Header("WayPoint")]
@@ -215,6 +216,23 @@ public class GameManager : MonoBehaviour, IDataPersistance
     {
         //Change this when fully implemented
         player = PlayerParent.GetChild(0).GetComponent<PlayerManager>();
+
+        #region Intialise Delivery Point
+        
+        Houses.Clear();
+        //Do this so I can remove the child objects of delivery points; the pizza throw at objects
+        Transform[] tempArray = possibleDeliveryPointsParent.GetComponentsInChildren<Transform>();
+        
+        foreach(Transform t in tempArray)
+        {
+            if(t.CompareTag("PizzaThrowEffectAnchor"))
+            {
+                continue;   
+            }
+            
+            Houses.Add(t);
+        }
+        #endregion
         
         #region Get Self Contained References
         try
@@ -253,6 +271,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
         #endregion
 
         Application.targetFrameRate = 60;
+
+      
     }
 
         
@@ -834,14 +854,14 @@ public class GameManager : MonoBehaviour, IDataPersistance
     
     private void SpawnDeliveryPoint() 
     {
-        int houseNum = UnityEngine.Random.Range(0, Houses.Length);
+        int houseNum = UnityEngine.Random.Range(0, Houses.Count);
 
         //This is for the pizza throw particle effect
-        Transform PointToThrowPizzaTo = Houses[houseNum].transform.GetChild(0);
+        Transform PointToThrowPizzaTo = Houses[houseNum].GetChild(0);
 
         if (houseNum != lastHouse)
         {
-            delivery_point.transform.position = Houses[houseNum].transform.position;
+            delivery_point.transform.position = Houses[houseNum].position;
             lastHouse = houseNum;
 
             if (PointToThrowPizzaTo != null)
@@ -1102,7 +1122,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
    
 
     #region Car Select
-    //Assings nessecary variables to a car just spawned
+    //Assigns necessary variables to a car just spawned
     public void AssignSpawnedCarVariables(GameObject car) 
     {
         carController = car.GetComponent<CarController>();
