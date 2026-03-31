@@ -8,7 +8,8 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
     [SerializeField] public static int DreamCarCost = 6000;
     [SerializeField] QuestTrigger Quest1Trigger;
     [SerializeField] GameObject Quest2Trigger;
-    public static GameObject Quest2TriggerRef;
+    [SerializeField] GameObject Quest3Trigger;
+    private static GameObject Quest2TriggerRef;
 
     #region Save/Load Values
     private int currentQuestProgress = 0;
@@ -29,6 +30,12 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
         Quest2TriggerRef.gameObject.SetActive(true);
         GameManager.instance.EnableDisableMapTriggers(false, false, false, true);
         CanvasController.instance.UpdateNotificationText("CONGRATS! You have saved enough to buy your dream car!");
+        GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, QuestPrerequisite.Quest2TriggerRef);
+    }
+
+    private void EnableQuest3()
+    {
+        Quest3Trigger.gameObject.SetActive(true);
         GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, QuestPrerequisite.Quest2TriggerRef);
     }
 

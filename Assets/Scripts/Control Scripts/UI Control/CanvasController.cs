@@ -341,8 +341,8 @@ public class CanvasController : MonoBehaviour
     {
         if(SpawnCarButton == null) Debug.LogError("Spawn car button is null, assign it in the inspector.");
         
-        SpawnCarButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        SpawnCarButton.GetComponent<Button>().onClick.AddListener(CarSelectorScript.instance.SelectCar);
+        SpawnCarButton.onClick.RemoveAllListeners();
+        SpawnCarButton.onClick.AddListener(CarSelectorScript.instance.SelectCar);
     }
     
     #region Toggle UI Elements
