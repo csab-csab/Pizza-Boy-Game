@@ -25,7 +25,7 @@ public class DataPersistanceManager : MonoBehaviour
     //List of all the scripts that implement data persistance interface
     [SerializeField]List<IDataPersistance> dataPersistanceObjects = new List<IDataPersistance>();
     
-    //Singletont assignment
+    //Singleton assignment
     void Awake()
     {
         if (instance != null && instance != this)

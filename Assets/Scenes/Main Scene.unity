@@ -42588,7 +42588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &206546350
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57532,7 +57532,7 @@ Transform:
   - {fileID: 525743069}
   - {fileID: 1113175248}
   - {fileID: 1458622274}
-  m_Father: {fileID: 746306806}
+  m_Father: {fileID: 1060901883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &279390945
 PrefabInstance:
@@ -112196,7 +112196,7 @@ GameObject:
   - component: {fileID: 505568420}
   - component: {fileID: 505568419}
   m_Layer: 5
-  m_Name: Select Owned Car Menu  (1)
+  m_Name: Save Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112266,9 +112266,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 498518486}
-        m_TargetAssemblyTypeName: CarSelectorScript, Assembly-CSharp
-        m_MethodName: SelectOwnedCarsList
+      - m_Target: {fileID: 1488687153}
+        m_TargetAssemblyTypeName: DataPersistanceHelper, Assembly-CSharp
+        m_MethodName: SaveGameData
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1488687153}
+        m_TargetAssemblyTypeName: DataPersistanceHelper, Assembly-CSharp
+        m_MethodName: SaveSettingsData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -139456,6 +139468,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5cf4deab3ab8b94bb780dee8670914a, type: 3}
+--- !u!1 &639139273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 639139276}
+  - component: {fileID: 639139275}
+  - component: {fileID: 639139274}
+  m_Layer: 5
+  m_Name: Save Game Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &639139274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639139273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 29849a9761db66d40b347c72dcfb04fa, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &639139275
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639139273}
+  m_CullTransparentMesh: 1
+--- !u!224 &639139276
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639139273}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1921986063}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -922, y: 508}
+  m_SizeDelta: {x: 54.8061, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &639145754
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165114,10 +165201,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1239982460}
   - {fileID: 1060901883}
   - {fileID: 248888390}
-  - {fileID: 848473752}
-  - {fileID: 279319350}
   - {fileID: 829515766}
   m_Father: {fileID: 833903637}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -183678,7 +183764,7 @@ PrefabInstance:
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: unlockedCarSounds.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -183695,12 +183781,12 @@ PrefabInstance:
         type: 3}
       propertyPath: 'unlockedCarSounds.Array.data[0]'
       value: 
-      objectReference: {fileID: 8300000, guid: 7e841c709b3f9414bbfc2edf426d2151, type: 3}
+      objectReference: {fileID: 8300000, guid: 6f0d270f194616e46826a16bb256c381, type: 3}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: 'unlockedCarSounds.Array.data[1]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: ba8e7c694d89aed45a9813e31533c8e9, type: 3}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: carListLockedPlayable.Array.size
@@ -183927,7 +184013,7 @@ PrefabInstance:
     - target: {fileID: 8593113101489428145, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8593113101765255831, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -183937,7 +184023,7 @@ PrefabInstance:
     - target: {fileID: 8593113101765255832, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.65
+      value: 8.067
       objectReference: {fileID: 0}
     - target: {fileID: 8593113101765255832, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -183947,7 +184033,7 @@ PrefabInstance:
     - target: {fileID: 8593113101765255832, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.03
+      value: 0.778
       objectReference: {fileID: 0}
     - target: {fileID: 8593113101765255832, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -183983,6 +184069,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593113101765255833, guid: 8e6e8125df99580438f6b8c5153c46f3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8632685559884316837, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -187709,7 +187800,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 512701395}
-  m_Father: {fileID: 746306806}
+  m_Father: {fileID: 1060901883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &848473753
 AudioSource:
@@ -230394,7 +230485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1060901883
 Transform:
   m_ObjectHideFlags: 0
@@ -230407,7 +230498,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 279319350}
+  - {fileID: 848473752}
   m_Father: {fileID: 746306806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1061198129
@@ -266160,6 +266253,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 318828643}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1239982459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1239982460}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1239982460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239982459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746306806}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1240157548 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4493833895131308, guid: e44802eac9aa6e543923a8509cb511cc,
@@ -404186,6 +404310,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 639139276}
   - {fileID: 206546350}
   - {fileID: 752423554}
   - {fileID: 753123426}
@@ -404220,6 +404345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textPresets: {fileID: 11400000, guid: 79ed5af96f5de7243863493b740b7d19, type: 2}
   CarSelectionUiPanel: {fileID: 2880575703400110157}
+  CarSelectionUiObjects: {fileID: 1060901882}
   CarViewChoicePanel: {fileID: 8663552985421938631}
   CarViewPanel: {fileID: 2023240682662041092}
   SelectLockedCarsButton: {fileID: 1385353123096744509}
@@ -404238,6 +404364,8 @@ MonoBehaviour:
   SavingsText: {fileID: 1995111931}
   FreeLookUi: {fileID: 258674186}
   SettingsUi: {fileID: 752423553}
+  SaveGameText: {fileID: 639139273}
+  SaveGameTextLifeTime: 3
   CountDownTimer: {fileID: 1807443871}
   SpeedText: {fileID: 1808052249}
   GearsText: {fileID: 1200205629}
@@ -404294,18 +404422,6 @@ MonoBehaviour:
   QuestCompleteColor: {r: 0.68235296, g: 1, b: 0.5882353, a: 1}
   QuestFailColor: {r: 1, g: 0.6313726, b: 0.5882353, a: 1}
   scaleInFactor: 20
-  scaleInGameplayUi: 0
-  scaleInCarSelectMenu: 0
-  scaleInCarView: 0
-  scaleInRefuelUi: 0
-  scaleInRadioUi: 0
-  scaleOutRadioUi: 0
-  scaleInDialogue: 0
-  scaleOutDialogue: 0
-  scaleInQuestTitle: 0
-  scaleOutQuestTitle: 0
-  scaleInQuestOver: 0
-  scaleOutQuestOver: 0
   NotificationShowTime: 3
   NotifcationShowScale: 1000
 --- !u!1001 &1922692304
@@ -453168,7 +453284,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2880575703400110158
 RectTransform:
   m_ObjectHideFlags: 0
@@ -454733,7 +454849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &8735521886516595850
 MonoBehaviour:
   m_ObjectHideFlags: 0

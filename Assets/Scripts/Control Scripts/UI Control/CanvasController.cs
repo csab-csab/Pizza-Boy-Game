@@ -21,6 +21,7 @@ public class CanvasController : MonoBehaviour
     #region Car Selection UI
     [Header("Car Selection UI")]
     [SerializeField] GameObject CarSelectionUiPanel;
+    [SerializeField] GameObject CarSelectionUiObjects;
     [SerializeField] GameObject CarViewChoicePanel;
     [SerializeField] GameObject CarViewPanel;
     [Header("Car Selection UI Buttons")]
@@ -44,6 +45,10 @@ public class CanvasController : MonoBehaviour
     [SerializeField] GameObject SavingsText;
     [SerializeField] GameObject FreeLookUi;
     [SerializeField] GameObject SettingsUi;
+    [SerializeField] GameObject SaveGameText;
+
+    private float current_SaveGameTextLifeTime;
+    [SerializeField] float SaveGameTextLifeTime = 3;
 
 
     [Header("Car UI")]
@@ -133,34 +138,32 @@ public class CanvasController : MonoBehaviour
     [SerializeField] float scaleInFactor = 20f;
 
     //Gameplay Ui
-    [SerializeField] bool scaleInGameplayUi;
+    private bool scaleInGameplayUi;
 
     //Car Select Ui
-    [SerializeField] bool scaleInCarSelectMenu;
+    private bool scaleInCarSelectMenu;
 
-    [SerializeField] bool scaleInCarView;
+    private bool scaleInCarView;
 
     //Refuel Ui
-    [SerializeField] bool scaleInRefuelUi;
+    private bool scaleInRefuelUi;
 
     //Radio Ui
-    [SerializeField] bool scaleInRadioUi;
-    [SerializeField] bool scaleOutRadioUi;
+    private bool scaleInRadioUi;
+    private bool scaleOutRadioUi;
 
     //Dialogue Ui
-    [SerializeField] bool scaleInDialogue;
-    [SerializeField] bool scaleOutDialogue;
+    private bool scaleInDialogue;
+    private bool scaleOutDialogue;
 
     //Quest Ui
-    [SerializeField] bool scaleInQuestTitle;
-    [SerializeField] bool scaleOutQuestTitle;
+    private bool scaleInQuestTitle;
+    private bool scaleOutQuestTitle;
 
-    [SerializeField] bool scaleInQuestOver;
-    [SerializeField] bool scaleOutQuestOver;
+    private bool scaleInQuestOver;
+    private bool scaleOutQuestOver;
     //this is a work around so it can be passed into scale in method when a scale out bool isnt required
     private bool emptyBool;
-
-
 
     //default value for the amount of time after which the radio graphic gets hidden
     float def_timeUntilRadioFade = 5f;
@@ -210,7 +213,7 @@ public class CanvasController : MonoBehaviour
    
     private void Update()
     {
-      #region Go Timer
+     #region Go Timer
       //Shows the GO text after countdown is over for two seconds
       if (GoTimer > 0) 
       { 
@@ -220,9 +223,9 @@ public class CanvasController : MonoBehaviour
       {
           CountDownTimer.text = " ";
       }
-        #endregion
-
-        #region Low Fuel Flash
+    #endregion
+        
+     #region Low Fuel Flash
         if (isLowOnFuel) 
         {
             float alpha = Mathf.Abs(Mathf.Sin(Time.time * flashesPerSec));
@@ -230,9 +233,9 @@ public class CanvasController : MonoBehaviour
             c.a = alpha;
             fuelIcon.color = c;
         }
-        #endregion
+    #endregion
 
-        #region Fade Notification
+     #region Fade Notification
         //this is used to fade the notifcation text once the timer is 0
         if (_notificationShowTime > 0) 
         { 
@@ -240,7 +243,7 @@ public class CanvasController : MonoBehaviour
         }
         else if (NotificationText.fontSize > 0) 
         {
-          NotificationText.fontSize -= Time.unscaledDeltaTime * NotifcationShowScale;
+            NotificationText.fontSize -= Time.unscaledDeltaTime * NotifcationShowScale;
 
             //this is to make sure the text fully dissapears and doesnt flip
             if(NotificationText.fontSize < 0) 
@@ -248,14 +251,13 @@ public class CanvasController : MonoBehaviour
              NotificationText.fontSize = 0;
             }
         }
-        #endregion
+    #endregion
 
-      #region Call Scale in effect
+     #region Call Scale in effect
         CheckScaleInBools();
-       
         #endregion
     
-      #region Scale out effect
+     #region Scale out effect
         if(timeUntilRadioFade > 0) 
         { 
             timeUntilRadioFade -= Time.deltaTime;
@@ -332,9 +334,21 @@ public class CanvasController : MonoBehaviour
             ShowObjectiveText(false);
         }
         #endregion
-    }
-   
 
+     #region Disable Text Automatically
+
+     if (current_SaveGameTextLifeTime > 0)
+     {
+         current_SaveGameTextLifeTime -= Time.deltaTime;
+     }
+     else if (current_SaveGameTextLifeTime <= 0 && SaveGameText.activeSelf)
+     {
+         ShowSavedGameText(false);
+         current_SaveGameTextLifeTime = 0;
+     }
+
+     #endregion   
+    }
 
     //Adds required methods to the OnClick event 
     private void SetupButtonListeners()
@@ -396,6 +410,7 @@ public class CanvasController : MonoBehaviour
         CarSelectionUiPanel.SetActive(active);
         CarViewChoicePanel.SetActive(active);
         CarViewPanel.SetActive(!active);
+        CarSelectionUiObjects.SetActive(active);
         SelectButtonToStartNavigation(SelectLockedCarsButton.gameObject);
         
         if (active)
@@ -577,6 +592,17 @@ public class CanvasController : MonoBehaviour
     public void ToggleSettingsUi(bool enabled)
     {
         SettingsUi.SetActive(enabled);
+    }
+
+    public void ShowSavedGameText(bool show=true)
+    {
+        if (SaveGameText == null)
+        {
+            return;
+        }
+        
+        SaveGameText.SetActive(show);
+        current_SaveGameTextLifeTime = SaveGameTextLifeTime;
     }
     #endregion
 

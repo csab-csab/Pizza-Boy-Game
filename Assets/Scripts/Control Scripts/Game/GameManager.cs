@@ -1139,29 +1139,28 @@ public class GameManager : MonoBehaviour, IDataPersistance
     {
         if(gameState == GameState.Cutscene) return;
 
-        //Destroys current car and disables camera
-        if (active && carController != null)
-        {
-            car_cam.gameObject.SetActive(false);
-            ToggleFreeLookCamera(false);
-            Destroy(carController.gameObject);
-        }
-
-        if (active) 
-        {
-            ModifyGameState(GameState.CarSelect);
-             LightingManager.instance.SetTimeOfDay("ToggleCarSelect/GameManager",0, true);
-        }
-        else 
-        {
-            ModifyGameState(GameState.Playing);
-            LightingManager.instance.SetTimeOfDay("toggleCarSelect/GameManager",12, false);
-        }
-
+        ModifyGameState( active? GameState.CarSelect : GameState.Playing);
+        
+        Time.timeScale = active? 1f : 0f;
+        
+        CameraManager.instance.ToggleMainCamera(!active);
+        
+        ToggleFreeLookCamera(false);
+        
+        lightingManager.ToggleDirectionalLight(!active);
+        
+        CanvasController.instance.ToggleCursor(active);
+        
+        CanvasController.instance.EnableDisableDebugUi(false);
+        
+        SoundManager.instance.ToggleMuteAudioForPause(active);
+        SoundManager.instance.ToggleAmbientSounds(!active);
+        
         CanvasController.instance.EnableDisableCarSelectionUI(active);
         CanvasController.instance.EnableDisableGameplayUi(!active);
         car_select.SetActive(active);
         //to get rid of annoying 2 audio listener message
+        car_select_cam.SetActive(active);
         car_select_cam.GetComponent<AudioListener>().enabled = active;
     }
 

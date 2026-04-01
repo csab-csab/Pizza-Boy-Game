@@ -181,6 +181,11 @@ public class QuestManager : MonoBehaviour
     private void CompleteQuest()
     {
         GrantRewards();
+        
+        //Save Progress
+        QuestPrerequisite.instance.IncreaseQuestProgress();
+        DataPersistanceManager.instance.SaveGame();
+        
         isQuestOver = true;
         currentTimeUntilTermination = TimeUntilTermination;
 
