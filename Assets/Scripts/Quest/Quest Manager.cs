@@ -483,13 +483,13 @@ public class QuestManager : MonoBehaviour
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
                 extras.carToSpawn, 4, TransmissionTypeIndex,
-                  nameof(SpawnQuestCar));
+                  nameof(SpawnQuestCar), -1);
             }
             else 
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
                 extras.carToSpawn, 1,TransmissionTypeIndex,
-                nameof(SpawnQuestCar));
+                nameof(SpawnQuestCar), -1);
             }
         }
     }

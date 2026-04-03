@@ -11,7 +11,7 @@ public class CarSelectorScript : MonoBehaviour
     
     //Events
    //this event is used to spawn the car by other scripts without needing a reference
-    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method);
+    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method, float exactFuel);
     public static TriggerSpawnCar triggerSpawnCar; 
     
     [Header("Properties")]
@@ -412,15 +412,12 @@ public class CarSelectorScript : MonoBehaviour
             if (TempSelCar != null)
             {
                 Destroy(TempSelCar);
-            }
-
-            GameObject Car = Instantiate(carListUnlockedPlayable[currentCar]);
-            Car.transform.position = CarSpawn.position;
-
-            GameManager.instance.AssignSpawnedCarVariables(Car);
-
-            CameraManager.instance.AssignCameras(Car);
-
+            } 
+            
+            //Change so fuel level is whatever it was at before
+            SpawnSpecifiedCar(CarSpawn.transform, carListUnlockedPlayable[currentCar], 1, 
+                GameManager.instance.ReturnTransmissionTypeLoaded(), "SelectCar()", GameManager.instance.ReturnFuel());
+            
             GameManager.instance.ToggleCarSelect(false);
         }
 
@@ -432,7 +429,7 @@ public class CarSelectorScript : MonoBehaviour
 
     //Spawns Any Car
     //WARNING, IF CAR DOESNT WORK WHEN SPAWNED MAKE SURE GAME MANAGER STATE IS PLAYING
-    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method_name)
+    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method_name, float exactFuelLevel = -1)
     {
         string method_called_from_name = method_name;
 
@@ -450,8 +447,15 @@ public class CarSelectorScript : MonoBehaviour
         controller.SwitchTransmissionMode((CarController.typeOfTransmission)TransmissionTypeIndex);
 
         if (controller != null) 
-        { 
-           controller.SetFuelByDenomination(fuelDenomination);
+        {
+            if (exactFuelLevel > -1)
+            {
+                controller.currentFuel =  exactFuelLevel;
+            }
+            else
+            {
+                controller.SetFuelByDenomination(fuelDenomination);
+            }
         }
 
         GameManager.instance.SetPlayState();

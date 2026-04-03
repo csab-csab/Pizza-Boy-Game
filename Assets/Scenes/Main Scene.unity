@@ -183764,7 +183764,7 @@ PrefabInstance:
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: unlockedCarSounds.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
@@ -183781,7 +183781,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'unlockedCarSounds.Array.data[0]'
       value: 
-      objectReference: {fileID: 8300000, guid: 6f0d270f194616e46826a16bb256c381, type: 3}
+      objectReference: {fileID: 8300000, guid: ba8e7c694d89aed45a9813e31533c8e9, type: 3}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: 'unlockedCarSounds.Array.data[1]'
@@ -446897,6 +446897,7 @@ MonoBehaviour:
   RecoveryCost: 100
   CarOutOfFuelCam: {fileID: 1757713390}
   CarOutOfFuelCutscene: {fileID: 1282770789}
+  currentFuelLevel: 0
   fuelPrice: 1
   fuelUnitMultiplier: 50
   countDownStartTime: 0
@@ -446977,7 +446978,10 @@ MonoBehaviour:
   PointToThrowPizzaTrans: {fileID: 0}
   PizzaStartPos: {fileID: 310013237}
   BurntPizzaObj: {fileID: 168398394}
-  DamageFx: []
+  DamageFx:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   NormalCarBody: {fileID: 0}
   DestroyedCarBody: {fileID: 0}
 --- !u!114 &2121870893

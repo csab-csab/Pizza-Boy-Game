@@ -284,7 +284,7 @@ public class ParticleEffectsControl : MonoBehaviour
                 }
                 else 
                 {
-                    Debug.LogError("Ps is null");
+                    Debug.LogError("Paricle system is null");
                 }
             
             }

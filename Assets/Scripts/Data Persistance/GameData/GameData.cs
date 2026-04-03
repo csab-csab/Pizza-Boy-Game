@@ -9,4 +9,5 @@ public class GameData
     public int deliveriesCompleted = 0;
     
     public int carColour = 0;
+    public float fuelLevel = 0;
 }
