@@ -323,7 +323,6 @@ public class SoundManager : MonoBehaviour
     { 
         ToggleMuteCarSounds(mute);
         MuteRadio(mute);
-        
     }
 
 

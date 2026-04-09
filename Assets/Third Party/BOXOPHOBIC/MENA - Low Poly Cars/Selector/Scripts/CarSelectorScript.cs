@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class CarSelectorScript : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class CarSelectorScript : MonoBehaviour
     
     //Events
    //this event is used to spawn the car by other scripts without needing a reference
-    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method);
+    public delegate void TriggerSpawnCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method, float exactFuel);
     public static TriggerSpawnCar triggerSpawnCar; 
     
     [Header("Properties")]
@@ -45,7 +44,7 @@ public class CarSelectorScript : MonoBehaviour
 
     [Header("Visuals")]
     public Animator main_Camera_Animator, camera_Container_Animator, car_Container_Animator;
-    public Text carNameText;
+    public TMP_Text carNameText;
     public Material ColorVar_1, ColorVar_2, ColorVar_3, ColorVar_4, ColorVar_5;
     [SerializeField] GameObject GarageLights;
 
@@ -413,15 +412,12 @@ public class CarSelectorScript : MonoBehaviour
             if (TempSelCar != null)
             {
                 Destroy(TempSelCar);
-            }
-
-            GameObject Car = Instantiate(carListUnlockedPlayable[currentCar]);
-            Car.transform.position = CarSpawn.position;
-
-            GameManager.instance.AssignSpawnedCarVariables(Car);
-
-            CameraManager.instance.AssignCameras(Car);
-
+            } 
+            
+            //Change so fuel level is whatever it was at before
+            SpawnSpecifiedCar(CarSpawn.transform, carListUnlockedPlayable[currentCar], 1, 
+                GameManager.instance.ReturnTransmissionTypeLoaded(), "SelectCar()", GameManager.instance.ReturnFuel());
+            
             GameManager.instance.ToggleCarSelect(false);
         }
 
@@ -433,27 +429,34 @@ public class CarSelectorScript : MonoBehaviour
 
     //Spawns Any Car
     //WARNING, IF CAR DOESNT WORK WHEN SPAWNED MAKE SURE GAME MANAGER STATE IS PLAYING
-    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method_name)
+    public void SpawnSpecifiedCar(Transform transformToSpawnAt, GameObject car, int fuelDenomination, int TransmissionTypeIndex, string method_name, float exactFuelLevel = -1)
     {
-           string method_called_from_name = method_name;
+        string method_called_from_name = method_name;
 
-            print("Method that called spawn car: " + method_name);
+        print("Method that called spawn car: " + method_name);
 
-            GameObject Car = Instantiate(car, transformToSpawnAt.position, transformToSpawnAt.rotation );
+        GameObject Car = Instantiate(car, transformToSpawnAt.position, transformToSpawnAt.rotation );
 
-            AssignLastSpawnedCar(car);
+        AssignLastSpawnedCar(car);
 
-            GameManager.instance.AssignSpawnedCarVariables(Car);
+        GameManager.instance.AssignSpawnedCarVariables(Car);
 
-            CameraManager.instance.AssignCameras(Car);
+        CameraManager.instance.AssignCameras(Car);
 
-            CarController controller = Car.GetComponent<CarController>();
-            controller.SwitchTransmissionMode((CarController.typeOfTransmission)TransmissionTypeIndex);
+        CarController controller = Car.GetComponent<CarController>();
+        controller.SwitchTransmissionMode((CarController.typeOfTransmission)TransmissionTypeIndex);
 
-            if (controller != null) 
-            { 
-               controller.SetFuelByDenomination(fuelDenomination);
+        if (controller != null) 
+        {
+            if (exactFuelLevel > -1)
+            {
+                controller.currentFuel =  exactFuelLevel;
             }
+            else
+            {
+                controller.SetFuelByDenomination(fuelDenomination);
+            }
+        }
 
         GameManager.instance.SetPlayState();
     }

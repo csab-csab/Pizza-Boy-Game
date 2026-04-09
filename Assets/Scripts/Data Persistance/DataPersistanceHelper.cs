@@ -15,10 +15,21 @@ public class DataPersistanceHelper : MonoBehaviour
     public void SaveSettingsData()
     {
         DataPersistanceManager.instance.SaveSettingsData();
+        
+        if (CanvasController.instance != null)
+        {
+            CanvasController.instance.ShowSavedGameText();    
+        }
     }
 
-    private void SaveGameData()
+    public void SaveGameData()
     {
         DataPersistanceManager.instance.SaveGame();
+        
+        if (CanvasController.instance != null)
+        {
+            CanvasController.instance.ShowSavedGameText();    
+        }
     }
+
 }

@@ -39,6 +39,8 @@ public class CameraManager : MonoBehaviour
     Transform SecondaryCamera;
 
     List<Transform> CameraPositionsList;
+
+    
     #endregion
     private void Awake()
     {
@@ -83,6 +85,8 @@ public class CameraManager : MonoBehaviour
     
     public void AssignCameras(GameObject car) 
     {
+       
+        
         SecondaryCamera = car.transform.Find(SECONDARY_CAM_NAME);
 
         SecondaryCamera.GetComponent<Camera>().fieldOfView = revrseCameraFov;
@@ -194,6 +198,8 @@ public class CameraManager : MonoBehaviour
         if (MainCamera != null)
         {
             MainCamera.GetComponent<Camera>().enabled = enabled;
+            //gets rid of annoying two audio listeners message
+            MainCamera.GetComponent<AudioListener>().enabled = enabled;
         }
     }
 

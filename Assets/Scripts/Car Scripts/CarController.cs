@@ -800,8 +800,6 @@ public class CarController : MonoBehaviour
         isEnabled = true;
 
         ToggleEngine(false);
-
-        
     }
     
     private void GetWheelColliders()
@@ -1405,8 +1403,13 @@ public class CarController : MonoBehaviour
     }
     #endregion
 
-        private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Debug.DrawRay(transform.position, Vector3.down, Color.yellow);
+    }
+
+    private void OnDestroy()
+    {
+        ParticleEffectsControl.instance.ResetSpecialVariables();
     }
 }

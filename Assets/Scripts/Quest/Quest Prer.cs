@@ -5,15 +5,32 @@ using UnityEngine;
 
 public class QuestPrerequisite : MonoBehaviour, IDataPersistance
 {
+    public static QuestPrerequisite instance;
+    
+    //this script handles the enabling of quest triggers as well as saving and loading the current quest progress
+    
     [SerializeField] public static int DreamCarCost = 6000;
     [SerializeField] QuestTrigger Quest1Trigger;
     [SerializeField] GameObject Quest2Trigger;
-    public static GameObject Quest2TriggerRef;
+    [SerializeField] GameObject Quest3Trigger;
+    private static GameObject Quest2TriggerRef;
 
     #region Save/Load Values
     private int currentQuestProgress = 0;
-    #endregion  
+    #endregion
 
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(instance);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+    
     private void Start()
     {
         Quest2TriggerRef = Quest2Trigger;
@@ -32,14 +49,26 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
         GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, QuestPrerequisite.Quest2TriggerRef);
     }
 
+    private void EnableQuest3()
+    {
+        Quest3Trigger.gameObject.SetActive(true);
+        GameManager.instance.SpawnPointerArrow(GameManager.ArrowType.Objective, QuestPrerequisite.Quest2TriggerRef);
+    }
+
+    public void IncreaseQuestProgress()
+    {
+        currentQuestProgress++;
+    }
+    
     public void SaveGameData(ref GameData gameData)
     {
-        throw new System.NotImplementedException();
+        gameData.currentQuestProgress = this.currentQuestProgress;
     }
 
     public void LoadGameData(GameData gameData)
     {
         this.currentQuestProgress = gameData.currentQuestProgress;
+        //player money is needed here to calculate cost below
         float playerMoney = gameData.playerMoney;
 
         if (this.currentQuestProgress == 0)
@@ -59,17 +88,20 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
                 $"You are only{DreamCarCost - playerMoney} away from your dream car! ");
             }
         }
-        //Same for quest 3
+        else if (this.currentQuestProgress == 2)
+        {
+            EnableQuest3();
+        }
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void LoadSettingsData(SettingsData settingsData)
     {
-        throw new System.NotImplementedException();
+       
     }
 }
 

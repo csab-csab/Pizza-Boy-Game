@@ -105,6 +105,14 @@ public class ParticleEffectsControl : MonoBehaviour
         NormalCarBody = normal;
         DestroyedCarBody = destroyed;
     }
+
+    //call this on car destroy to ensure particle effects get assigned correctly when car is destroyed
+    public void ResetSpecialVariables()
+    {
+        damageFxAssigned = false; 
+        smokesAssigned = false;
+        trailRendersAssigned = false;
+    }
     #endregion
 
 
@@ -284,7 +292,7 @@ public class ParticleEffectsControl : MonoBehaviour
                 }
                 else 
                 {
-                    Debug.LogError("Ps is null");
+                    Debug.LogError("Paricle system is null");
                 }
             
             }

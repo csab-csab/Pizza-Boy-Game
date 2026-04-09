@@ -181,6 +181,11 @@ public class QuestManager : MonoBehaviour
     private void CompleteQuest()
     {
         GrantRewards();
+        
+        //Save Progress
+        QuestPrerequisite.instance.IncreaseQuestProgress();
+        DataPersistanceManager.instance.SaveGame();
+        
         isQuestOver = true;
         currentTimeUntilTermination = TimeUntilTermination;
 
@@ -478,13 +483,13 @@ public class QuestManager : MonoBehaviour
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
                 extras.carToSpawn, 4, TransmissionTypeIndex,
-                  nameof(SpawnQuestCar));
+                  nameof(SpawnQuestCar), -1);
             }
             else 
             {
                 CarSelectorScript.triggerSpawnCar?.Invoke(extras.carTransformToSpawnOn,
                 extras.carToSpawn, 1,TransmissionTypeIndex,
-                nameof(SpawnQuestCar));
+                nameof(SpawnQuestCar), -1);
             }
         }
     }

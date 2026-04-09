@@ -160,11 +160,11 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
 
     public void SaveSettingsData(ref SettingsData settingsData)
     {
-        throw new System.NotImplementedException();
+       
     }
 
     public void LoadSettingsData(SettingsData settingsData)
     {
-        throw new System.NotImplementedException();
+       
     }
 }

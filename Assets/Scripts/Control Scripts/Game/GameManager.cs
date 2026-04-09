@@ -75,7 +75,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
     [SerializeField] float RecoveryCost = 100;
     [SerializeField] Camera CarOutOfFuelCam;
     [SerializeField] PlayableDirector CarOutOfFuelCutscene;
-
+    //Used so we can set appropiate fuel level in car select
+    [SerializeField] private float currentFuelLevel;
     #endregion
 
 
@@ -379,7 +380,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
                 if(Input.GetKeyDown(KeyCode.Comma))
                 {
-                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, TransmissionTypeIndex, nameof(GameManager.instance.Start));
+                     CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn,DefaultCar, 1, TransmissionTypeIndex, nameof(GameManager.instance.Start), -1);
                      SetPlayState();
                 }
 
@@ -485,10 +486,10 @@ public class GameManager : MonoBehaviour, IDataPersistance
         switch (car) 
         { 
             case StartGameDebug.CarToSpawn.Emma:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DefaultCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode), -1);
                 break;
             case StartGameDebug.CarToSpawn.Raiden:
-                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode));
+                CarSelectorScript.triggerSpawnCar?.Invoke(DefaultCarSpawn, DreamCar, 1, TransmissionTypeIndex,nameof(StartGameFreemode), -1);
                 break;
         }
         
@@ -740,6 +741,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
         {
             DestroyPointerArrow();
         }
+        
+        carController = null;
     }
 
     //this method exists so status can be accessed from the cutscene
@@ -791,15 +794,17 @@ public class GameManager : MonoBehaviour, IDataPersistance
         if (Gamemode == gamemode.Delivery ||
           gameState == GameState.Paused || gameState == GameState.Cutscene)
         {
-            Debug.LogError("Attempted to start delivery while " + Gamemode + "and " + gameState+ "\n This is not allowed.");
+            Debug.LogError("Attempted to start delivery while " + Gamemode + "and " + gameState+ 
+                           "\n This is not allowed.");
             return; 
         }
 
         EnableDisableMapTriggers(false);
 
         if (DialogueHolder.instance != null)
-        {
-            Dialouge PreDeliveryDialouge = DialogueHolder.instance.ReturnDeliveryDialouge(player.ReturnDelisCompleted());
+        { 
+            Dialouge PreDeliveryDialouge = 
+                DialogueHolder.instance.ReturnDeliveryDialouge(player.ReturnDelisCompleted());
 
             if (PreDeliveryDialouge != null)
             {
@@ -997,7 +1002,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
         {
             EnableDisableMapTriggers(true);
             CanvasController.instance.UpdateQuestOverText("Delivery Failed!", true);
-            CanvasController.instance.UpdateQuestOverSubText("You failed to deliver the pizza in time!!\n No tips for you!");
+            CanvasController.instance.UpdateQuestOverSubText("You failed to deliver the pizza in time!!\n" +
+                                                             " No tips for you!");
             Gamemode = gamemode.Freemode;
         }
 
@@ -1015,7 +1021,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
         CanvasController.instance.ToggleDeliveryUi(false);
     }
     
-    public void EnableDisableMapTriggers(bool enableAll  ,bool enableDelivery = false, bool enableGarage = false, bool enableFuel = false) 
+    public void EnableDisableMapTriggers(bool enableAll  ,bool enableDelivery = false, bool enableGarage = false, 
+        bool enableFuel = false) 
     {
         if (enableAll) 
         {
@@ -1125,8 +1132,16 @@ public class GameManager : MonoBehaviour, IDataPersistance
     //Assigns necessary variables to a car just spawned
     public void AssignSpawnedCarVariables(GameObject car) 
     {
-        carController = car.GetComponent<CarController>();
-        carController.SetPlayer(player);
+        try
+        {
+            carController = car.GetComponent<CarController>();
+        
+            carController.SetPlayer(player); 
+        }
+        catch (Exception e)
+        {
+           Debug.Log($"An error occured {e.Message}");
+        }
 
         CameraManager.instance.PassRefsToCinemachine(carController.ReturnCameraLookAtTrans());
 
@@ -1139,30 +1154,44 @@ public class GameManager : MonoBehaviour, IDataPersistance
     {
         if(gameState == GameState.Cutscene) return;
 
-        //Destroys current car and disables camera
-        if (active && carController != null)
+        ModifyGameState( active? GameState.CarSelect : GameState.Playing);
+
+        if ( active && carController != null)
         {
-            car_cam.gameObject.SetActive(false);
-            ToggleFreeLookCamera(false);
-            Destroy(carController.gameObject);
+            currentFuelLevel = carController.currentFuel;
+            ForceDestroyCurCar();
         }
 
-        if (active) 
+        lightingManager.ToggleDirectionalLight(!active);
+        
+        CameraManager.instance.ToggleMainCamera(!active);
+        
+        ToggleFreeLookCamera(false);
+
+        CanvasController.instance.ToggleCursor(active);
+        
+        CanvasController.instance.EnableDisableDebugUi(false);
+
+        
+        
+        //only call on active as we destroy car, it tries to unmute audio
+        //source that doesnt exist anymore on unpause
+        if (active)
         {
-            ModifyGameState(GameState.CarSelect);
-             LightingManager.instance.SetTimeOfDay("ToggleCarSelect/GameManager",0, true);
-        }
-        else 
-        {
-            ModifyGameState(GameState.Playing);
-            LightingManager.instance.SetTimeOfDay("toggleCarSelect/GameManager",12, false);
+            SoundManager.instance.ToggleMuteAudioForPause(true);
         }
 
+        SoundManager.instance.ToggleAmbientSounds(!active);
+        
         CanvasController.instance.EnableDisableCarSelectionUI(active);
         CanvasController.instance.EnableDisableGameplayUi(!active);
+        
         car_select.SetActive(active);
+        
         //to get rid of annoying 2 audio listener message
+        car_select_cam.SetActive(active);
         car_select_cam.GetComponent<AudioListener>().enabled = active;
+      
     }
 
     public void ToggleFreeLookCamera(bool active, bool cutSceneMode = false, Vector3 pos = default, 
@@ -1328,6 +1357,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
         return player;
     }
 
+    public float ReturnFuel()
+    {
+        return currentFuelLevel;
+    }
+    
     public int ReturnTransmissionTypeLoaded()
     {
        return this.TransmissionTypeIndex;
