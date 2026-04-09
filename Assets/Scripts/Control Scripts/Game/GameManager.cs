@@ -1162,19 +1162,18 @@ public class GameManager : MonoBehaviour, IDataPersistance
             ForceDestroyCurCar();
         }
 
-        
-        Time.timeScale = active? 1f : 0f;
+        lightingManager.ToggleDirectionalLight(!active);
         
         CameraManager.instance.ToggleMainCamera(!active);
         
         ToggleFreeLookCamera(false);
-        
-        lightingManager.ToggleDirectionalLight(!active);
-        
+
         CanvasController.instance.ToggleCursor(active);
         
         CanvasController.instance.EnableDisableDebugUi(false);
 
+        
+        
         //only call on active as we destroy car, it tries to unmute audio
         //source that doesnt exist anymore on unpause
         if (active)
@@ -1186,10 +1185,13 @@ public class GameManager : MonoBehaviour, IDataPersistance
         
         CanvasController.instance.EnableDisableCarSelectionUI(active);
         CanvasController.instance.EnableDisableGameplayUi(!active);
+        
         car_select.SetActive(active);
+        
         //to get rid of annoying 2 audio listener message
         car_select_cam.SetActive(active);
         car_select_cam.GetComponent<AudioListener>().enabled = active;
+      
     }
 
     public void ToggleFreeLookCamera(bool active, bool cutSceneMode = false, Vector3 pos = default, 

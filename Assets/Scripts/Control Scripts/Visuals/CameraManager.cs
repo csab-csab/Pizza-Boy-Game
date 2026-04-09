@@ -198,6 +198,8 @@ public class CameraManager : MonoBehaviour
         if (MainCamera != null)
         {
             MainCamera.GetComponent<Camera>().enabled = enabled;
+            //gets rid of annoying two audio listeners message
+            MainCamera.GetComponent<AudioListener>().enabled = enabled;
         }
     }
 
