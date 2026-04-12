@@ -8,11 +8,16 @@ public class StartGameDebug : MonoBehaviour
     public enum CarToSpawn{ Emma, Raiden};
 
 
-    public void StartGameFreeMode() 
+    public void StartGameFreeModeDebug() 
     {
         CanvasController.instance.ToggleCarSelectStartGame(true);
     }
 
+    public void StartGameFreemodeProd()
+    {
+        GameManager.instance.ToggleCarSelect(true);
+    }
+    
     public void TriggerCutscene() 
     {
         CustsceneManager.instance.TriggerCutscene1();

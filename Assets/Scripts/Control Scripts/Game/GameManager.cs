@@ -879,10 +879,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
             }
 
             delivery_point.SetActive(true);
-            //isDeliveryPointActive = true;
-
+            
             timeToDeliver += timeToAdd;
-        
         }
         else 
         {
@@ -933,7 +931,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         SpawnPointerArrow(ArrowType.Objective, delivery_trigger_point);
 
-       
         CanvasController.instance.UpdateQuestObjectiveText("Drive back to the pizzeria.");
 
         CanvasController.instance.ShowObjectiveText(true);
@@ -1021,7 +1018,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         CanvasController.instance.ToggleDeliveryUi(false);
     }
     
-    public void EnableDisableMapTriggers(bool enableAll  ,bool enableDelivery = false, bool enableGarage = false, 
+    public void EnableDisableMapTriggers(bool enableAll = false ,bool enableDelivery = false, bool enableGarage = false, 
         bool enableFuel = false) 
     {
         if (enableAll) 
@@ -1365,6 +1362,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public int ReturnTransmissionTypeLoaded()
     {
        return this.TransmissionTypeIndex;
+    }
+
+    public bool ReturnCarSelectStatus()
+    {
+        return gameState == GameState.CarSelect ?  true : false;
     }
     #endregion
 

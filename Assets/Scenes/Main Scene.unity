@@ -140260,6 +140260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff82c2eb9f8b13345a66a40fefdc03bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startGameDebug: {fileID: 248124751}
   Quest1Trigger: {fileID: 1926560507}
   Quest2Trigger: {fileID: 877943824}
   Quest3Trigger: {fileID: 447223962}
@@ -183406,7 +183407,7 @@ PrefabInstance:
         type: 3}
       propertyPath: CarSpawn
       value: 
-      objectReference: {fileID: 1244447329}
+      objectReference: {fileID: 1183737095}
     - target: {fileID: 8593113100681348196, guid: 8e6e8125df99580438f6b8c5153c46f3,
         type: 3}
       propertyPath: supraIdle
@@ -267013,12 +267014,6 @@ PrefabInstance:
 --- !u!1 &1244447325 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8521063929855880617, guid: 411454f56864e0440af60e3360e5ee65,
-    type: 3}
-  m_PrefabInstance: {fileID: 522072681744047259}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1244447329 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9081207731951275510, guid: 411454f56864e0440af60e3360e5ee65,
     type: 3}
   m_PrefabInstance: {fileID: 522072681744047259}
   m_PrefabAsset: {fileID: 0}
@@ -404422,7 +404417,7 @@ MonoBehaviour:
   QuestCompleteColor: {r: 0.68235296, g: 1, b: 0.5882353, a: 1}
   QuestFailColor: {r: 1, g: 0.6313726, b: 0.5882353, a: 1}
   scaleInFactor: 20
-  NotificationShowTime: 3
+  NotificationShowTime: 5
   NotifcationShowScale: 1000
 --- !u!1001 &1922692304
 PrefabInstance:
