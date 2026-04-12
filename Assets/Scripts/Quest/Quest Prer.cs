@@ -8,7 +8,11 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
     public static QuestPrerequisite instance;
     
     //this script handles the enabling of quest triggers as well as saving and loading the current quest progress
+    //also handles launching the game for the first time
     
+    [Header("Refernce to the script that triggers first cutscene")]
+    [SerializeField] StartGameDebug startGameDebug;
+    [Space(10)]
     [SerializeField] public static int DreamCarCost = 6000;
     [SerializeField] QuestTrigger Quest1Trigger;
     [SerializeField] GameObject Quest2Trigger;
@@ -36,9 +40,50 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
         Quest2TriggerRef = Quest2Trigger;
     }
 
-    private void TriggerQuest1()
+    //these coroutines are there to ensure the player has fully loaded in
+    //before showing messaegs or triggering quests; avoiding errors
+
+    //Starts Game if loaded from main menu; it waits for player to exit car select
+    private IEnumerator StartGameAfterLoading(float playerMoney)
     {
-        Quest1Trigger.TriggerQuest();
+       yield return new WaitForSecondsRealtime(2);
+       
+       startGameDebug.StartGameFreemodeProd();
+      
+       yield return new WaitUntil(() =>  !GameManager.instance.ReturnCarSelectStatus());
+       
+       if (this.currentQuestProgress == 1)
+       {
+           StartCoroutine(EnableQuest2OrShowMessage(playerMoney));
+       }
+       else if (this.currentQuestProgress == 2)
+       {
+           EnableQuest3();
+       }
+    }
+    
+    private IEnumerator TriggerQuest1()
+    {
+        //launches first cutscene
+        yield return new WaitForSeconds(3);
+        startGameDebug.TriggerCutscene();
+    }
+
+    private IEnumerator EnableQuest2OrShowMessage(float playerMoney)
+    {
+        yield return new WaitForSeconds(3);
+        
+        if (playerMoney >= DreamCarCost)
+        {
+            EnableQuest2();
+        }
+        else
+        {
+            CanvasController.instance.UpdateNotificationText("Keep doing deliveries!\n" +
+                                                             $"You are only ${DreamCarCost - playerMoney} away from your dream car! ");
+            //Ensures delivery remains accessible
+            GameManager.instance.EnableDisableMapTriggers(true);
+        }
     }
 
     public static void EnableQuest2()
@@ -68,29 +113,14 @@ public class QuestPrerequisite : MonoBehaviour, IDataPersistance
     public void LoadGameData(GameData gameData)
     {
         this.currentQuestProgress = gameData.currentQuestProgress;
-        //player money is needed here to calculate cost below
-        float playerMoney = gameData.playerMoney;
-
+        
         if (this.currentQuestProgress == 0)
         {
-            TriggerQuest1();
+            StartCoroutine(TriggerQuest1());
         }
-        else if (this.currentQuestProgress == 1)
+        else
         {
-
-            if (playerMoney >= DreamCarCost)
-            {
-                EnableQuest2();
-            }
-            else
-            {
-                CanvasController.instance.UpdateNotificationText("Keep doing deliveries!\n" +
-                $"You are only{DreamCarCost - playerMoney} away from your dream car! ");
-            }
-        }
-        else if (this.currentQuestProgress == 2)
-        {
-            EnableQuest3();
+            StartCoroutine(StartGameAfterLoading(gameData.playerMoney));
         }
     }
 

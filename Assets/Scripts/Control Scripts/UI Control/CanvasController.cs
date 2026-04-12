@@ -208,7 +208,10 @@ public class CanvasController : MonoBehaviour
         CarController.LowOnFuelEvent += TriggerLowFuelFlash;
         CarController.HighOnFuelEvent += StopLowFuelFlash;
 
-        ToggleStartGameUi(true);
+        if (SceneManager.instance == null)
+        {
+            ToggleStartGameUi(true);
+        }
     }
    
     private void Update()

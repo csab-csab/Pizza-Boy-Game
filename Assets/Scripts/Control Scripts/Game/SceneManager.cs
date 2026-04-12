@@ -12,8 +12,6 @@ public class SceneManager : MonoBehaviour
 
     private float loadProgress = 0f;
 
-  
-
     private void Awake()
     {
         if(instance != null && instance != this)
@@ -60,7 +58,7 @@ public class SceneManager : MonoBehaviour
 
    
     #region Return Values
-    public bool ReturIsFirstStart()
+    public bool ReturnIsFirstStart()
     {
         return isFirstStart;
     }
