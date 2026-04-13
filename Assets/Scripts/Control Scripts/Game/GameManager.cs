@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
 {
    public static GameManager instance;
 
-    public enum gamemode {Freemode,Delivery, FinishedDelivery, Track};
-    public gamemode Gamemode { get; private set; }
+    public enum Gamemode {Freemode,Delivery, FinishedDelivery, Track};
+    public Gamemode gamemode { get; private set; }
 
 
     public enum DebugMode { Off, On };
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
     public FuelMode fuelMode { get; private set; }
 
-    public int fuelPrice = 1;
+    public float fuelPrice = 1.5f;
 
     //this decides how much real fuel is one unit of fuel
     //used for pricing
@@ -177,7 +177,9 @@ public class GameManager : MonoBehaviour, IDataPersistance
     //Actual delivery points
     [SerializeField]List<Transform> Houses;
     [SerializeField]string pizzaThrowEffectTag = "PizzaThrowEffectAnchor";
-    private int lastHouse;
+    [Header("Minimum distance between delivery point and player pos")]
+    [SerializeField] private float minDistance;
+    private int lastHouse = -1;
 
     [Header("WayPoint")]
     bool doesDeliveryArrowExist = false;
@@ -198,6 +200,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
     
     public enum InputDevice { KeyboardAndMouse, Controller }
     public InputDevice inputDevice;
+
+    
+    private float resetCarTimer = 0f;
+    [Header("Time in seconds the button to reset the car needs to be held")]
+    [SerializeField] private float timeToResetCar = 3f;
 
     #endregion
    
@@ -272,8 +279,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
         #endregion
 
         Application.targetFrameRate = 60;
-
-      
     }
 
         
@@ -387,6 +392,39 @@ public class GameManager : MonoBehaviour, IDataPersistance
             }
 
         #endregion
+
+        
+        
+        if (Input.GetKey("r"))
+        {
+            //if r is held down, start countdown
+            resetCarTimer +=  1 * Time.deltaTime;
+            
+            //Ensures text is only displayed if button is held for over a second
+            if (resetCarTimer > 0.5)
+            {
+                CanvasController.instance.UpdateInteractUiText($"Keeping holding 'r' to reset! {resetCarTimer:F2}/{timeToResetCar:F2}"); 
+            }
+            
+            
+            if (resetCarTimer >= timeToResetCar)
+            {
+                resetCarTimer = 0;
+                if (carController != null)
+                {
+                    carController.ResetCarPostion();
+                    carController.ResetCarRotation();
+                }
+            }
+        }
+        else
+        {
+            if(resetCarTimer != 0)
+            {
+                CanvasController.instance.ClearInteractUiText();
+                resetCarTimer = 0;
+            }
+        }
         #endregion
 
         #region Timers
@@ -407,7 +445,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         
 
-        if (Gamemode == gamemode.Delivery && timeToDeliver > 0)
+        if (gamemode == Gamemode.Delivery && timeToDeliver > 0)
         {
             timeToDeliver -= Time.deltaTime;
 
@@ -420,7 +458,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
             timeItTookToDeliver += Time.deltaTime;
         }
-        else if(Gamemode == gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0)
+        else if(gamemode == Gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0)
         {
           Defeat();
         }
@@ -480,7 +518,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void StartGameFreemode(StartGameDebug.CarToSpawn car) 
     {
         debugMode = DebugMode.Off;
-        Gamemode = gamemode.Freemode;
+        gamemode = Gamemode.Freemode;
 
         
         switch (car) 
@@ -791,10 +829,10 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #region Delivery Related Functions
    public void TryStartDelivery() 
    {
-        if (Gamemode == gamemode.Delivery ||
-          gameState == GameState.Paused || gameState == GameState.Cutscene)
+        if (gamemode == Gamemode.Delivery ||
+          gameState == GameState.Paused || gameState == GameState.Cutscene || gamemode == Gamemode.FinishedDelivery)
         {
-            Debug.LogError("Attempted to start delivery while " + Gamemode + "and " + gameState+ 
+            Debug.LogError("Attempted to start delivery while " + gamemode + "and " + gameState+ 
                            "\n This is not allowed.");
             return; 
         }
@@ -836,12 +874,12 @@ public class GameManager : MonoBehaviour, IDataPersistance
         //unsubscribe in case called after dialouge
        DialogueManager.OnDialogueFinished -= StartDelivery;
 
-       if (Gamemode == gamemode.Delivery ||
-            gameState == GameState.Paused || gameState == GameState.Cutscene){ 
-                Debug.LogError("delivery cannot be started because gameState is: " + Gamemode + " and " + gameState);
+       if (gamemode == Gamemode.Delivery ||
+            gameState == GameState.Paused || gameState == GameState.Cutscene || gamemode == Gamemode.FinishedDelivery){ 
+                Debug.LogError("delivery cannot be started because gameState is: " + gamemode + " and " + gameState);
                 return;}
         
-        Gamemode = gamemode.Delivery;
+        gamemode = Gamemode.Delivery;
         StartCountDown();
        
         timeToDeliver = base_time_to_deliver;
@@ -857,40 +895,46 @@ public class GameManager : MonoBehaviour, IDataPersistance
         CanvasController.instance.UpdateNotificationText("Deliver the pizza before the it's temperature reaches 25�C!");
     }
     
-    private void SpawnDeliveryPoint() 
+    private void SpawnDeliveryPoint()
     {
-        int houseNum = UnityEngine.Random.Range(0, Houses.Count);
+        int candidate = 0;
+        //to prevent getting stuck in an infinite loop
+        int safetyNet = 0;
+        do
+        {
+            candidate = UnityEngine.Random.Range(0, Houses.Count);
+            safetyNet++;
+            print($"Checking houses: {safetyNet}");
+        } while ((candidate != lastHouse || 
+                  Vector3.Distance(carController.transform.position, 
+                      Houses[candidate].transform.position) < minDistance) 
+                 && safetyNet < 100);
+        
+        lastHouse = candidate;
 
         //This is for the pizza throw particle effect
-        Transform PointToThrowPizzaTo = Houses[houseNum].GetChild(0);
+        Transform PointToThrowPizzaTo = Houses[candidate].GetChild(0);
+        
+        delivery_point.transform.position = Houses[candidate].position;
 
-        if (houseNum != lastHouse)
+        if (PointToThrowPizzaTo != null)
+        { 
+            ParticleEffectsControl.instance.GivePizzaToThrowToPos(PointToThrowPizzaTo);
+        }
+        else
         {
-            delivery_point.transform.position = Houses[houseNum].position;
-            lastHouse = houseNum;
-
-            if (PointToThrowPizzaTo != null)
-            {
-                ParticleEffectsControl.instance.GivePizzaToThrowToPos(PointToThrowPizzaTo);
-            }
-            else
-            {
                 Debug.LogError("PTTT IS NULL");
-            }
+        }
 
-            delivery_point.SetActive(true);
+        delivery_point.SetActive(true);
             
-            timeToDeliver += timeToAdd;
-        }
-        else 
-        {
-            SpawnDeliveryPoint();
-        }
+        timeToDeliver += timeToAdd;
     }
+    
     public void EndCurrentDelivery() 
     {
         //makes sure to only trigger when gamemode is delivery
-        if (Gamemode != gamemode.Delivery) return;
+        if (gamemode != Gamemode.Delivery) return;
 
         delivery_point.SetActive(false);
 
@@ -923,7 +967,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
     private void FinishedDelivery() 
     {
-        Gamemode = gamemode.FinishedDelivery;
+        gamemode = Gamemode.FinishedDelivery;
         
         DestroyPointerArrow();
 
@@ -938,7 +982,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
     public void EndDelivery(bool failed = false) 
     {
-        Gamemode = gamemode.Freemode;
+        gamemode = Gamemode.Freemode;
 
         DestroyPointerArrow();
         
@@ -1001,7 +1045,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
             CanvasController.instance.UpdateQuestOverText("Delivery Failed!", true);
             CanvasController.instance.UpdateQuestOverSubText("You failed to deliver the pizza in time!!\n" +
                                                              " No tips for you!");
-            Gamemode = gamemode.Freemode;
+            gamemode = Gamemode.Freemode;
         }
 
         if(delivery_point != null) 
@@ -1059,7 +1103,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     /// <returns>Returns true if the gamemode is delivery</returns>
     public bool ReturnIsDelivery() 
     {
-        return Gamemode == gamemode.Delivery;
+        return gamemode == Gamemode.Delivery;
     }
 
     #region Delivery/Objective Arrow
@@ -1371,13 +1415,13 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #endregion
 
      public void SaveGameData(ref GameData gameData)
-    {
-       
-    }
+     {
+         gameData.fuelLevel = carController.currentFuel;
+     }
 
     public void LoadGameData(GameData gameData)
     {
-      
+      currentFuelLevel = gameData.fuelLevel;
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)

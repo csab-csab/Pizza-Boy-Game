@@ -6,7 +6,7 @@ public class TriggerNewLap : MonoBehaviour
 {
     public void OnTriggerExit(Collider other)
     {
-        if (GameManager.instance.Gamemode == GameManager.gamemode.Track)
+        if (GameManager.instance.gamemode == GameManager.Gamemode.Track)
         {
             GameManager.instance.EndLapTimer();
             GameManager.instance.StartLapTimer();

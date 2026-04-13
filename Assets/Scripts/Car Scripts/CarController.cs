@@ -189,11 +189,7 @@ public class CarController : MonoBehaviour
             ResetCarPostion();  
         }
 
-        //Check if car is upside down 
-        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), transform.up, 5f, GroundLayer))
-        {
-          ResetCarRotation();
-        }
+      
 
         #endregion
 
@@ -739,6 +735,7 @@ public class CarController : MonoBehaviour
             speedLineReady = true;
         }
     }
+    
     #endregion
 
     #region Assign Variables
@@ -1059,8 +1056,8 @@ public class CarController : MonoBehaviour
         }
         
   
-        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.Gamemode != GameManager.gamemode.FinishedDelivery 
-        && GameManager.instance.Gamemode != GameManager.gamemode.Delivery && !DialogueManager.instance.CheckIsActiveDialogue())
+        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.gamemode != GameManager.Gamemode.FinishedDelivery 
+        && GameManager.instance.gamemode != GameManager.Gamemode.Delivery && !DialogueManager.instance.CheckIsActiveDialogue())
         {
             CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.StartDeliveryTextPc);
             CanvasController.instance.AssignDeliverTextCleared(false);
@@ -1081,7 +1078,7 @@ public class CarController : MonoBehaviour
         }
        
 
-        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.Gamemode == GameManager.gamemode.FinishedDelivery)
+        if (other.gameObject.transform.CompareTag("Start Delivery") && displaySpeed <= 0 && GameManager.instance.gamemode == GameManager.Gamemode.FinishedDelivery)
         {
             //this needs to be called here not entry so it can be showed when the speed is 0
             CanvasController.instance.UpdateInteractUiText(CanvasController.instance.textPresets.EndDeliveryTextPc);
@@ -1258,7 +1255,7 @@ public class CarController : MonoBehaviour
 
     public void GiveFuel(float fuelToGive, bool chargeForFuel)
     {
-        int price = GameManager.instance.fuelPrice;
+        float price = GameManager.instance.fuelPrice;
 
         float unit = GameManager.instance.fuelUnitMultiplier;
 
@@ -1280,7 +1277,7 @@ public class CarController : MonoBehaviour
         if (chargeForFuel && playerMoney < price )
         {
             CanvasController.instance.UpdateNotificationText("You don't have enough money for fuel.\n " +
-                "Go get some money by doing delivery!");
+                "Go get some money by doing a delivery!");
             return;
         }
 
