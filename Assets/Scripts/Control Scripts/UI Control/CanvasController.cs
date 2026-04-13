@@ -754,7 +754,7 @@ public class CanvasController : MonoBehaviour
     public void UpdateCarRefuelUi(float money, float price) 
     { 
         RefuelMoneyText.text = "Your money:$" +  money.ToString("F2");
-        RefuelPriceText.text = "Fuel price per unit:$ " + price.ToString();
+        RefuelPriceText.text = "Fuel price per unit:$ " + price.ToString("F2");
     }
 
     public void UpdateMoneyText(float money) 
