@@ -551,6 +551,8 @@ public class CarController : MonoBehaviour
         }
         else 
         { 
+            CanvasController.instance.UpdateNotificationText("Press P to Turn on car");
+            
             enginePower = 0;
 
             lastRPM = engineRpm;
@@ -963,7 +965,6 @@ public class CarController : MonoBehaviour
 
         if (engineOff)
         {
-            Debug.LogError("Engine off executed");
             ToggleEngine(false);
         }
         

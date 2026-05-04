@@ -134,6 +134,7 @@ public class QuestManager : MonoBehaviour
         print("quest started");
         if (quest != null && !isQuestActive)
         {
+            quest.ResetQuest();
             GameManager.instance.AssignQuestManager(this);
             GameManager.instance.SetPlayState();
             CanvasController.instance.EnableDisableGameplayUi(true);
@@ -316,8 +317,8 @@ public class QuestManager : MonoBehaviour
                         //creates new event handler
                         DialogueManager.DialougeFinished disableFreeLook = null;
                         
-                        //assigns newly crreated event handler to an anonymous function
-                        //that disables camera and unsubcribes this event from the OnDialogue finished event
+                        //assigns newly created event handler to an anonymous function
+                        //that disables camera and unsubscribes this event from the OnDialogue finished event
                         disableFreeLook = () =>
                         {
                             // Disables camera
@@ -462,6 +463,11 @@ public class QuestManager : MonoBehaviour
             {
                 CompleteObjective();
             }
+        }
+        else if (currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime &&
+                 triggeredType == Objective.ObjectiveType.ReachPoint)
+        {
+            CompleteObjective();
         }
     }
 
