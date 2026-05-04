@@ -10,4 +10,5 @@ public class GameData
     
     public int carColour = 0;
     public float fuelLevel = 0;
+    public bool raidenUnlocked = false;
 }

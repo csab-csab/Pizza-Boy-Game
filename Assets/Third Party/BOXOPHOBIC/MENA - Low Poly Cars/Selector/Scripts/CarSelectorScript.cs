@@ -55,6 +55,9 @@ public class CarSelectorScript : MonoBehaviour
     [SerializeField] List<AudioClip> carSounds;
     [SerializeField] List<AudioClip> unlockedCarSounds;
 
+    [Header("Misc")] 
+    //The spawn point for the raiden after quest 3 is complete
+    [SerializeField] private Transform raidenSpawnPoint;
     #endregion
 
     void Start()
@@ -461,6 +464,8 @@ public class CarSelectorScript : MonoBehaviour
         GameManager.instance.SetPlayState();
     }
 
+    
+    
     public void SelectOwnedCarsList() 
     {
         if (TempSelCar != null)
@@ -515,6 +520,26 @@ public class CarSelectorScript : MonoBehaviour
         currentCar = 0;
         totalCars = 0;
 
+    }
+
+    /// <summary>
+    /// Gives player the raiden
+    /// </summary>
+    public void GrantRaiden()
+    {
+        //Changed the index of raiden to be the first one
+        carListUnlocked.Add(carListLocked[0]);
+        carListLocked.Remove(carListLocked[0]);
+
+        carListUnlockedPlayable.Add(carListLockedPlayable[0]);
+        carListLockedPlayable.Remove(carListLockedPlayable[0]);
+
+        unlockedCarSounds.Add(carSounds[0]);
+        carSounds.RemoveAt(currentCar);
+        
+        GameManager.instance.ForceDestroyCurCar();
+        SpawnSpecifiedCar(raidenSpawnPoint, carListUnlockedPlayable[1], 1, 
+            GameManager.instance.ReturnTransmissionTypeLoaded(), "Grant Raiden");
     }
 
     //Delays execution so car doesnt get confirmed before menu is shown

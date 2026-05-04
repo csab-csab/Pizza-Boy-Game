@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Pipes;
@@ -1408,5 +1409,10 @@ public class CarController : MonoBehaviour
     private void OnDestroy()
     {
         ParticleEffectsControl.instance.ResetSpecialVariables();
+    }
+
+    private void OnEnable()
+    {
+        IntialiseCar();
     }
 }

@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     [SerializeField] Transform DefaultCarSpawn;
     [SerializeField] GameObject DefaultCar;
     [SerializeField] GameObject DreamCar;
-
+    private bool isRaidenUnlocked = false;
     #endregion
 
     #region FreeLook and Cutscene Camera
@@ -1326,6 +1326,13 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #endregion
 
     #region Assign Values
+
+    public void UnlockRaiden()
+    {
+        isRaidenUnlocked = true;
+        DataPersistanceManager.instance.SaveGame();
+    }
+    
     //Idea is that quests can use this method to assign num of pizzas to be delivered
     //if they desire
     public void AssignPizzasToDeliver(int pizzas)
@@ -1417,6 +1424,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
      public void SaveGameData(ref GameData gameData)
      {
          gameData.fuelLevel = carController.currentFuel;
+         gameData.raidenUnlocked = isRaidenUnlocked;
      }
 
     public void LoadGameData(GameData gameData)
@@ -1434,5 +1442,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         this.TransmissionTypeIndex = settingsData.TransmissionTypeIndex;
         print($"in game, manager, loading{TransmissionTypeIndex}");
     }
+    
+    
 }
 

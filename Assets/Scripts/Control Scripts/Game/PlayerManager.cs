@@ -108,6 +108,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     { 
         yield return new WaitForSeconds(delay);
         GameManager.instance.DestroyCar();
+        print("destroyed car");
        
     }
 
@@ -144,6 +145,11 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     public int ReturnDelisCompleted() 
     {
         return delisCompleted;
+    }
+
+    public bool returnIsCarDestroyed()
+    {
+        return isCarDestroyed;
     }
 
     public void SaveGameData(ref GameData gameData)
