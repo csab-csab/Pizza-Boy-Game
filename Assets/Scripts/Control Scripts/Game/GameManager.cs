@@ -1294,6 +1294,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
                     CanvasController.instance.EnableDisableGameplayUi(!active);
                 }
 
+
+                if (car_cam.gameObject != null)
+                {
+                    car_cam.gameObject.SetActive(false);
+                }
                 FreeLookCam.gameObject.SetActive(true);
                 freeLookCamOn = true;
                 

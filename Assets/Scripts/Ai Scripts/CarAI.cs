@@ -61,8 +61,8 @@ public class CarAI : MonoBehaviour
     [Tooltip("Set to the index of the first path-point targeted by AI - 1. Indexes start with 0")]
     [SerializeField] private int current_point = -1;
 
-    private Vector3 targetPosition;
-    private Vector3 nextTargetPosition;
+    [SerializeField]private Vector3 targetPosition;
+    [SerializeField]private Vector3 nextTargetPosition;
 
 #endregion
 
@@ -74,10 +74,6 @@ public class CarAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isOutOfPoints)
-        {
-            return;
-        }
         CalculateSpeed();
         CheckForObstacles();
         WorkOutInputs();
@@ -223,26 +219,18 @@ public class CarAI : MonoBehaviour
             return;
 
         current_point++;
-        isOutOfPoints = current_point >= path.Length;
+        isOutOfPoints = current_point >= path.Length-1;
 
         if (isOutOfPoints)
         {
             forwardInput = 0;
             BrakeCar(maxBrakeInput);
+            current_point = 0;
             return;
         }
 
         targetPosition = path.GetPoint(current_point);
         nextTargetPosition = path.GetPoint(current_point +1);
-
-        if (path.IsLast(current_point))
-        {
-            HandleJunction(path.GetNextJunction());
-        }
-        else
-        {
-            ResetJunctionValues();
-        }       
     }
 
     void HandleJunction(JunctionPoint junction)

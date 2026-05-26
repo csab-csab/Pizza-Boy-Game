@@ -1171,9 +1171,8 @@ MonoBehaviour:
       m_ForceAssetFolder: 0
       m_AbsolutePath: 
     m_FileName: <Recorder>_<Take>
-  m_Version: 1
   encoderSettings:
-    rid: 3851100262300123136
+    rid: 1836393933401751617
   captureAlpha: 0
   captureAudio: 1
   m_ImageInputSelector:
@@ -1245,10 +1244,11 @@ MonoBehaviour:
   encoderPresetSelectedSuffixes: 
   encoderColorDefinitionSelected: 0
   encoderCustomOptions: 
+  m_MovieRecorderVersion: 1
   references:
     version: 2
     RefIds:
-    - rid: 3851100262300123136
+    - rid: 1836393933401751617
       type: {class: CoreEncoderSettings, ns: UnityEditor.Recorder.Encoder, asm: Unity.Recorder.Editor}
       data:
         targetBitRate: 8

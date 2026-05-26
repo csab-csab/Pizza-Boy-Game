@@ -100,7 +100,7 @@ public class RadioManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("r") && GameManager.instance.gameState != GameManager.GameState.Playing)
         {
             SwitchRadio();
         }
