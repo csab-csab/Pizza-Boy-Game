@@ -233,7 +233,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         
         foreach(Transform t in tempArray)
         {
-            if(t.CompareTag("PizzaThrowEffectAnchor"))
+            if(t.CompareTag("PizzaThrowEffectAnchor") || t.position == possibleDeliveryPointsParent.transform.position)
             {
                 continue;   
             }
@@ -458,7 +458,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
             timeItTookToDeliver += Time.deltaTime;
         }
-        else if(gamemode == Gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0)
+        else if (gamemode == Gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0 || 
+                 gamemode == Gamemode.Delivery && player.returnIsCarDestroyed())
         {
           Defeat();
         }
@@ -1019,7 +1020,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         timeItTookToDeliver = 0;
         //increase num of deliveries and base time
-        //tweak these values in the future after teaching
+        //tweak these values in the future after testing
         if (player.ReturnDelisCompleted() < 10) return;
         AssignPizzasToDeliver(pizzasToDeliver + 2);
         base_time_to_deliver += 10f;
@@ -1030,6 +1031,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         {
           QuestPrerequisite.EnableQuest2();    
         }
+        
         
     }
 
@@ -1428,13 +1430,20 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
      public void SaveGameData(ref GameData gameData)
      {
-         gameData.fuelLevel = carController.currentFuel;
+         if (carController != null)
+         {
+             gameData.fuelLevel = carController.currentFuel; 
+         }
          gameData.raidenUnlocked = isRaidenUnlocked;
+         gameData.baseTimeToDeliver = base_time_to_deliver;
+         gameData.basePizzasToDeliver = pizzasToDeliver;
      }
 
     public void LoadGameData(GameData gameData)
     {
       currentFuelLevel = gameData.fuelLevel;
+      base_time_to_deliver = gameData.baseTimeToDeliver;
+      AssignPizzasToDeliver(gameData.basePizzasToDeliver);
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)

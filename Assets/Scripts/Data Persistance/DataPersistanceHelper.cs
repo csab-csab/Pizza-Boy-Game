@@ -24,7 +24,15 @@ public class DataPersistanceHelper : MonoBehaviour
 
     public void SaveGameData()
     {
-        DataPersistanceManager.instance.SaveGame();
+        if (DataPersistanceManager.instance != null)
+        {
+            DataPersistanceManager.instance.SaveGame();  
+        }
+        else
+        {
+            Debug.LogError("No DataPersistanceManager found");
+        }
+        
         
         if (CanvasController.instance != null)
         {

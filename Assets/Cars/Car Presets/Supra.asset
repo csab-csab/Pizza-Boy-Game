@@ -128,7 +128,7 @@ MonoBehaviour:
   - 0.2
   finalDrive: 3
   enginePower: 1000
-  engineBrakeFactor: 0
+  engineBrakeFactor: 200
   switchUPRPM: 6000
   switchDOWNRPM: 2000
   gearChangeCoolDown: 2

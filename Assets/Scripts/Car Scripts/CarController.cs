@@ -54,7 +54,7 @@ public class CarController : MonoBehaviour
     [Space(10)]
 
     [Header("Car Properties")]
-    
+    private bool hasBeenIntialised = false;
     public bool isEnabled = true;
     Vector3 StartPosition;
     [SerializeField] CarPreset preset;
@@ -742,8 +742,12 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region Assign Variables
-    private void IntialiseCar() 
+    private void IntialiseCar()
     {
+        if (hasBeenIntialised) return;
+        
+        hasBeenIntialised = true;
+        
         rb = GetComponent<Rigidbody>();
         wheelColliders = new WheelCollider[4];
 
@@ -1000,7 +1004,7 @@ public class CarController : MonoBehaviour
 
         for (int i = 0; i < Lights.Count; i++)
         {
-            //Ensures brake lights remain on on when braking
+            //Ensures brake lights remain on when braking
             if (i == 2 && !lightsEnabled && isBraking) return;
             Lights[i].gameObject.SetActive(lightsEnabled);
         }
