@@ -1199,9 +1199,6 @@ public class CarController : MonoBehaviour
            playerManager.InstantDestroy();
         }
     }
-
-
-
     #endregion
 
     #region Special
@@ -1342,9 +1339,9 @@ public class CarController : MonoBehaviour
 
     #endregion
 
-    #region Refuelling
+    #region Refueling
 
-   //this is used to set all the variables for refuelling to keep the collision detection cleaner
+   //this is used to set all the variables for refueling to keep the collision detection cleaner
    //and so it can be called from other places such as the return button
     public void ToggleRefuel(bool enabled, Transform other = null) 
     {

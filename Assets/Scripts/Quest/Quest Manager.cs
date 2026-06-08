@@ -81,6 +81,11 @@ public class QuestManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Hash))
+        {
+            CompleteObjective();
+        }
+        
         if (autoRestart && currentTimeUntilRestart > 0)
         {
             currentTimeUntilRestart -= Time.deltaTime;
@@ -275,6 +280,7 @@ public class QuestManager : MonoBehaviour
                 if (objsToEnableIndxPtr > 0)
                 {
                     quest.questExtras.objsToEnable[objsToEnableIndxPtr - 1].SetActive(false);
+                    print("prev obj to enable is being disabled.");
                 }
                 
                 if (objsToEnableIndxPtr < quest.questExtras.objsToEnable.Length && 
@@ -432,8 +438,7 @@ public class QuestManager : MonoBehaviour
 
             CanvasController.instance.UpdateQuestOverSubText("+$ " + moneyReward);
 
-            //if final quest
-            if (quest.id == 2)
+            if (quest.ReturnQuestId() == 2)
             {
                 CarSelectorScript.instance.GrantRaiden();
             }
@@ -467,6 +472,8 @@ public class QuestManager : MonoBehaviour
         else if (currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime &&
                  triggeredType == Objective.ObjectiveType.ReachPoint)
         {
+            CanvasController.instance.ToggleGPTimerUi(false);
+            isTimerReachPointActive = false;
             CompleteObjective();
         }
     }

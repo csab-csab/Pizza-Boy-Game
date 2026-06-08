@@ -30,11 +30,6 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
         {
             DamageDestroyedCar(1);
         }
-
-        if (Input.GetKey(KeyCode.L))
-        {
-            InstantDestroy();
-        }
     }
 
     #region Money

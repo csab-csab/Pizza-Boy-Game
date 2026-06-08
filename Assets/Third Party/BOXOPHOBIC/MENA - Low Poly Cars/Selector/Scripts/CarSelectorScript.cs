@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -60,14 +61,17 @@ public class CarSelectorScript : MonoBehaviour
     [SerializeField] private Transform raidenSpawnPoint;
     #endregion
 
-    void Start()
+    private void Awake()
     {
         if (instance != null)
         {
             Destroy(instance);
         }
         instance = this;
+    }
 
+    void Start()
+    {
         GarageLights.SetActive(false);
         triggerSpawnCar += SpawnSpecifiedCar;
     }
@@ -527,6 +531,8 @@ public class CarSelectorScript : MonoBehaviour
     /// </summary>
     public void GrantRaiden()
     {
+        print("granting raiden");
+        
         //Changed the index of raiden to be the first one
         carListUnlocked.Add(carListLocked[0]);
         carListLocked.Remove(carListLocked[0]);
@@ -540,7 +546,33 @@ public class CarSelectorScript : MonoBehaviour
         GameManager.instance.ForceDestroyCurCar();
         SpawnSpecifiedCar(raidenSpawnPoint, carListUnlockedPlayable[1], 1, 
             GameManager.instance.ReturnTransmissionTypeLoaded(), "Grant Raiden");
+        
+        //hopefully fixes cam issue
+        CameraManager.instance.ToggleMainCamera(false);
+        CameraManager.instance.ToggleMainCamera(true);
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UnlockRaiden();
+        } 
     }
+
+    /// <summary>
+    /// This method unlocks raiden on start up, if its owned
+    /// </summary>
+    public void AllowRaiden()
+    {
+        print("allowing raiden");
+        carListUnlocked.Add(carListLocked[0]);
+        carListLocked.Remove(carListLocked[0]);
+
+        carListUnlockedPlayable.Add(carListLockedPlayable[0]);
+        carListLockedPlayable.Remove(carListLockedPlayable[0]);
+
+        unlockedCarSounds.Add(carSounds[0]);
+        carSounds.RemoveAt(currentCar);
+    }
+    
 
     //Delays execution so car doesnt get confirmed before menu is shown
     private IEnumerator DelayConfirmButton() 

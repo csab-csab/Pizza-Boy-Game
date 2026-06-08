@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour, IDataPersistance
 {
@@ -46,6 +47,10 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #region Pause Variables
     [Header("Pause Variables")]
     [SerializeField] GameObject PauseMenu;
+    
+    [FormerlySerializedAs("freezeTime")]
+    [Header("Time Freeze, used for taking screenshots")]
+    [SerializeField] private bool timeFrozen = false;
     #endregion
 
     #region Car Select
@@ -59,7 +64,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     [SerializeField] Transform DefaultCarSpawn;
     [SerializeField] GameObject DefaultCar;
     [SerializeField] GameObject DreamCar;
-    private bool isRaidenUnlocked = false;
+    [SerializeField]private bool isRaidenUnlocked = false;
     #endregion
 
     #region FreeLook and Cutscene Camera
@@ -291,6 +296,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
         if (Input.GetButtonDown("Pause") && gameState != GameState.Paused)
         {
             PauseGame();
+        }
+
+        if (Input.GetKey(KeyCode.T))
+        {
+            FreezeTime();
         }
 
         if (Input.GetAxisRaw("Mouse X") != 0 ^ Input.GetAxisRaw("Mouse Y") != 0)
@@ -556,7 +566,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void PauseGame() 
     {
         if (gameState == GameState.CarSelect || gameState == GameState.Refueling || gameState == GameState.Cutscene || gameState == GameState.CarDestroyed || 
-            gameState == GameState.CarOutOfFuel) return;
+            gameState == GameState.CarOutOfFuel || DialogueManager.instance.CheckIsActiveDialogue()) return;
         
         if (gameState == GameState.Playing) 
         {
@@ -634,6 +644,16 @@ public class GameManager : MonoBehaviour, IDataPersistance
         }
     }
 
+    public void FreezeTime()
+    {
+        timeFrozen = !timeFrozen;
+        
+        Time.timeScale = timeFrozen ? 1 : 0;
+        
+        CanvasController.instance.EnableDisableGameplayUi(!timeFrozen);
+        SoundManager.instance.ToggleMuteAudioForPause(!timeFrozen);
+    }
+    
     public void SetRefuelingStatus(FuelMode mode)
     {
         fuelMode = mode;
@@ -989,8 +1009,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
         
         CanvasController.instance.ToggleDeliveryUi(false);
 
-        EnableDisableMapTriggers(true);
-
+        if (!QuestManager.isQuestActive)
+        {
+            EnableDisableMapTriggers(true);
+        }
+        
         if (!failed)
         {
             player.AddToDelisComplete();
@@ -1030,9 +1053,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         if(player.ReturnMoney() >= QuestPrerequisite.DreamCarCost) 
         {
           QuestPrerequisite.EnableQuest2();    
-        }
-        
-        
+        } 
     }
 
     private void Defeat() 
@@ -1333,13 +1354,15 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #endregion
 
     #region Assign Values
-
+    /// <summary>
+    /// Sets bool and saves it so raiden can be unlocked on every load
+    /// </summary>
     public void UnlockRaiden()
     {
         isRaidenUnlocked = true;
         DataPersistanceManager.instance.SaveGame();
     }
-    
+
     //Idea is that quests can use this method to assign num of pizzas to be delivered
     //if they desire
     public void AssignPizzasToDeliver(int pizzas)
@@ -1444,6 +1467,13 @@ public class GameManager : MonoBehaviour, IDataPersistance
       currentFuelLevel = gameData.fuelLevel;
       base_time_to_deliver = gameData.baseTimeToDeliver;
       AssignPizzasToDeliver(gameData.basePizzasToDeliver);
+      isRaidenUnlocked = gameData.raidenUnlocked;
+      
+      if (isRaidenUnlocked)
+      {
+          CarSelectorScript.instance.AllowRaiden();
+      }
+      
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)
@@ -1454,7 +1484,6 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void LoadSettingsData(SettingsData settingsData)
     {
         this.TransmissionTypeIndex = settingsData.TransmissionTypeIndex;
-        print($"in game, manager, loading{TransmissionTypeIndex}");
     }
     
     
