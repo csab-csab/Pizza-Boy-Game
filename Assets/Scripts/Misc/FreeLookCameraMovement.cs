@@ -106,15 +106,34 @@ public class FreeLookCameraMovement : MonoBehaviour
             // //Keep the camera's roll at zero:
             // transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
         }
-     }
+        
+        if (Input.GetKeyDown(KeyCode.Comma))
+        {
+            TeleportToPlayer();
+        }
+       }
     }
 
     public void ToggleMovement(bool MovementEnabled)
     {
         isMovementEnabled = MovementEnabled;
     }
+    
     private void ClampRotation(float angle) 
     { 
         Mathf.Clamp(angle, -90, 90);
+    }
+    
+    private void TeleportToPlayer()
+    {
+        CarController carController = GameManager.instance.AccessCarController();
+        
+        print("Trying to teleport to player");
+        
+        if (carController != null)
+        {
+            print("Teleported to player executed correctly");
+            transform.position = carController.transform.position;    
+        }
     }
 }

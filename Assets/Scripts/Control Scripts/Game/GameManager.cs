@@ -337,7 +337,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
             isJoystickDpadYEnabled = true;
         }
 
-        if(Input.GetButtonDown("Freelook Camera")) 
+        if(Input.GetButtonDown("Freelook Camera") || Input.GetButtonDown("Pause") && freeLookCamOn) 
         {
             ToggleFreeLookCamera(!freeLookCamOn);
         }
@@ -388,7 +388,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
                     carController.ResetCarRotation();
                 }
             
-                if (Input.GetKeyDown(KeyCode.T))
+                if (Input.GetKeyDown(KeyCode.Semicolon))
                 {
                     ParticleEffectsControl.instance.ThrowPizzaOutCar(carController.gameObject);
                 }
@@ -566,7 +566,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void PauseGame() 
     {
         if (gameState == GameState.CarSelect || gameState == GameState.Refueling || gameState == GameState.Cutscene || gameState == GameState.CarDestroyed || 
-            gameState == GameState.CarOutOfFuel || DialogueManager.instance.CheckIsActiveDialogue()) return;
+            gameState == GameState.CarOutOfFuel || DialogueManager.instance.CheckIsActiveDialogue() || freeLookCamOn) return;
         
         if (gameState == GameState.Playing) 
         {

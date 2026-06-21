@@ -64,7 +64,7 @@ public class Destructible : MonoBehaviour
 
     IEnumerator DisableObject(float lifeTime = 0) 
     {
-        yield return new WaitForSecondsRealtime(lifeTime);
+        yield return new WaitForSeconds(lifeTime);
 
         this.gameObject.SetActive(false);
         DestructibleManager.instance.RegisterDestruction(this);
