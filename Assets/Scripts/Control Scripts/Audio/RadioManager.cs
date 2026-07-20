@@ -100,12 +100,12 @@ public class RadioManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("r") && GameManager.instance.gameState == GameManager.GameState.Playing)
         {
             SwitchRadio();
         }
 
-        //radio isnt playing music and is not off
+        //radio isn't playing music and is not off
         if (!RadioSource.isPlaying && currentRadio != -1)
         {
             ChooseTrack(currentTrack);

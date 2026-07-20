@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour, IDataPersistance
 {
@@ -46,6 +47,10 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #region Pause Variables
     [Header("Pause Variables")]
     [SerializeField] GameObject PauseMenu;
+    
+    [FormerlySerializedAs("freezeTime")]
+    [Header("Time Freeze, used for taking screenshots")]
+    [SerializeField] private bool timeFrozen = false;
     #endregion
 
     #region Car Select
@@ -59,7 +64,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     [SerializeField] Transform DefaultCarSpawn;
     [SerializeField] GameObject DefaultCar;
     [SerializeField] GameObject DreamCar;
-
+    [SerializeField]private bool isRaidenUnlocked = false;
     #endregion
 
     #region FreeLook and Cutscene Camera
@@ -233,7 +238,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         
         foreach(Transform t in tempArray)
         {
-            if(t.CompareTag("PizzaThrowEffectAnchor"))
+            if(t.CompareTag("PizzaThrowEffectAnchor") || t.position == possibleDeliveryPointsParent.transform.position)
             {
                 continue;   
             }
@@ -293,6 +298,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
             PauseGame();
         }
 
+        if (Input.GetKey(KeyCode.T))
+        {
+            FreezeTime();
+        }
+
         if (Input.GetAxisRaw("Mouse X") != 0 ^ Input.GetAxisRaw("Mouse Y") != 0)
         {
             inputDevice = InputDevice.KeyboardAndMouse;
@@ -327,7 +337,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
             isJoystickDpadYEnabled = true;
         }
 
-        if(Input.GetButtonDown("Freelook Camera")) 
+        if(Input.GetButtonDown("Freelook Camera") || Input.GetButtonDown("Pause") && freeLookCamOn) 
         {
             ToggleFreeLookCamera(!freeLookCamOn);
         }
@@ -378,7 +388,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
                     carController.ResetCarRotation();
                 }
             
-                if (Input.GetKeyDown(KeyCode.T))
+                if (Input.GetKeyDown(KeyCode.Semicolon))
                 {
                     ParticleEffectsControl.instance.ThrowPizzaOutCar(carController.gameObject);
                 }
@@ -458,7 +468,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
             timeItTookToDeliver += Time.deltaTime;
         }
-        else if(gamemode == Gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0)
+        else if (gamemode == Gamemode.Delivery && timeToDeliver <= 0 && currentNoPizzas > 0 || 
+                 gamemode == Gamemode.Delivery && player.returnIsCarDestroyed())
         {
           Defeat();
         }
@@ -555,7 +566,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void PauseGame() 
     {
         if (gameState == GameState.CarSelect || gameState == GameState.Refueling || gameState == GameState.Cutscene || gameState == GameState.CarDestroyed || 
-            gameState == GameState.CarOutOfFuel) return;
+            gameState == GameState.CarOutOfFuel || DialogueManager.instance.CheckIsActiveDialogue() || freeLookCamOn) return;
         
         if (gameState == GameState.Playing) 
         {
@@ -633,6 +644,16 @@ public class GameManager : MonoBehaviour, IDataPersistance
         }
     }
 
+    public void FreezeTime()
+    {
+        timeFrozen = !timeFrozen;
+        
+        Time.timeScale = timeFrozen ? 1 : 0;
+        
+        CanvasController.instance.EnableDisableGameplayUi(!timeFrozen);
+        SoundManager.instance.ToggleMuteAudioForPause(!timeFrozen);
+    }
+    
     public void SetRefuelingStatus(FuelMode mode)
     {
         fuelMode = mode;
@@ -988,8 +1009,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
         
         CanvasController.instance.ToggleDeliveryUi(false);
 
-        EnableDisableMapTriggers(true);
-
+        if (!QuestManager.isQuestActive)
+        {
+            EnableDisableMapTriggers(true);
+        }
+        
         if (!failed)
         {
             player.AddToDelisComplete();
@@ -1019,7 +1043,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
         timeItTookToDeliver = 0;
         //increase num of deliveries and base time
-        //tweak these values in the future after teaching
+        //tweak these values in the future after testing
         if (player.ReturnDelisCompleted() < 10) return;
         AssignPizzasToDeliver(pizzasToDeliver + 2);
         base_time_to_deliver += 10f;
@@ -1029,8 +1053,7 @@ public class GameManager : MonoBehaviour, IDataPersistance
         if(player.ReturnMoney() >= QuestPrerequisite.DreamCarCost) 
         {
           QuestPrerequisite.EnableQuest2();    
-        }
-        
+        } 
     }
 
     private void Defeat() 
@@ -1294,6 +1317,11 @@ public class GameManager : MonoBehaviour, IDataPersistance
                     CanvasController.instance.EnableDisableGameplayUi(!active);
                 }
 
+
+                if (car_cam.gameObject != null)
+                {
+                    car_cam.gameObject.SetActive(false);
+                }
                 FreeLookCam.gameObject.SetActive(true);
                 freeLookCamOn = true;
                 
@@ -1326,6 +1354,15 @@ public class GameManager : MonoBehaviour, IDataPersistance
     #endregion
 
     #region Assign Values
+    /// <summary>
+    /// Sets bool and saves it so raiden can be unlocked on every load
+    /// </summary>
+    public void UnlockRaiden()
+    {
+        isRaidenUnlocked = true;
+        DataPersistanceManager.instance.SaveGame();
+    }
+
     //Idea is that quests can use this method to assign num of pizzas to be delivered
     //if they desire
     public void AssignPizzasToDeliver(int pizzas)
@@ -1416,12 +1453,27 @@ public class GameManager : MonoBehaviour, IDataPersistance
 
      public void SaveGameData(ref GameData gameData)
      {
-         gameData.fuelLevel = carController.currentFuel;
+         if (carController != null)
+         {
+             gameData.fuelLevel = carController.currentFuel; 
+         }
+         gameData.raidenUnlocked = isRaidenUnlocked;
+         gameData.baseTimeToDeliver = base_time_to_deliver;
+         gameData.basePizzasToDeliver = pizzasToDeliver;
      }
 
     public void LoadGameData(GameData gameData)
     {
       currentFuelLevel = gameData.fuelLevel;
+      base_time_to_deliver = gameData.baseTimeToDeliver;
+      AssignPizzasToDeliver(gameData.basePizzasToDeliver);
+      isRaidenUnlocked = gameData.raidenUnlocked;
+      
+      if (isRaidenUnlocked)
+      {
+          CarSelectorScript.instance.AllowRaiden();
+      }
+      
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)
@@ -1432,7 +1484,8 @@ public class GameManager : MonoBehaviour, IDataPersistance
     public void LoadSettingsData(SettingsData settingsData)
     {
         this.TransmissionTypeIndex = settingsData.TransmissionTypeIndex;
-        print($"in game, manager, loading{TransmissionTypeIndex}");
     }
+    
+    
 }
 

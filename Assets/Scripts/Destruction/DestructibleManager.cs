@@ -55,7 +55,7 @@ public class DestructibleManager : MonoBehaviour
                     RemovefromDestroyedObject(i);
                 }  
             }
-            yield return new WaitForSecondsRealtime(2f);
+            yield return new WaitForSeconds(2f);
 
             if (DestroyedObjects.Count == 0)
             {

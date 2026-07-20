@@ -55,6 +55,10 @@ public class SceneManager : MonoBehaviour
         isLoading = false;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
    
     #region Return Values

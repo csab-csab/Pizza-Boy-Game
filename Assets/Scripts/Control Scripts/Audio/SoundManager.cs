@@ -306,7 +306,7 @@ public class SoundManager : MonoBehaviour
         audioSource.Stop();
         audioSource.loop = true;
         audioSource.clip = carRunning;
-        //dont play audio as car is off
+        //don't play audio as car is off
     }
 
     public void MuteAllAudio() 
@@ -392,7 +392,6 @@ public class SoundManager : MonoBehaviour
         carSources.Add(source);
     }
 
-
     private void ToggleMuteCarSounds(bool mute) 
     {
         if (mute)
@@ -415,7 +414,5 @@ public class SoundManager : MonoBehaviour
     { 
         radioManager.MuteRadio(mute);
     }
-
-
     #endregion
 }

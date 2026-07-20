@@ -7,8 +7,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     #region Player Progress
     [SerializeField] int delisCompleted = 0;
     [SerializeField]private float Money;
-
-    #endregion
+        #endregion
 
     #region Car Health
     private float MaxCarHealth = 100;
@@ -24,23 +23,12 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     [SerializeField]bool isCarDestroyed;
     #endregion
 
-    private void Start()
-    {
-        CanvasController.instance.UpdateMoneyText(Money);
-        
-    }
-
     private void Update()
     {
         //See method for description
         if(CarHealth <= 0 && DestroyedCarHealth > 0) 
         {
             DamageDestroyedCar(1);
-        }
-
-        if (Input.GetKey(KeyCode.L))
-        {
-            InstantDestroy();
         }
     }
 
@@ -49,6 +37,8 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     {
         Money += amount;
         CanvasController.instance.UpdateMoneyText(Money);
+
+        DataPersistanceManager.instance.SaveGame();
     }
 
     public void TakeMoney(float amount) 
@@ -108,6 +98,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     { 
         yield return new WaitForSeconds(delay);
         GameManager.instance.DestroyCar();
+        print("destroyed car");
        
     }
 
@@ -146,6 +137,11 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
         return delisCompleted;
     }
 
+    public bool returnIsCarDestroyed()
+    {
+        return isCarDestroyed;
+    }
+
     public void SaveGameData(ref GameData gameData)
     {
         gameData.playerMoney = this.Money;
@@ -156,6 +152,8 @@ public class PlayerManager : MonoBehaviour, IDataPersistance
     {
         this.Money = gameData.playerMoney;
         this.delisCompleted = gameData.deliveriesCompleted;
+        CanvasController.instance.UpdateMoneyText(Money);
+        print("LoadGameData in player manager");
     }
 
     public void SaveSettingsData(ref SettingsData settingsData)

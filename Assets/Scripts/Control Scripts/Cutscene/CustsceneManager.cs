@@ -89,22 +89,17 @@ public class CustsceneManager : MonoBehaviour
     
     void SkipCutscene()
     {
-        if(playableDirector != null && playableDirector.state == PlayState.Playing) 
+        if (playableDirector != null && playableDirector.state == PlayState.Playing)
         {
             //This is hard coded because the way that the 1st cutscene plays out
             //It ensures that the cutscene skips to the part where the dialouge starts
             //rather than just ending
-            if(playableDirector.playableAsset == Cutscenes[0] && playableDirector.time < 42)
+            if (playableDirector.playableAsset == Cutscenes[0] && playableDirector.time < 42)
             {
-               playableDirector.time = 42;
-               playableDirector.Evaluate();
-               playableDirector.Play();
+                playableDirector.time = 42;
+                playableDirector.Evaluate();
+                playableDirector.Play();
             }
-            else
-            {
-             playableDirector.Stop();
-            }
-          
         }
     }
 

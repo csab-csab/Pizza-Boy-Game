@@ -207,6 +207,10 @@ public class DialogueManager : MonoBehaviour
     }
 
     #region  Return Values
+    /// <summary>
+    /// Returns if there is any dialogue running
+    /// </summary>
+    /// <returns></returns>
     public bool CheckIsActiveDialogue()
     {
         return activeDialouge;

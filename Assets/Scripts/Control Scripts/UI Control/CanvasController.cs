@@ -45,6 +45,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] GameObject SavingsText;
     [SerializeField] GameObject FreeLookUi;
     [SerializeField] GameObject SettingsUi;
+    [SerializeField] private GameObject ViewControlsUi;
     [SerializeField] GameObject SaveGameText;
 
     private float current_SaveGameTextLifeTime;
@@ -198,7 +199,6 @@ public class CanvasController : MonoBehaviour
     private void Start()
     {
         NotificationText.text = "";
-        SetupButtonListeners();
         ToggleCarDestroyedUi(false);
 
         //Subscribe to events
@@ -212,8 +212,10 @@ public class CanvasController : MonoBehaviour
         {
             ToggleStartGameUi(true);
         }
+		
+         SetupButtonListeners();
     }
-   
+    
     private void Update()
     {
      #region Go Timer
@@ -356,7 +358,11 @@ public class CanvasController : MonoBehaviour
     //Adds required methods to the OnClick event 
     private void SetupButtonListeners()
     {
-        if(SpawnCarButton == null) Debug.LogError("Spawn car button is null, assign it in the inspector.");
+        if(SpawnCarButton == null)
+        { 
+            Debug.LogError("Spawn car button is null, assign it in the inspector.");
+            return;
+        }
         
         SpawnCarButton.onClick.RemoveAllListeners();
         SpawnCarButton.onClick.AddListener(CarSelectorScript.instance.SelectCar);
@@ -597,6 +603,11 @@ public class CanvasController : MonoBehaviour
         SettingsUi.SetActive(enabled);
     }
 
+    public bool ReturnSettingsUiStatus()
+    {
+        return SettingsUi.activeSelf;
+    }
+
     public void ShowSavedGameText(bool show=true)
     {
         if (SaveGameText == null)
@@ -607,6 +618,17 @@ public class CanvasController : MonoBehaviour
         SaveGameText.SetActive(show);
         current_SaveGameTextLifeTime = SaveGameTextLifeTime;
     }
+
+    public void ToggleViewControlsTab(bool show)
+    {
+        ViewControlsUi.SetActive(show);
+    }
+
+    public bool ReturnControlsUiStatus()
+    {
+        return ViewControlsUi.activeSelf;
+    }
+    
     #endregion
 
     #region Update UI Elements 

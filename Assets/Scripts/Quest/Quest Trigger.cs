@@ -13,10 +13,10 @@ public class QuestTrigger : MonoBehaviour
         if (questManager != null)
         {
             questManager.StartQuest();
+            questManager.gameObject.SetActive(true);
             if (this.gameObject.GetComponent<QuestManager>() != null) 
             {
                 print("Quest manager on this go:" + this.gameObject.GetComponent<QuestManager>() != null);
-                //this.enabled = false;
             }
             else 
             {

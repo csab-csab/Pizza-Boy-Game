@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Pipes;
@@ -53,7 +54,7 @@ public class CarController : MonoBehaviour
     [Space(10)]
 
     [Header("Car Properties")]
-    
+    private bool hasBeenIntialised = false;
     public bool isEnabled = true;
     Vector3 StartPosition;
     [SerializeField] CarPreset preset;
@@ -550,6 +551,8 @@ public class CarController : MonoBehaviour
         }
         else 
         { 
+            CanvasController.instance.UpdateNotificationText("Press P to Turn on car");
+            
             enginePower = 0;
 
             lastRPM = engineRpm;
@@ -739,8 +742,12 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region Assign Variables
-    private void IntialiseCar() 
+    private void IntialiseCar()
     {
+        if (hasBeenIntialised) return;
+        
+        hasBeenIntialised = true;
+        
         rb = GetComponent<Rigidbody>();
         wheelColliders = new WheelCollider[4];
 
@@ -962,7 +969,6 @@ public class CarController : MonoBehaviour
 
         if (engineOff)
         {
-            Debug.LogError("Engine off executed");
             ToggleEngine(false);
         }
         
@@ -998,7 +1004,7 @@ public class CarController : MonoBehaviour
 
         for (int i = 0; i < Lights.Count; i++)
         {
-            //Ensures brake lights remain on on when braking
+            //Ensures brake lights remain on when braking
             if (i == 2 && !lightsEnabled && isBraking) return;
             Lights[i].gameObject.SetActive(lightsEnabled);
         }
@@ -1193,9 +1199,6 @@ public class CarController : MonoBehaviour
            playerManager.InstantDestroy();
         }
     }
-
-
-
     #endregion
 
     #region Special
@@ -1336,9 +1339,9 @@ public class CarController : MonoBehaviour
 
     #endregion
 
-    #region Refuelling
+    #region Refueling
 
-   //this is used to set all the variables for refuelling to keep the collision detection cleaner
+   //this is used to set all the variables for refueling to keep the collision detection cleaner
    //and so it can be called from other places such as the return button
     public void ToggleRefuel(bool enabled, Transform other = null) 
     {
@@ -1408,5 +1411,10 @@ public class CarController : MonoBehaviour
     private void OnDestroy()
     {
         ParticleEffectsControl.instance.ResetSpecialVariables();
+    }
+
+    private void OnEnable()
+    {
+        IntialiseCar();
     }
 }

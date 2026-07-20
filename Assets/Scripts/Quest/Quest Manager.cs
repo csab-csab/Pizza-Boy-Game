@@ -7,6 +7,7 @@ public class QuestManager : MonoBehaviour
     public Quest quest;
 
     //Can be used to see if there is currently a quest active
+    
     public static bool isQuestActive { get; private set; } = false;
     
     private Objective currentObjective;
@@ -46,6 +47,7 @@ public class QuestManager : MonoBehaviour
     [SerializeField]private bool isQuestOver = false;
     private bool autoRestart = false;
     Quest lastQuest;
+    private bool hasRestartBeenCalled = false;
     #endregion
 
     #region Reach Value
@@ -79,13 +81,18 @@ public class QuestManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Hash))
+        {
+            CompleteObjective();
+        }
+        
         if (autoRestart && currentTimeUntilRestart > 0)
         {
             currentTimeUntilRestart -= Time.deltaTime;
             CanvasController.instance.UpdateQuestOverTimerBar(currentTimeUntilRestart, timeUntilAutoStart);
         }
         
-        if (autoRestart && currentTimeUntilRestart <= 0 || autoRestart && Input.GetKey(KeyCode.Return))
+        if (autoRestart && currentTimeUntilRestart <= 0 && !hasRestartBeenCalled || autoRestart && Input.GetKey(KeyCode.Return) && !hasRestartBeenCalled)
         {
             CanvasController.instance.UpdateQuestOverTimerBar(0, 1);
             autoRestart = false;
@@ -132,6 +139,7 @@ public class QuestManager : MonoBehaviour
         print("quest started");
         if (quest != null && !isQuestActive)
         {
+            quest.ResetQuest();
             GameManager.instance.AssignQuestManager(this);
             GameManager.instance.SetPlayState();
             CanvasController.instance.EnableDisableGameplayUi(true);
@@ -159,12 +167,15 @@ public class QuestManager : MonoBehaviour
         else
         {
             print($"Quest null: {quest == null}, questActive: {isQuestActive}");
-            Debug.LogError("Quest is null. Please assign quest in the inspector! ");
+            Debug.LogError("Quest is null or quest is already active. Please assign quest in the inspector! ");
+            return;
         }
     }
 
     private void RestartQuest()
     {
+        hasRestartBeenCalled = true;
+        
         if (lastQuest == null)
         {
             Debug.LogError("No last quest found");
@@ -172,6 +183,7 @@ public class QuestManager : MonoBehaviour
         }
 
         quest = lastQuest;
+        isQuestActive = false;
         lastQuest.ResetQuest();
         CanvasController.instance.FadeQuestOverTextNow();
         CanvasController.instance.Play_Cutscene_End_Fade();
@@ -236,6 +248,7 @@ public class QuestManager : MonoBehaviour
         CanvasController.instance.ClearInteractUiText();
 
         quest = null;
+        isQuestActive = false;
 
         CanvasController.instance.UpdateQuestOverText("Quest Failed!", true);
         CanvasController.instance.UpdateQuestOverSubText(" 'Enter'-> Retry?");
@@ -267,6 +280,7 @@ public class QuestManager : MonoBehaviour
                 if (objsToEnableIndxPtr > 0)
                 {
                     quest.questExtras.objsToEnable[objsToEnableIndxPtr - 1].SetActive(false);
+                    print("prev obj to enable is being disabled.");
                 }
                 
                 if (objsToEnableIndxPtr < quest.questExtras.objsToEnable.Length && 
@@ -309,8 +323,8 @@ public class QuestManager : MonoBehaviour
                         //creates new event handler
                         DialogueManager.DialougeFinished disableFreeLook = null;
                         
-                        //assigns newly crreated event handler to an anonymous function
-                        //that disables camera and unsubcribes this event from the OnDialogue finished event
+                        //assigns newly created event handler to an anonymous function
+                        //that disables camera and unsubscribes this event from the OnDialogue finished event
                         disableFreeLook = () =>
                         {
                             // Disables camera
@@ -423,6 +437,11 @@ public class QuestManager : MonoBehaviour
             GameManager.instance.ReturnPlayerManager().GiveMoney(quest.MoneyReward);
 
             CanvasController.instance.UpdateQuestOverSubText("+$ " + moneyReward);
+
+            if (quest.ReturnQuestId() == 2)
+            {
+                CarSelectorScript.instance.GrantRaiden();
+            }
         }
     }
 
@@ -449,6 +468,13 @@ public class QuestManager : MonoBehaviour
             {
                 CompleteObjective();
             }
+        }
+        else if (currentObjective.type == Objective.ObjectiveType.ReachPointWithinTime &&
+                 triggeredType == Objective.ObjectiveType.ReachPoint)
+        {
+            CanvasController.instance.ToggleGPTimerUi(false);
+            isTimerReachPointActive = false;
+            CompleteObjective();
         }
     }
 
@@ -496,6 +522,13 @@ public class QuestManager : MonoBehaviour
 
     public void SpawnCurrentCarQuest()
     {
+        if (GameManager.instance.AccessCarController() == null || GameManager.instance.ReturnPlayerManager().returnIsCarDestroyed())
+        {
+            CarSelectorScript.instance.SpawnSpecifiedCar(
+                quest.questExtras.carTransformToSpawnOn,  CarSelectorScript.instance.ReturnLastSpawnedCar(),
+                1, GameManager.instance.ReturnTransmissionTypeLoaded(), "SpawnCurrentCarQuest");
+        }
+        
         if(quest.questExtras.carTransformToSpawnOn != null){
             Transform spawnPoint = quest.questExtras.carTransformToSpawnOn;
 
@@ -522,7 +555,8 @@ public class QuestManager : MonoBehaviour
      IEnumerator WaitBeforeRestarting()
     {
         yield return new WaitForSeconds(CanvasController.instance.Return_Cutscene_End_Fade_Length());
-        StartQuest(); 
+        StartQuest();
+        hasRestartBeenCalled = false;
     }
 
     private void OnDisable()

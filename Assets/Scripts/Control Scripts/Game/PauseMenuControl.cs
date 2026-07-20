@@ -109,7 +109,21 @@ public class PauseMenuControl : MonoBehaviour
                 else if (hit.collider.TryGetComponent<QuitGameButton>(out QuitGameButton quitGameButton))  
                 {
                     HighlightMenuChoiceObj(quitGameButton.transform);
-                    //QuitGame
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        if (SceneManager.instance != null)
+                        {
+                            SceneManager.instance.QuitGame(); 
+                        }
+                        else
+                        {
+                            Debug.LogError("Scene manager instance is null.");
+                        }
+                        
+                    }
+                  
+                    
 
                     if (QuitText.fontSize < fontSize)
                     {
@@ -139,7 +153,16 @@ public class PauseMenuControl : MonoBehaviour
         {
             if(Input.GetButtonDown("Pause"))
             {
-                CanvasController.instance.ToggleSettingsUi(false);
+                if (CanvasController.instance.ReturnSettingsUiStatus())
+                {
+                    CanvasController.instance.ToggleSettingsUi(false);
+                }
+
+                if (CanvasController.instance.ReturnControlsUiStatus())
+                {
+                    CanvasController.instance.ToggleViewControlsTab(false);
+                }
+                
                 HandOverControl(true);
             }
         }

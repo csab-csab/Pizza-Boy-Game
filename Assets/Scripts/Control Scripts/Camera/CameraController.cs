@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -20,7 +21,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float RotationSmoothness = 6f;
     [SerializeField] float LookHeightOffset = 1.5f;
 
-    [Header("Collison Settings")]
+    [Header("Collision Settings")]
     [Space(2)]
     [Header("This is the layer the camera will collide with")]
     [SerializeField] LayerMask CollisionMask;
@@ -47,7 +48,6 @@ public class CameraController : MonoBehaviour
         RotateCamera();
 
     }
-
 
     private void CheckCollisionAndMoveCamera() 
     {
