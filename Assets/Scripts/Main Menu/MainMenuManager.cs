@@ -89,6 +89,11 @@ public class MainMenuManager : MonoBehaviour, IDataPersistance
         SceneManager.instance.LoadScene(1);
     }
 
+    public void OpenControlsTab()
+    {
+        NavigateMainMenu(5);
+    }
+
     public void Quit()
     {
         Application.Quit();

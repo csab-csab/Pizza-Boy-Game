@@ -153,7 +153,16 @@ public class PauseMenuControl : MonoBehaviour
         {
             if(Input.GetButtonDown("Pause"))
             {
-                CanvasController.instance.ToggleSettingsUi(false);
+                if (CanvasController.instance.ReturnSettingsUiStatus())
+                {
+                    CanvasController.instance.ToggleSettingsUi(false);
+                }
+
+                if (CanvasController.instance.ReturnControlsUiStatus())
+                {
+                    CanvasController.instance.ToggleViewControlsTab(false);
+                }
+                
                 HandOverControl(true);
             }
         }
