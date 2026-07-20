@@ -14,6 +14,7 @@ The project started as a small prototype and gradually evolved into a complete g
 - Audio effects and music
 - Day/Night Cycle
 - Keyboard and partial controller support
+- Text based dialogue
 
 ## Technologies
 
