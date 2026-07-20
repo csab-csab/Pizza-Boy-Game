@@ -72,4 +72,7 @@ https://sunbearstudios.itch.io/pizza-boy
 
 ## Repository
 
-This repository contains the source code for Pizza Boy.
+This repository contains the source code and unity project for Pizza Boy.
+
+## Thank you!
+Thank you for looking at my github! :)
